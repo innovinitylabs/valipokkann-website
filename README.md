@@ -78,4 +78,6 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 Valipokkann - [@valipokkann](https://twitter.com/valipokkann)
 
-Project Link: [https://github.com/valipokkann/valipokkann-website](https://github.com/valipokkann/valipokkann-website) 
+Project Link: [https://github.com/valipokkann/valipokkann-website](https://github.com/valipokkann/valipokkann-website)
+
+Last updated: May 30, 2024 

@@ -33,7 +33,7 @@ function App() {
   };
 
   return (
-    <Router>
+    <Router basename="/">
       <div className="min-h-screen flex flex-col">
         <Navbar isDarkMode={isDarkMode} toggleTheme={toggleTheme} />
         <main className="flex-grow">

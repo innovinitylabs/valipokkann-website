@@ -8,7 +8,7 @@ const Footer = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           <div>
-            <h3 className="text-lg font-semibold mb-4">Valipokkann</h3>
+            <h3 className="text-lg font-semibold mb-4">VALIPOKKANN</h3>
             <p className="text-gray-600 dark:text-gray-400">
               Exploring the intersection of art, culture, and revolution.
             </p>
@@ -64,7 +64,7 @@ const Footer = () => {
         
         <div className="mt-8 pt-8 border-t border-gray-200 dark:border-gray-700">
           <p className="text-center text-gray-600 dark:text-gray-400">
-            © {currentYear} Valipokkann. All rights reserved.
+            © {currentYear} VALIPOKKANN. All rights reserved.
           </p>
         </div>
       </div>

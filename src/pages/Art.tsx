@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { motion, AnimatePresence, PanInfo } from 'framer-motion';
+import { useState, useRef } from 'react';
+import { motion, AnimatePresence, PanInfo, useMotionValue, animate } from 'framer-motion';
 
 interface Artwork {
   id: number;
@@ -16,7 +16,8 @@ const Art = () => {
   const [detailsRotation, setDetailsRotation] = useState(0);
   const [fullscreenRotation, setFullscreenRotation] = useState(0);
   const [zoom, setZoom] = useState(1);
-  const [pan, setPan] = useState({ x: 0, y: 0 });
+  const panX = useMotionValue(0);
+  const panY = useMotionValue(0);
   const [rotationSlider, setRotationSlider] = useState(0);
 
   // Sample artwork data with logo as placeholder
@@ -92,7 +93,7 @@ const Art = () => {
     setDetailsRotation(0);
     setFullscreenRotation(0);
     setZoom(1);
-    setPan({ x: 0, y: 0 });
+    // setPan({ x: 0, y: 0 });
     setRotationSlider(0);
   };
 
@@ -107,15 +108,8 @@ const Art = () => {
 
   // Fullscreen modal drag for pan
   const handleDrag = (event: MouseEvent | TouchEvent | PointerEvent, info: PanInfo) => {
-    // Use velocity for smoother movement
-    const velocity = info.velocity;
-    const delta = info.delta;
-    
-    // Calculate new position with constraints
-    const newX = Math.max(-300, Math.min(300, pan.x + delta.x));
-    const newY = Math.max(-300, Math.min(300, pan.y + delta.y));
-    
-    setPan({ x: newX, y: newY });
+    // framer-motion updates panX and panY directly when attached to the motion div and drag is enabled.
+    // No manual update needed here.
   };
 
   // Fullscreen modal slider rotation
@@ -284,16 +278,18 @@ const Art = () => {
               dragConstraints={{
                 left: -1000,
                 right: 1000,
-                top: -1000,
+                top: -1000, // Adjusted top/bottom constraints back to reasonable values
                 bottom: 1000
               }}
               onDrag={handleDrag}
               whileDrag={{ cursor: 'grabbing' }}
-              style={{
-                x: pan.x,
-                y: pan.y,
+              animate={{
                 rotate: fullscreenRotation,
                 scale: zoom,
+              }}
+              style={{
+                x: panX,
+                y: panY,
                 touchAction: 'none',
                 userSelect: 'none'
               }}
@@ -303,7 +299,7 @@ const Art = () => {
                   src={selectedArtwork.image}
                   alt={selectedArtwork.title}
                   className="object-contain w-full h-full"
-                  drag={false}
+                  drag={false} // Ensure the image itself is not draggable
                   style={{ 
                     touchAction: 'none',
                     userSelect: 'none',
@@ -339,8 +335,10 @@ const Art = () => {
                   e.stopPropagation();
                   setFullscreenRotation(0);
                   setZoom(1);
-                  setPan({ x: 0, y: 0 });
                   setRotationSlider(0);
+                  // Animate motion values back to 0 for a quick reset
+                  animate(panX, 0, { duration: 0.3 });
+                  animate(panY, 0, { duration: 0.3 });
                }} className="p-2 bg-white dark:bg-gray-800 rounded-full shadow-lg">⟳</button>
             </div>
 

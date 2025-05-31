@@ -22,35 +22,35 @@ const Art = () => {
     {
       id: 1,
       title: 'Revolution in Color',
-      image: '/valipokkann_transparent_logo.png',
+      image: 'valipokkann_transparent_logo.png',
       description: 'A vibrant exploration of cultural identity and resistance.',
       year: 2024
     },
     {
       id: 2,
       title: 'Echoes of Tradition',
-      image: '/valipokkann_transparent_logo.png',
+      image: 'valipokkann_transparent_logo.png',
       description: 'Blending the old and new in a single frame.',
       year: 2023
     },
     {
       id: 3,
       title: 'Urban Pulse',
-      image: '/valipokkann_transparent_logo.png',
+      image: 'valipokkann_transparent_logo.png',
       description: 'Capturing the rhythm of the city.',
       year: 2022
     },
     {
       id: 4,
       title: 'Dreams in Monsoon',
-      image: '/valipokkann_transparent_logo.png',
+      image: 'valipokkann_transparent_logo.png',
       description: 'A journey through rain-soaked memories.',
       year: 2021
     },
     {
       id: 5,
       title: 'Roots and Wings',
-      image: '/valipokkann_transparent_logo.png',
+      image: 'valipokkann_transparent_logo.png',
       description: 'Balancing heritage and aspiration.',
       year: 2020
     }
@@ -65,6 +65,7 @@ const Art = () => {
   };
 
   const handleArtworkClick = (artwork: Artwork) => {
+    console.log('Artwork clicked:', artwork); // Debug log
     setSelectedArtwork(artwork);
     setRotation(0);
     setDragRotation(0);
@@ -80,7 +81,6 @@ const Art = () => {
     setDragRotation(0);
   };
 
-  // Improved drag-to-rotate logic
   const handleDragStart = (e: React.MouseEvent<HTMLDivElement>) => {
     setDragStart({ x: e.clientX, y: e.clientY });
   };
@@ -88,7 +88,7 @@ const Art = () => {
   const handleDrag = (e: React.MouseEvent<HTMLDivElement>) => {
     if (dragStart) {
       const dx = e.clientX - dragStart.x;
-      setDragRotation(dx / 2); // 2px = 1deg for smoother rotation
+      setDragRotation(dx / 2);
     }
   };
 
@@ -128,7 +128,11 @@ const Art = () => {
                 onClick={() => handleArtworkClick(artwork)}
               >
                 <div className="aspect-w-16 aspect-h-9 bg-gray-200 dark:bg-gray-700 flex items-center justify-center">
-                  <img src={artwork.image} alt={artwork.title} className="object-contain max-w-[60%] max-h-[60%] mx-auto my-auto" />
+                  <img 
+                    src={artwork.image} 
+                    alt={artwork.title} 
+                    className="object-contain max-w-[60%] max-h-[60%] mx-auto my-auto"
+                  />
                 </div>
                 <div className="p-6">
                   <h3 className="text-xl font-semibold mb-2">{artwork.title}</h3>
@@ -146,7 +150,7 @@ const Art = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="artwork-modal fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-60"
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-60"
             onClick={() => setSelectedArtwork(null)}
           >
             <div
@@ -159,40 +163,54 @@ const Art = () => {
               >
                 ✕
               </button>
-              <div
-                className="relative aspect-w-16 aspect-h-9 bg-gray-200 dark:bg-gray-700 cursor-grab flex items-center justify-center mb-4"
-                style={{ userSelect: 'none', touchAction: 'none', transform: `rotate(${rotation + dragRotation}deg)` }}
-                onMouseDown={handleDragStart}
-                onMouseMove={dragStart ? handleDrag : undefined}
-                onMouseUp={handleDragEnd}
-                onMouseLeave={dragStart ? handleDragEnd : undefined}
-              >
-                <img src={selectedArtwork.image} alt={selectedArtwork.title} className="object-contain max-w-[70%] max-h-[70%] mx-auto my-auto" />
-              </div>
-              <div className="flex gap-2 justify-center mb-4">
-                <button
-                  onClick={() => handleRotate('left')}
-                  className="p-2 bg-white dark:bg-gray-800 rounded-full shadow-lg border border-gray-200 dark:border-gray-700"
-                >
-                  ↶
-                </button>
-                <button
-                  onClick={handleReset}
-                  className="p-2 bg-white dark:bg-gray-800 rounded-full shadow-lg border border-gray-200 dark:border-gray-700"
-                >
-                  ⟳
-                </button>
-                <button
-                  onClick={() => handleRotate('right')}
-                  className="p-2 bg-white dark:bg-gray-800 rounded-full shadow-lg border border-gray-200 dark:border-gray-700"
-                >
-                  ↷
-                </button>
-              </div>
-              <div className="mt-4">
-                <h2 className="text-2xl font-serif mb-2">{selectedArtwork.title}</h2>
-                <p className="text-gray-600 dark:text-gray-400">{selectedArtwork.description}</p>
-                <p className="text-sm text-gray-500 mt-2">{selectedArtwork.year}</p>
+              
+              <div className="flex flex-col items-center">
+                <div className="relative w-full h-[400px] max-h-[60vh] mb-4 overflow-hidden bg-gray-200 dark:bg-gray-700 rounded-lg flex items-center justify-center">
+                  {selectedArtwork.image && (
+                    <img 
+                      src={selectedArtwork.image} 
+                      alt={selectedArtwork.title} 
+                      className="object-contain w-full h-full"
+                      style={{ 
+                        transform: `rotate(${rotation + dragRotation}deg)`,
+                        userSelect: 'none',
+                        touchAction: 'none'
+                      }}
+                      onError={(e) => {
+                        const target = e.target as HTMLImageElement;
+                        console.error('Image failed to load:', target.src);
+                      }}
+                      onLoad={() => console.log('Image loaded successfully:', selectedArtwork.image)}
+                    />
+                  )}
+                </div>
+
+                <div className="flex gap-2 justify-center mb-4">
+                  <button
+                    onClick={() => handleRotate('left')}
+                    className="p-2 bg-white dark:bg-gray-800 rounded-full shadow-lg border border-gray-200 dark:border-gray-700"
+                  >
+                    ↶
+                  </button>
+                  <button
+                    onClick={handleReset}
+                    className="p-2 bg-white dark:bg-gray-800 rounded-full shadow-lg border border-gray-200 dark:border-gray-700"
+                  >
+                    ⟳
+                  </button>
+                  <button
+                    onClick={() => handleRotate('right')}
+                    className="p-2 bg-white dark:bg-gray-800 rounded-full shadow-lg border border-gray-200 dark:border-gray-700"
+                  >
+                    ↷
+                  </button>
+                </div>
+
+                <div className="w-full text-center">
+                  <h2 className="text-2xl font-serif mb-2">{selectedArtwork.title}</h2>
+                  <p className="text-gray-600 dark:text-gray-400 mb-2">{selectedArtwork.description}</p>
+                  <p className="text-sm text-gray-500">{selectedArtwork.year}</p>
+                </div>
               </div>
             </div>
           </motion.div>

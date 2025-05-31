@@ -4,10 +4,10 @@ import { useState } from 'react';
 
 interface NavbarProps {
   isDarkMode: boolean;
-  toggleTheme: () => void;
+  toggleDarkMode: () => void;
 }
 
-const Navbar = ({ isDarkMode, toggleTheme }: NavbarProps) => {
+const Navbar = ({ isDarkMode, toggleDarkMode }: NavbarProps) => {
   const [isHovered, setIsHovered] = useState(false);
   
   const navItems = [
@@ -51,7 +51,7 @@ const Navbar = ({ isDarkMode, toggleTheme }: NavbarProps) => {
             ))}
             
             <button
-              onClick={toggleTheme}
+              onClick={toggleDarkMode}
               className="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-800 transition-colors duration-200"
               aria-label="Toggle theme"
             >

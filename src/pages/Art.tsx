@@ -282,10 +282,10 @@ const Art = () => {
               dragMomentum={true}
               dragElastic={0.1}
               dragConstraints={{
-                left: -300,
-                right: 300,
-                top: -300,
-                bottom: 300
+                left: -1000,
+                right: 1000,
+                top: -1000,
+                bottom: 1000
               }}
               onDrag={handleDrag}
               whileDrag={{ cursor: 'grabbing' }}

@@ -14,6 +14,7 @@ import Admin from './pages/Admin';
 import NotFound from './pages/NotFound';
 
 function App() {
+  // App component main function
   const [isDarkMode, setIsDarkMode] = useState(true);
   const [showTooltip, setShowTooltip] = useState(false);
 

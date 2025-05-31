@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
+import { useState } from 'react';
 
 interface NavbarProps {
   isDarkMode: boolean;
@@ -7,6 +8,8 @@ interface NavbarProps {
 }
 
 const Navbar = ({ isDarkMode, toggleTheme }: NavbarProps) => {
+  const [isHovered, setIsHovered] = useState(false);
+  
   const navItems = [
     { path: '/', label: 'Home' },
     { path: '/art', label: 'Art' },
@@ -22,7 +25,17 @@ const Navbar = ({ isDarkMode, toggleTheme }: NavbarProps) => {
         <div className="flex justify-between h-16">
           <div className="flex">
             <Link to="/" className="flex items-center">
-              <span className="text-2xl font-serif text-primary">VALIPOKKANN</span>
+              <motion.span 
+                className="text-2xl font-serif text-primary cursor-pointer"
+                onHoverStart={() => setIsHovered(true)}
+                onHoverEnd={() => setIsHovered(false)}
+                animate={{ 
+                  fontFamily: isHovered ? "'Noto Serif Tamil', serif" : "'Inter', sans-serif"
+                }}
+                transition={{ duration: 0.3 }}
+              >
+                {isHovered ? 'வழிப்போக்கன்' : 'VALIPOKKANN'}
+              </motion.span>
             </Link>
           </div>
 

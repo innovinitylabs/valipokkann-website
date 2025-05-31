@@ -4,6 +4,7 @@ import { useState } from 'react';
 
 const Home = () => {
   const [rotation, setRotation] = useState(0);
+  const [isHovered, setIsHovered] = useState(false);
 
   const handleLogoClick = () => {
     setRotation(prevRotation => prevRotation - 90);
@@ -34,9 +35,17 @@ const Home = () => {
             whileHover={{ scale: 1.1 }}
             whileTap={{ scale: 0.95 }}
           />
-          <h1 className="text-5xl md:text-7xl font-serif mb-6 text-gray-900 dark:text-white">
-            VALIPOKKANN
-          </h1>
+          <motion.h1 
+            className="text-5xl md:text-7xl font-serif mb-6 text-gray-900 dark:text-white cursor-pointer"
+            onHoverStart={() => setIsHovered(true)}
+            onHoverEnd={() => setIsHovered(false)}
+            animate={{ 
+              fontFamily: isHovered ? "'Noto Serif Tamil', serif" : "'Inter', sans-serif"
+            }}
+            transition={{ duration: 0.3 }}
+          >
+            {isHovered ? 'வழிப்போக்கன்' : 'VALIPOKKANN'}
+          </motion.h1>
           <p className="text-xl md:text-2xl text-gray-600 dark:text-gray-300 mb-8">
             Artist • Revolutionary • Visionary
           </p>

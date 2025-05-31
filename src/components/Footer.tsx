@@ -1,14 +1,27 @@
 import { Link } from 'react-router-dom';
+import { motion } from 'framer-motion';
+import { useState } from 'react';
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
+  const [isHovered, setIsHovered] = useState(false);
 
   return (
     <footer className="bg-gray-100 dark:bg-black py-8">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           <div>
-            <h3 className="text-lg font-semibold mb-4">VALIPOKKANN</h3>
+            <motion.h3 
+              className="text-lg font-semibold mb-4 cursor-pointer"
+              onHoverStart={() => setIsHovered(true)}
+              onHoverEnd={() => setIsHovered(false)}
+              animate={{ 
+                fontFamily: isHovered ? "'Noto Serif Tamil', serif" : "'Inter', sans-serif"
+              }}
+              transition={{ duration: 0.3 }}
+            >
+              {isHovered ? 'வழிப்போக்கன்' : 'VALIPOKKANN'}
+            </motion.h3>
             <p className="text-gray-600 dark:text-gray-400">
               Exploring the intersection of art, culture, and revolution.
             </p>
@@ -64,7 +77,17 @@ const Footer = () => {
         
         <div className="mt-8 pt-8 border-t border-gray-200 dark:border-gray-700">
           <p className="text-center text-gray-600 dark:text-gray-400">
-            © {currentYear} VALIPOKKANN. All rights reserved.
+            © {currentYear} <motion.span
+              className="cursor-pointer"
+              onHoverStart={() => setIsHovered(true)}
+              onHoverEnd={() => setIsHovered(false)}
+              animate={{ 
+                fontFamily: isHovered ? "'Noto Serif Tamil', serif" : "'Inter', sans-serif"
+              }}
+              transition={{ duration: 0.3 }}
+            >
+              {isHovered ? 'வழிப்போக்கன்' : 'VALIPOKKANN'}
+            </motion.span>. All rights reserved.
           </p>
         </div>
       </div>

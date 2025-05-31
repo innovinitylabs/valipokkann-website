@@ -15,16 +15,43 @@ const Art = () => {
   const [selectedArtwork, setSelectedArtwork] = useState<Artwork | null>(null);
   const [rotation, setRotation] = useState(0);
 
-  // Sample artwork data
+  // Sample artwork data with logo as placeholder
   const artworks: Artwork[] = [
     {
       id: 1,
       title: 'Revolution in Color',
-      image: '/artwork1.jpg',
+      image: '/valipokkann_transparent_logo.png',
       description: 'A vibrant exploration of cultural identity and resistance.',
       year: 2024
     },
-    // Add more artworks here
+    {
+      id: 2,
+      title: 'Echoes of Tradition',
+      image: '/valipokkann_transparent_logo.png',
+      description: 'Blending the old and new in a single frame.',
+      year: 2023
+    },
+    {
+      id: 3,
+      title: 'Urban Pulse',
+      image: '/valipokkann_transparent_logo.png',
+      description: 'Capturing the rhythm of the city.',
+      year: 2022
+    },
+    {
+      id: 4,
+      title: 'Dreams in Monsoon',
+      image: '/valipokkann_transparent_logo.png',
+      description: 'A journey through rain-soaked memories.',
+      year: 2021
+    },
+    {
+      id: 5,
+      title: 'Roots and Wings',
+      image: '/valipokkann_transparent_logo.png',
+      description: 'Balancing heritage and aspiration.',
+      year: 2020
+    }
   ];
 
   const handleBarrelRoll = () => {
@@ -37,6 +64,7 @@ const Art = () => {
 
   const handleArtworkClick = (artwork: Artwork) => {
     setSelectedArtwork(artwork);
+    setRotation(0);
   };
 
   const handleRotate = (direction: 'left' | 'right') => {
@@ -82,7 +110,9 @@ const Art = () => {
                 className="bg-white dark:bg-gray-800 rounded-lg shadow-lg overflow-hidden cursor-pointer"
                 onClick={() => handleArtworkClick(artwork)}
               >
-                <div className="aspect-w-16 aspect-h-9 bg-gray-200 dark:bg-gray-700"></div>
+                <div className="aspect-w-16 aspect-h-9 bg-gray-200 dark:bg-gray-700 flex items-center justify-center">
+                  <img src={artwork.image} alt={artwork.title} className="object-contain w-3/4 h-3/4" />
+                </div>
                 <div className="p-6">
                   <h3 className="text-xl font-semibold mb-2">{artwork.title}</h3>
                   <p className="text-gray-600 dark:text-gray-400">{artwork.year}</p>
@@ -114,11 +144,11 @@ const Art = () => {
               </button>
               
               <div
-                className="relative aspect-w-16 aspect-h-9 bg-gray-200 dark:bg-gray-700 cursor-grab"
+                className="relative aspect-w-16 aspect-h-9 bg-gray-200 dark:bg-gray-700 cursor-grab flex items-center justify-center"
                 onMouseDown={handleDragRotate}
                 style={{ transform: `rotate(${rotation}deg)` }}
               >
-                {/* Artwork image would go here */}
+                <img src={selectedArtwork.image} alt={selectedArtwork.title} className="object-contain w-3/4 h-3/4" />
               </div>
 
               <div className="artwork-controls">

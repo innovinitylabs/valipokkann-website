@@ -20,7 +20,7 @@ export default {
         },
         background: {
           light: '#FFFFFF',
-          dark: '#1A1A1A',
+          dark: '#000000',
         },
       },
       fontFamily: {

@@ -17,7 +17,7 @@ const Navbar = ({ isDarkMode, toggleTheme }: NavbarProps) => {
   ];
 
   return (
-    <nav className="bg-white dark:bg-gray-900 shadow-md">
+    <nav className="bg-white dark:bg-black shadow-md">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16">
           <div className="flex">
@@ -39,7 +39,7 @@ const Navbar = ({ isDarkMode, toggleTheme }: NavbarProps) => {
             
             <button
               onClick={toggleTheme}
-              className="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors duration-200"
+              className="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-800 transition-colors duration-200"
               aria-label="Toggle theme"
             >
               {isDarkMode ? '🌞' : '🌙'}

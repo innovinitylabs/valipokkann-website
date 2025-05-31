@@ -43,6 +43,13 @@ const Links = () => {
       category: 'social',
       icon: '🐦'
     },
+    {
+      id: 'social-3',
+      title: 'LinkedIn',
+      url: 'https://www.linkedin.com/in/valipokkann/',
+      category: 'social',
+      icon: '👔'
+    },
     // Music Links
     {
       id: 'music-1',
@@ -57,6 +64,13 @@ const Links = () => {
       url: 'https://music.apple.com/profile/valipokkann',
       category: 'music',
       icon: '🎧'
+    },
+    {
+      id: 'music-3',
+      title: 'SoundCloud',
+      url: 'https://soundcloud.com/valipokkann',
+      category: 'music',
+      icon: '🎶'
     }
   ];
 

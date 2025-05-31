@@ -24,12 +24,56 @@ const Music = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
         >
-          <h1 className="text-4xl font-serif mb-6 text-center">Music</h1>
-          <p className="text-xl text-gray-600 dark:text-gray-400 mb-8 text-center">
-            A collection of soundscapes and musical compositions
-          </p>
+          <h1 className="text-4xl font-serif mb-8">Music</h1>
           
-          <div className="space-y-8">
+          <div className="mb-12">
+            <iframe
+              width="100%"
+              height="450"
+              scrolling="no"
+              frameBorder="no"
+              allow="autoplay"
+              src="https://w.soundcloud.com/player/?url=https%3A//soundcloud.com/valipokkann&color=%23ff5500&auto_play=false&hide_related=false&show_comments=true&show_user=true&show_reposts=false&show_teaser=true"
+              className="rounded-lg shadow-lg"
+            ></iframe>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div>
+              <h2 className="text-2xl font-serif mb-4">About the Music</h2>
+              <p className="text-gray-600 dark:text-gray-400 mb-4">
+                VALIPOKKANN's music explores the intersection of traditional sounds and contemporary electronic elements.
+                Each track is a journey through cultural landscapes, blending ancient rhythms with modern beats.
+              </p>
+              <p className="text-gray-600 dark:text-gray-400">
+                Follow on SoundCloud to stay updated with new releases and musical experiments.
+              </p>
+            </div>
+            
+            <div>
+              <h2 className="text-2xl font-serif mb-4">Connect</h2>
+              <div className="space-y-4">
+                <a
+                  href="https://soundcloud.com/valipokkann"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="block text-gray-600 dark:text-gray-400 hover:text-primary"
+                >
+                  SoundCloud Profile
+                </a>
+                <a
+                  href="https://www.linkedin.com/in/valipokkann/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="block text-gray-600 dark:text-gray-400 hover:text-primary"
+                >
+                  LinkedIn
+                </a>
+              </div>
+            </div>
+          </div>
+
+          <div className="space-y-8 mt-12">
             {playlists.map(playlist => (
               <div key={playlist.id} className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6">
                 <h2 className="text-2xl font-serif mb-4">{playlist.title}</h2>

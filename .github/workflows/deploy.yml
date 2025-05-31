@@ -8,28 +8,26 @@ on:
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
+
     steps:
-      - name: Checkout
-        uses: actions/checkout@v3
+      - name: Checkout code
+        uses: actions/checkout@v4
 
       - name: Setup Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
-          node-version: '18'
-          cache: 'npm'
+          node-version: '20' # Use a recent Node.js version
 
       - name: Install dependencies
-        run: npm ci
+        run: npm install
 
-      - name: Build
+      - name: Build project
         run: npm run build
 
-      - name: Deploy
-        uses: JamesIves/github-pages-deploy-action@v4
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v4
         with:
-          folder: dist
-          branch: gh-pages
-          clean: true
-          commit-message: "Deploy: ${{ github.event.head_commit.message }}" 
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./dist # Directory containing the build output
+          publish_branch: gh-pages # Branch to deploy to
+          destination_dir: . # Deploy to the root of the gh-pages branch 

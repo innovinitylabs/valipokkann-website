@@ -66,10 +66,7 @@ const Art = () => {
   ];
 
   const handleBarrelRoll = () => {
-    setIsBarrelRolling(true);
-    setTimeout(() => {
-      setIsBarrelRolling(false);
-    }, 1000);
+    setIsBarrelRolling(prev => !prev);
   };
 
   const openDetailsModal = (artwork: Artwork) => {
@@ -144,17 +141,21 @@ const Art = () => {
           <h1 className="text-4xl font-serif">Art Gallery</h1>
           <button
             onClick={handleBarrelRoll}
-            className="px-4 py-2 bg-primary text-white rounded-md hover:bg-primary-dark transition-colors duration-200"
+            className={`px-4 py-2 rounded-md transition-colors duration-200 ${
+              isBarrelRolling 
+                ? 'bg-primary-dark text-white' 
+                : 'bg-primary text-white hover:bg-primary-dark'
+            }`}
             title="அழகு ஒரு புரட்சி"
           >
-            Special View
+            {isBarrelRolling ? 'Normal View' : 'Special View'}
           </button>
         </div>
 
         <div 
-          className={`transition-transform duration-1000 ${
+          className={`transition-all duration-1000 ${
             isBarrelRolling 
-              ? 'animate-barrel-roll'
+              ? 'rotate-180'
               : ''
           }`}
         >

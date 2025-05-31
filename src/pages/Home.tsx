@@ -5,7 +5,7 @@ const Home = () => {
   return (
     <div className="min-h-screen">
       {/* Hero Section */}
-      <section className="relative h-screen flex items-center justify-center bg-gradient-to-b from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800">
+      <section className="relative h-screen flex items-center justify-center bg-gradient-to-b from-gray-50 to-gray-100 dark:from-black dark:to-black">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -43,7 +43,7 @@ const Home = () => {
             {/* Featured Art */}
             <motion.div
               whileHover={{ y: -10 }}
-              className="bg-white dark:bg-gray-800 rounded-lg shadow-lg overflow-hidden"
+              className="bg-white dark:bg-gray-900 rounded-lg shadow-lg overflow-hidden"
             >
               <div className="aspect-w-16 aspect-h-9 bg-gray-200 dark:bg-gray-700"></div>
               <div className="p-6">
@@ -63,7 +63,7 @@ const Home = () => {
             {/* Featured Article */}
             <motion.div
               whileHover={{ y: -10 }}
-              className="bg-white dark:bg-gray-800 rounded-lg shadow-lg overflow-hidden"
+              className="bg-white dark:bg-gray-900 rounded-lg shadow-lg overflow-hidden"
             >
               <div className="aspect-w-16 aspect-h-9 bg-gray-200 dark:bg-gray-700"></div>
               <div className="p-6">
@@ -83,7 +83,7 @@ const Home = () => {
             {/* Featured Music */}
             <motion.div
               whileHover={{ y: -10 }}
-              className="bg-white dark:bg-gray-800 rounded-lg shadow-lg overflow-hidden"
+              className="bg-white dark:bg-gray-900 rounded-lg shadow-lg overflow-hidden"
             >
               <div className="aspect-w-16 aspect-h-9 bg-gray-200 dark:bg-gray-700"></div>
               <div className="p-6">

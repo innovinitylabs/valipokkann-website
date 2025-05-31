@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { motion } from 'framer-motion';
 
 interface Article {
@@ -12,6 +12,7 @@ interface Article {
 
 const Articles = () => {
   const [selectedArticle, setSelectedArticle] = useState<Article | null>(null);
+  const [selectedTag, setSelectedTag] = useState<string | null>(null);
 
   // Sample articles data
   const articles: Article[] = [
@@ -23,16 +24,83 @@ const Articles = () => {
       content: '# The Intersection of Art and Revolution\n\nArt has always been a mirror of society...',
       tags: ['Art', 'Revolution', 'Culture']
     },
-    // Add more articles here
+    {
+      id: 2,
+      title: 'Tamil Literature in Modern Times',
+      excerpt: 'A deep dive into the evolution of Tamil literature and its impact on contemporary society.',
+      date: '2024-03-10',
+      content: '# Tamil Literature in Modern Times\n\nTamil literature has a rich history...',
+      tags: ['Literature', 'Culture', 'Tamil']
+    },
+    {
+      id: 3,
+      title: 'Digital Art and Traditional Techniques',
+      excerpt: 'Bridging the gap between traditional artistic methods and modern digital tools.',
+      date: '2024-03-05',
+      content: '# Digital Art and Traditional Techniques\n\nThe digital age has transformed art...',
+      tags: ['Art', 'Technology', 'Digital']
+    },
+    {
+      id: 4,
+      title: 'Cultural Identity in Contemporary Art',
+      excerpt: 'Examining how artists express and preserve cultural identity through their work.',
+      date: '2024-02-28',
+      content: '# Cultural Identity in Contemporary Art\n\nCultural identity plays a crucial role...',
+      tags: ['Culture', 'Art', 'Identity']
+    }
   ];
+
+  // Get unique tags from all articles
+  const allTags = useMemo(() => {
+    const tags = new Set<string>();
+    articles.forEach(article => {
+      article.tags.forEach(tag => tags.add(tag));
+    });
+    return Array.from(tags).sort();
+  }, [articles]);
+
+  // Filter articles based on selected tag
+  const filteredArticles = useMemo(() => {
+    if (!selectedTag) return articles;
+    return articles.filter(article => article.tags.includes(selectedTag));
+  }, [articles, selectedTag]);
 
   return (
     <div className="min-h-screen py-12 px-4">
       <div className="max-w-4xl mx-auto">
         <h1 className="text-4xl font-serif mb-8">Articles</h1>
 
+        {/* Tag Filter */}
+        <div className="mb-8">
+          <div className="flex flex-wrap gap-2">
+            <button
+              onClick={() => setSelectedTag(null)}
+              className={`px-4 py-2 rounded-full transition-colors duration-200 ${
+                !selectedTag
+                  ? 'bg-primary text-white'
+                  : 'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700'
+              }`}
+            >
+              All
+            </button>
+            {allTags.map(tag => (
+              <button
+                key={tag}
+                onClick={() => setSelectedTag(tag)}
+                className={`px-4 py-2 rounded-full transition-colors duration-200 ${
+                  selectedTag === tag
+                    ? 'bg-primary text-white'
+                    : 'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700'
+                }`}
+              >
+                {tag}
+              </button>
+            ))}
+          </div>
+        </div>
+
         <div className="space-y-8">
-          {articles.map((article) => (
+          {filteredArticles.map((article) => (
             <motion.article
               key={article.id}
               initial={{ opacity: 0, y: 20 }}
@@ -95,7 +163,6 @@ const Articles = () => {
               </div>
               
               <div className="prose dark:prose-invert max-w-none">
-                {/* Here you would render the markdown content */}
                 <p>{selectedArticle.content}</p>
               </div>
             </div>

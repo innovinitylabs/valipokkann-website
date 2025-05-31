@@ -107,15 +107,15 @@ const Art = () => {
 
   // Fullscreen modal drag for pan
   const handleDrag = (event: MouseEvent | TouchEvent | PointerEvent, info: PanInfo) => {
-    console.log('Dragging offset:', info.offset.x, info.offset.y); // Debug drag
-    // Update pan based on drag offset
-    setPan({ x: info.offset.x, y: info.offset.y });
-
-    // Temporarily remove rotation update to debug pan
-    // const rotationSensitivity = 0.5; // Adjust sensitivity
-    // const newRotation = fullscreenRotation + info.delta.x * rotationSensitivity;
-    // setFullscreenRotation(newRotation);
-    // setRotationSlider(((newRotation % 360) + 360) % 360); // Sync slider
+    // Use velocity for smoother movement
+    const velocity = info.velocity;
+    const delta = info.delta;
+    
+    // Calculate new position with constraints
+    const newX = Math.max(-300, Math.min(300, pan.x + delta.x));
+    const newY = Math.max(-300, Math.min(300, pan.y + delta.y));
+    
+    setPan({ x: newX, y: newY });
   };
 
   // Fullscreen modal slider rotation
@@ -273,39 +273,55 @@ const Art = () => {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             className="fixed inset-0 z-50 flex items-center justify-center bg-black"
-            // Click background does NOT close modal in fullscreen
           >
-            {/* Fullscreen Image Container - occupies full modal space, allows drag for pan */}
-            {/* Using onDrag to update pan state */}
-            {/* Simplified container structure around the image */}
+            {/* Fullscreen Image Container */}
             <motion.div
-               className="relative w-full h-full flex items-center justify-center cursor-grab"
-               onClick={(e) => e.stopPropagation()} // Prevent closing modal when clicking image container
-               drag
-               dragConstraints={{ left: -Infinity, right: Infinity, top: -Infinity, bottom: Infinity }} // Allow dragging anywhere
-               style={{ x: pan.x, y: pan.y, rotate: fullscreenRotation }} // Apply pan and rotation
-               onDrag={(event, info) => handleDrag(event, info)} // Use custom handler for pan
+              className="relative w-full h-full flex items-center justify-center cursor-grab active:cursor-grabbing"
+              onClick={(e) => e.stopPropagation()}
+              drag
+              dragMomentum={true}
+              dragElastic={0.1}
+              dragConstraints={{
+                left: -300,
+                right: 300,
+                top: -300,
+                bottom: 300
+              }}
+              onDrag={handleDrag}
+              whileDrag={{ cursor: 'grabbing' }}
+              style={{
+                x: pan.x,
+                y: pan.y,
+                rotate: fullscreenRotation,
+                scale: zoom,
+                touchAction: 'none',
+                userSelect: 'none'
+              }}
             >
               {selectedArtwork.image && (
-                 <motion.img 
-                   src={selectedArtwork.image}
-                   alt={selectedArtwork.title}
-                   className="object-contain w-full h-full"
-                   style={{ scale: zoom }} // Apply zoom
-                 />
+                <motion.img 
+                  src={selectedArtwork.image}
+                  alt={selectedArtwork.title}
+                  className="object-contain w-full h-full"
+                  drag={false}
+                  style={{ 
+                    touchAction: 'none',
+                    userSelect: 'none',
+                    pointerEvents: 'none'
+                  }}
+                />
               )}
             </motion.div>
 
-            {/* Fullscreen Controls (positioned on top) */}
+            {/* Fullscreen Controls */}
             <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex items-center space-x-4 z-50 bg-gray-800 bg-opacity-75 p-3 rounded-lg"
-                 onClick={(e) => e.stopPropagation()} // Prevent closing modal when clicking controls
+                 onClick={(e) => e.stopPropagation()}
             >
                {/* Zoom Controls */}
                <button onClick={(e) => { e.stopPropagation(); handleZoom(1.1); }} className="p-2 bg-white dark:bg-gray-800 rounded-full shadow-lg">➕</button>
                <button onClick={(e) => { e.stopPropagation(); handleZoom(0.9); }} className="p-2 bg-white dark:bg-gray-800 rounded-full shadow-lg">➖</button>
 
                {/* Rotation Slider */}
-               {/* Using rotationSlider state for slider value, updating fullscreenRotation */}              
                <input 
                  type="range"
                  min="-360"
@@ -328,14 +344,13 @@ const Art = () => {
                }} className="p-2 bg-white dark:bg-gray-800 rounded-full shadow-lg">⟳</button>
             </div>
 
-             {/* Close Fullscreen Button (Top Right) */}
+            {/* Close Fullscreen Button */}
             <button
               className="absolute top-4 right-4 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 z-50"
-              onClick={(e) => { e.stopPropagation(); closeModals(); }} // Ensure stopPropagation here too
+              onClick={(e) => { e.stopPropagation(); closeModals(); }}
             >
               ✕
             </button>
-
           </motion.div>
         )}
       </AnimatePresence>

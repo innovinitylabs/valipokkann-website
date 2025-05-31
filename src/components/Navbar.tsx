@@ -22,7 +22,7 @@ const Navbar = ({ isDarkMode, toggleTheme }: NavbarProps) => {
         <div className="flex justify-between h-16">
           <div className="flex">
             <Link to="/" className="flex items-center">
-              <span className="text-2xl font-serif text-primary">Valipokkann</span>
+              <span className="text-2xl font-serif text-primary">VALIPOKKANN</span>
             </Link>
           </div>
 

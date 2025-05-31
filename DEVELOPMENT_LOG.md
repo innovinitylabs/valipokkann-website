@@ -1,7 +1,7 @@
 # Valipokkann Website Development Log
 
 ## Project Overview
-Personal artist website for Valipokkann built with React, Vite, and Tailwind CSS. The website features a minimalist aesthetic with traditional Indian elements, including interactive animations and responsive design.
+Personal artist website for VALIPOKKANN built with React, Vite, and Tailwind CSS. The website features a minimalist aesthetic with traditional Indian elements, including interactive animations and responsive design.
 
 ## Tech Stack
 - React 18
@@ -92,6 +92,52 @@ keyframes: {
 - Custom 404 page for routing
 - PWA support with manifest.json
 
+## Latest Updates
+
+### Branding Updates
+- Added transparent logo to the site
+- Updated all instances of "Valipokkann" to "VALIPOKKANN"
+- Implemented logo in:
+  - Favicon
+  - Home page hero section
+  - Featured section placeholders
+  - PWA icons
+- Enhanced visual identity with consistent branding
+
+### Theme System
+- Implemented dark knight mode with pure black background as default
+- Updated theme toggle functionality
+- Modified color scheme for better contrast in dark mode
+- Updated components to support dark knight theme:
+  - Navbar
+  - Footer
+  - Home page
+  - Article cards
+  - Modal overlays
+
+### Articles Section
+- Added tag-based filtering system
+- Implemented category filter UI with:
+  - "All" button to clear filters
+  - Dynamic tag buttons
+  - Visual feedback for selected tags
+- Added sample articles with various tags:
+  - Art & Revolution
+  - Tamil Literature
+  - Digital Art
+  - Cultural Identity
+- Enhanced article cards with:
+  - Tag display
+  - Date information
+  - Hover animations
+  - Modal view for full content
+
+### Technical Improvements
+- Used `useMemo` for optimized tag filtering
+- Implemented responsive design for filter buttons
+- Added smooth animations for filtering transitions
+- Enhanced dark mode support across components
+
 ## Future Enhancements
 1. Content Management System
 2. Image optimization and lazy loading
@@ -133,7 +179,8 @@ Key dependencies and their purposes:
 1. Chose Tailwind CSS for rapid development and consistent design
 2. Implemented barrel roll animation as a unique interactive element
 3. Used Framer Motion for smooth page transitions
-4. Adopted TypeScript for better type safety and developer experience
+4. Selected dark knight mode as default for better visual impact
+5. Implemented tag-based filtering for better content organization
 
 ## Performance Considerations
 - Lazy loading for routes

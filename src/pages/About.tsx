@@ -1,6 +1,9 @@
 import { motion } from 'framer-motion';
+import { useState } from 'react';
 
 const About = () => {
+  const [isHovered, setIsHovered] = useState(false);
+
   return (
     <div className="min-h-screen py-12 px-4">
       <div className="max-w-4xl mx-auto">
@@ -9,14 +12,34 @@ const About = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
         >
-          <h1 className="text-4xl font-serif mb-8">About Valipokkann</h1>
+          <motion.h1 
+            className="text-4xl font-serif mb-8 cursor-pointer"
+            onHoverStart={() => setIsHovered(true)}
+            onHoverEnd={() => setIsHovered(false)}
+            animate={{ 
+              fontFamily: isHovered ? "'Noto Serif Tamil', serif" : "'Inter', sans-serif"
+            }}
+            transition={{ duration: 0.3 }}
+          >
+            About {isHovered ? 'வழிப்போக்கன்' : 'VALIPOKKANN'}
+          </motion.h1>
           
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
             <div>
-              <div className="aspect-w-1 aspect-h-1 bg-gray-200 dark:bg-gray-700 rounded-lg mb-6"></div>
+              <motion.div 
+                className="aspect-w-1 aspect-h-1 bg-gray-200 dark:bg-gray-700 rounded-lg mb-6 overflow-hidden"
+                whileHover={{ scale: 1.05 }}
+                transition={{ duration: 0.3 }}
+              >
+                <img 
+                  src="/valipokkann_transparent_logo.png" 
+                  alt="VALIPOKKANN Logo" 
+                  className="w-full h-full object-contain p-8"
+                />
+              </motion.div>
               <h2 className="text-2xl font-serif mb-4">Artist Bio</h2>
               <p className="text-gray-600 dark:text-gray-400 mb-4">
-                Valipokkann is an artist whose work explores the intersection of traditional Indian aesthetics
+                VALIPOKKANN is an artist whose work explores the intersection of traditional Indian aesthetics
                 and contemporary artistic expression. Through various mediums, they create pieces that challenge
                 conventional perspectives and celebrate cultural heritage.
               </p>

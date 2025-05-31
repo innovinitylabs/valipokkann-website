@@ -55,6 +55,13 @@ const Art = () => {
       image: 'valipokkann_transparent_logo.png',
       description: 'Balancing heritage and aspiration.',
       year: 2020
+    },
+    {
+      id: 6,
+      title: 'Vertical Test',
+      image: 'artworks/vertical_test.jpg',
+      description: 'Testing vertical image display and aspect ratio handling.',
+      year: 2024
     }
   ];
 
@@ -101,17 +108,17 @@ const Art = () => {
     setDetailsRotation(0);
   };
 
-  // Fullscreen modal drag for pan and rotate
+  // Fullscreen modal drag for pan
   const handleDrag = (event: MouseEvent | TouchEvent | PointerEvent, info: PanInfo) => {
-    // Update pan based on drag delta
-    setPan({ x: pan.x + info.delta.x, y: pan.y + info.delta.y });
+    console.log('Dragging offset:', info.offset.x, info.offset.y); // Debug drag
+    // Update pan based on drag offset
+    setPan({ x: info.offset.x, y: info.offset.y });
 
-    // Update rotation based on horizontal drag delta (simplified)
-    const rotationSensitivity = 0.5; // Adjust sensitivity
-    const newRotation = fullscreenRotation + info.delta.x * rotationSensitivity;
-    setFullscreenRotation(newRotation);
-    // Keep slider value within 0-360, handling negative results correctly
-    setRotationSlider(((newRotation % 360) + 360) % 360); 
+    // Temporarily remove rotation update to debug pan
+    // const rotationSensitivity = 0.5; // Adjust sensitivity
+    // const newRotation = fullscreenRotation + info.delta.x * rotationSensitivity;
+    // setFullscreenRotation(newRotation);
+    // setRotationSlider(((newRotation % 360) + 360) % 360); // Sync slider
   };
 
   // Fullscreen modal slider rotation
@@ -159,6 +166,7 @@ const Art = () => {
                 className="bg-white dark:bg-gray-800 rounded-lg shadow-lg overflow-hidden cursor-pointer"
                 onClick={() => openDetailsModal(artwork)}
               >
+                {/* Image container in gallery view */}
                 <div className="aspect-w-16 aspect-h-9 bg-gray-200 dark:bg-gray-700 flex items-center justify-center">
                   <img 
                     src={artwork.image} 
@@ -199,7 +207,7 @@ const Art = () => {
               
               <div className="flex flex-col items-center">
                 {/* Image Display Area - Clickable to go fullscreen */}
-                {/* Ensured object-contain and proper container sizing */}
+                {/* Adjusted container and image classes for better fitting */}
                 <div
                   className="relative w-full max-h-[60vh] mb-4 overflow-hidden bg-gray-200 dark:bg-gray-700 rounded-lg flex items-center justify-center cursor-pointer"
                   onClick={(e) => { e.stopPropagation(); openFullscreenModal(); }}
@@ -266,15 +274,16 @@ const Art = () => {
             className="fixed inset-0 z-50 flex items-center justify-center bg-black"
             // Click background does NOT close modal in fullscreen
           >
-            {/* Fullscreen Image Container - occupies full modal space, allows drag and pan/rotate via framer-motion */}
-            {/* Using onDrag to update both pan and rotation states */}
+            {/* Fullscreen Image Container - occupies full modal space, allows drag for pan */}
+            {/* Using onDrag to update pan state */}
+            {/* Simplified container structure around the image */}
             <motion.div
                className="relative w-full h-full flex items-center justify-center cursor-grab"
                onClick={(e) => e.stopPropagation()} // Prevent closing modal when clicking image container
                drag
                dragConstraints={{ left: -Infinity, right: Infinity, top: -Infinity, bottom: Infinity }} // Allow dragging anywhere
                style={{ x: pan.x, y: pan.y, rotate: fullscreenRotation }} // Apply pan and rotation
-               onDrag={(event, info) => handleDrag(event, info)} // Use custom handler for combined pan and rotate
+               onDrag={(event, info) => handleDrag(event, info)} // Use custom handler for pan
             >
               {selectedArtwork.image && (
                  <motion.img 

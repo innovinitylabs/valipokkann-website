@@ -1,5 +1,5 @@
-import { useState, useRef } from 'react';
-import { motion, AnimatePresence, PanInfo, useMotionValue, animate } from 'framer-motion';
+import { useState } from 'react';
+import { motion, AnimatePresence, useMotionValue, animate } from 'framer-motion';
 
 interface Artwork {
   id: number;
@@ -107,7 +107,7 @@ const Art = () => {
   };
 
   // Fullscreen modal drag for pan
-  const handleDrag = (event: MouseEvent | TouchEvent | PointerEvent, info: PanInfo) => {
+  const handleDrag = () => {
     // framer-motion updates panX and panY directly when attached to the motion div and drag is enabled.
     // No manual update needed here.
   };

@@ -140,9 +140,9 @@ const Art = () => {
                 ? 'bg-primary-dark text-white' 
                 : 'bg-primary text-white hover:bg-primary-dark'
             }`}
-            title="அழகு ஒரு புரட்சி"
+            title={isBarrelRolling ? 'normie view' : 'enter the omnivalient era'}
           >
-            {isBarrelRolling ? 'Normal View' : 'Special View'}
+            {isBarrelRolling ? 'Nilai Pārvai' : 'Nōkkōṇam'}
           </button>
         </div>
 

@@ -12,11 +12,13 @@ import About from './pages/About';
 import Links from './pages/Links';
 import Admin from './pages/Admin';
 import NotFound from './pages/NotFound';
+import { useKonamiCode } from './utils/konami';
 
 function App() {
   // App component main function
   const [isDarkMode, setIsDarkMode] = useState(true);
   const [showTooltip, setShowTooltip] = useState(false);
+  const [isSiteBarrelRolling, setIsSiteBarrelRolling] = useState(false);
 
   useEffect(() => {
     const isDark = localStorage.getItem('darkMode') === 'true';
@@ -38,11 +40,22 @@ function App() {
 
   useEffect(() => {
     console.log('App mounted');
+    const konami = useKonamiCode(() => {
+      setIsSiteBarrelRolling(prev => !prev);
+      // Optional: Add a visual cue or log here when Konami code is entered
+      console.log('Konami code entered! Barrel roll toggled.');
+    });
+
+    konami.start();
+
+    return () => {
+      konami.stop();
+    };
   }, []);
 
   return (
     <Router basename="/">
-      <div className="min-h-screen flex flex-col">
+      <div className={`min-h-screen flex flex-col transition-transform duration-1000 ${isSiteBarrelRolling ? 'rotate-180' : ''}`}>
         <Navbar isDarkMode={isDarkMode} toggleDarkMode={toggleDarkMode} />
         <main className="flex-grow">
           <AnimatePresence mode="wait">

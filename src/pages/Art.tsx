@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 interface Artwork {
@@ -14,6 +14,8 @@ const Art = () => {
   const [isUpsideDown, setIsUpsideDown] = useState(false);
   const [selectedArtwork, setSelectedArtwork] = useState<Artwork | null>(null);
   const [rotation, setRotation] = useState(0);
+  const [dragStart, setDragStart] = useState<{x: number, y: number} | null>(null);
+  const [dragRotation, setDragRotation] = useState(0);
 
   // Sample artwork data with logo as placeholder
   const artworks: Artwork[] = [
@@ -65,20 +67,35 @@ const Art = () => {
   const handleArtworkClick = (artwork: Artwork) => {
     setSelectedArtwork(artwork);
     setRotation(0);
+    setDragRotation(0);
   };
 
   const handleRotate = (direction: 'left' | 'right') => {
     setRotation(prev => prev + (direction === 'left' ? -90 : 90));
+    setDragRotation(0);
   };
 
-  const handleDragRotate = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (e.buttons === 1) { // Left mouse button
-      const target = e.currentTarget;
-      const centerX = target.offsetWidth / 2;
-      const centerY = target.offsetHeight / 2;
-      const angle = Math.atan2(e.clientY - centerY, e.clientX - centerX);
-      setRotation(angle * (180 / Math.PI));
+  const handleReset = () => {
+    setRotation(0);
+    setDragRotation(0);
+  };
+
+  // Improved drag-to-rotate logic
+  const handleDragStart = (e: React.MouseEvent<HTMLDivElement>) => {
+    setDragStart({ x: e.clientX, y: e.clientY });
+  };
+
+  const handleDrag = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (dragStart) {
+      const dx = e.clientX - dragStart.x;
+      setDragRotation(dx / 2); // 2px = 1deg for smoother rotation
     }
+  };
+
+  const handleDragEnd = () => {
+    setRotation(prev => prev + dragRotation);
+    setDragStart(null);
+    setDragRotation(0);
   };
 
   return (
@@ -111,7 +128,7 @@ const Art = () => {
                 onClick={() => handleArtworkClick(artwork)}
               >
                 <div className="aspect-w-16 aspect-h-9 bg-gray-200 dark:bg-gray-700 flex items-center justify-center">
-                  <img src={artwork.image} alt={artwork.title} className="object-contain w-3/4 h-3/4" />
+                  <img src={artwork.image} alt={artwork.title} className="object-contain max-w-[60%] max-h-[60%] mx-auto my-auto" />
                 </div>
                 <div className="p-6">
                   <h3 className="text-xl font-semibold mb-2">{artwork.title}</h3>
@@ -129,11 +146,11 @@ const Art = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="artwork-modal"
+            className="artwork-modal fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-60"
             onClick={() => setSelectedArtwork(null)}
           >
             <div
-              className="relative max-w-4xl mx-auto bg-white dark:bg-gray-800 p-4 rounded-lg"
+              className="relative w-full max-w-3xl md:max-w-4xl bg-white dark:bg-gray-800 p-6 rounded-lg mx-2"
               onClick={(e) => e.stopPropagation()}
             >
               <button
@@ -142,30 +159,36 @@ const Art = () => {
               >
                 ✕
               </button>
-              
               <div
-                className="relative aspect-w-16 aspect-h-9 bg-gray-200 dark:bg-gray-700 cursor-grab flex items-center justify-center"
-                onMouseDown={handleDragRotate}
-                style={{ transform: `rotate(${rotation}deg)` }}
+                className="relative aspect-w-16 aspect-h-9 bg-gray-200 dark:bg-gray-700 cursor-grab flex items-center justify-center mb-4"
+                style={{ userSelect: 'none', touchAction: 'none', transform: `rotate(${rotation + dragRotation}deg)` }}
+                onMouseDown={handleDragStart}
+                onMouseMove={dragStart ? handleDrag : undefined}
+                onMouseUp={handleDragEnd}
+                onMouseLeave={dragStart ? handleDragEnd : undefined}
               >
-                <img src={selectedArtwork.image} alt={selectedArtwork.title} className="object-contain w-3/4 h-3/4" />
+                <img src={selectedArtwork.image} alt={selectedArtwork.title} className="object-contain max-w-[70%] max-h-[70%] mx-auto my-auto" />
               </div>
-
-              <div className="artwork-controls">
+              <div className="flex gap-2 justify-center mb-4">
                 <button
                   onClick={() => handleRotate('left')}
-                  className="p-2 bg-white dark:bg-gray-800 rounded-full shadow-lg"
+                  className="p-2 bg-white dark:bg-gray-800 rounded-full shadow-lg border border-gray-200 dark:border-gray-700"
                 >
                   ↶
                 </button>
                 <button
+                  onClick={handleReset}
+                  className="p-2 bg-white dark:bg-gray-800 rounded-full shadow-lg border border-gray-200 dark:border-gray-700"
+                >
+                  ⟳
+                </button>
+                <button
                   onClick={() => handleRotate('right')}
-                  className="p-2 bg-white dark:bg-gray-800 rounded-full shadow-lg"
+                  className="p-2 bg-white dark:bg-gray-800 rounded-full shadow-lg border border-gray-200 dark:border-gray-700"
                 >
                   ↷
                 </button>
               </div>
-
               <div className="mt-4">
                 <h2 className="text-2xl font-serif mb-2">{selectedArtwork.title}</h2>
                 <p className="text-gray-600 dark:text-gray-400">{selectedArtwork.description}</p>

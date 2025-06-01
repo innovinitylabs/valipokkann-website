@@ -1,0 +1,30 @@
+backend:
+  name: git-gateway
+  branch: main # Branch to commit to
+  base_url: https://valipokkann.netlify.app/.netlify/identity
+
+media_folder: "public/images"
+public_folder: "/images"
+
+collections:
+  - name: "articles"
+    label: "Articles"
+    folder: "src/data/articles"
+    create: true
+    slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
+    fields:
+      - {label: "Title", name: "title", widget: "string"}
+      - {label: "Publish Date", name: "date", widget: "datetime"}
+      - {label: "Tags", name: "tags", widget: "list", field: {label: "Tag", name: "tag", widget: "string"}}
+      - {label: "Body", name: "body", widget: "markdown"}
+
+  - name: "artwork"
+    label: "Artwork"
+    folder: "src/data/artwork"
+    create: true
+    slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
+    fields:
+      - {label: "Title", name: "title", widget: "string"}
+      - {label: "Image", name: "image", widget: "image", media_folder: "/public/artworks", public_folder: "/artworks"}
+      - {label: "Description", name: "description", widget: "text"}
+      - {label: "Year", name: "year", widget: "number"} 

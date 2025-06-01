@@ -119,6 +119,6 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 Valipokkann - [@valipokkann](https://twitter.com/valipokkann)
 
-Project Link: [https://github.com/innovinitylabs/valipokkann-website](https://github.com/innovinitylabs/valipokkann-website)
+Project Link: https://github.com/innovinitylabs/valipokkann-website
 
 Last updated: July 24, 2024 

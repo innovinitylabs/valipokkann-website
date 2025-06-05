@@ -21,7 +21,7 @@ function App() {
   const [isSiteBarrelRolling, setIsSiteBarrelRolling] = useState(false);
 
   useEffect(() => {
-    const isDark = localStorage.getItem('darkMode') === 'true';
+    const isDark = localStorage.getItem('darkMode') === null ? true : localStorage.getItem('darkMode') === 'true';
     setIsDarkMode(isDark);
     document.documentElement.classList.toggle('dark', isDark);
   }, []);

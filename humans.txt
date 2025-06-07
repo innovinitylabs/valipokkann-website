@@ -1,0 +1,21 @@
+/* TEAM */
+	Developer: VALIPOKKANN
+	Contact: https://valipokkann.in
+	From: India
+
+/* SITE */
+	Last update: 2024/03/19
+	Language: English, Tamil
+	Doctype: HTML5
+	IDE: Visual Studio Code
+	Stack: React, TypeScript, Tailwind CSS
+	Standards: HTML5, CSS3, JavaScript ES6+
+	Components: React Router, Framer Motion, React Helmet Async
+	Software: Node.js, npm, Git
+	Hosting: GitHub Pages
+	Analytics: Google Analytics
+	SEO: Schema.org, Open Graph, Twitter Cards
+	Performance: Lazy Loading, Code Splitting
+	Accessibility: ARIA, Semantic HTML
+	Security: HTTPS, CSP
+	License: MIT 

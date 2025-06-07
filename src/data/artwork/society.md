@@ -22,8 +22,8 @@ artistNotes: "This piece explores the complex web of human relationships and soc
 pressMentions: []
 license: "CC BY-NC-ND 4.0"
 priceEth: 0.9
-thumbnail: "/public/artworks/SOCIETY.PNG"
-fullImage: "/public/artworks/SOCIETY.PNG"
+thumbnail: "/artworks/SOCIETY.PNG"
+fullImage: "/artworks/SOCIETY.PNG"
 links:
   - label: "View on ArtNet"
     url: "#"

@@ -22,8 +22,8 @@ artistNotes: "This piece delves into the balance between chaos and order."
 pressMentions: []
 license: "CC BY-NC-ND 4.0"
 priceEth: 0.2
-thumbnail: "/public/artworks/harmonyofobscurefidelity.jpeg"
-fullImage: "/public/artworks/harmonyofobscurefidelity.jpeg"
+thumbnail: "/artworks/harmonyofobscurefidelity.jpeg"
+fullImage: "/artworks/harmonyofobscurefidelity.jpeg"
 links:
   - label: "Learn More"
     url: "#"

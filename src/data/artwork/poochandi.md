@@ -22,8 +22,8 @@ artistNotes: "This piece explores the cultural tales of childhood fears and fant
 pressMentions: []
 license: "CC BY-NC-ND 4.0"
 priceEth: 0.4
-thumbnail: "/public/artworks/poochandi.JPG"
-fullImage: "/public/artworks/poochandi.JPG"
+thumbnail: "/artworks/poochandi.JPG"
+fullImage: "/artworks/poochandi.JPG"
 links:
   - label: "View Collection"
     url: "#"

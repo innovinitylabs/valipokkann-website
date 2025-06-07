@@ -22,8 +22,8 @@ artistNotes: "Inspired by the fleeting nature of perception and the human desire
 pressMentions: []
 license: "CC BY-NC-ND 4.0"
 priceEth: 0.3
-thumbnail: "/public/artworks/கானல் நீர்.JPG"
-fullImage: "/public/artworks/கானல் நீர்.JPG"
+thumbnail: "/artworks/கானல் நீர்.JPG"
+fullImage: "/artworks/கானல் நீர்.JPG"
 links:
   - label: "Explore This Piece"
     url: "#"

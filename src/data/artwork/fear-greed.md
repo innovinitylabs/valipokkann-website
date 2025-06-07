@@ -22,8 +22,8 @@ artistNotes: "Inspired by the volatile nature of financial markets and human psy
 pressMentions: []
 license: "CC BY-NC-ND 4.0"
 priceEth: 0.1
-thumbnail: "/public/artworks/FEAR & GREED.jpeg"
-fullImage: "/public/artworks/FEAR & GREED.jpeg"
+thumbnail: "/artworks/FEAR & GREED.jpeg"
+fullImage: "/artworks/FEAR & GREED.jpeg"
 links:
   - label: "Explore on Marketplace"
     url: "#"

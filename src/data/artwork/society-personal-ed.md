@@ -22,8 +22,8 @@ artistNotes: "This piece reflects my personal struggle within societal norms."
 pressMentions: []
 license: "CC BY-NC-ND 4.0"
 priceEth: 0.7
-thumbnail: "/public/artworks/Society - Personal ED.PNG"
-fullImage: "/public/artworks/Society - Personal ED.PNG"
+thumbnail: "/artworks/Society - Personal ED.PNG"
+fullImage: "/artworks/Society - Personal ED.PNG"
 links:
   - label: "Read More"
     url: "#"

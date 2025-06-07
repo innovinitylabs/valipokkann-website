@@ -25,8 +25,8 @@ pressMentions:
     url: "https://example.com/press"
 license: "CC BY-NC-ND 4.0"
 priceEth: 1.5
-thumbnail: "/public/artworks/OmniValient.GIF"
-fullImage: "/public/artworks/OmniValient.GIF"
+thumbnail: "/artworks/OmniValient.GIF"
+fullImage: "/artworks/OmniValient.GIF"
 links:
   - label: "View on SuperRare"
     url: "#"

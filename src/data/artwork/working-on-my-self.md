@@ -22,8 +22,8 @@ artistNotes: "This piece explores the continuous journey of self-discovery and i
 pressMentions: []
 license: "CC BY-NC-ND 4.0"
 priceEth: 0.6
-thumbnail: "/public/artworks/WORKING ON MY-SELF.jpg"
-fullImage: "/public/artworks/WORKING ON MY-SELF.jpg"
+thumbnail: "/artworks/WORKING ON MY-SELF.jpg"
+fullImage: "/artworks/WORKING ON MY-SELF.jpg"
 links:
   - label: "Artist Statement"
     url: "#"

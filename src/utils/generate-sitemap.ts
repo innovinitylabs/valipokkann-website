@@ -1,7 +1,6 @@
 import fs from 'fs';
 import path from 'path';
-import pkg from 'glob';
-const { glob } = pkg;
+import glob from 'glob';
 import siteConfig from '../config/site-config.js';
 
 interface SitemapUrl {

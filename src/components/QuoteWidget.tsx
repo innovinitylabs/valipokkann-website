@@ -1,45 +1,52 @@
-import { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Draggable from 'react-draggable';
+import tamilQuotes from '../data/quotes/tamil.json';
+import thirukkuralData from '../data/quotes/thirukkural.json';
 
 interface Quote {
   text: string;
-  translation: string;
-  transliteration: string;
+  translation?: string;
+  transliteration?: string;
   source: string;
+  explanation?: string;
 }
 
-const quotes: Quote[] = [
-  {
-    text: 'அழகு ஒரு புரட்சி',
-    translation: 'Beauty is a revolution',
-    transliteration: 'Azhagu oru puraṭci',
-    source: 'Valipokkann'
-  },
-  {
-    text: 'கற்றது கை மண் அளவு, கல்லாதது உலகளவு',
-    translation: 'What we know is a handful of sand, what we don\'t know is the size of the world',
-    transliteration: 'Kaṟṟatu kai maṇ aḷavu, kallātu ulakaḷavu',
-    source: 'Thirukkural'
-  },
-  // Add more quotes here
-];
-
-const QuoteWidget = () => {
-  const [currentQuote, setCurrentQuote] = useState(0);
-  const [isMinimized, setIsMinimized] = useState(false);
+const QuoteWidget: React.FC = () => {
+  const [quotes, setQuotes] = useState<Quote[]>([]);
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [isMinimized, setIsMinimized] = useState(true);
   const [position, setPosition] = useState({ x: 0, y: 0 });
   const nodeRef = useRef(null);
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      if (!isMinimized) {
-        setCurrentQuote((prev) => (prev + 1) % quotes.length);
-      }
-    }, 20000);
+    // Get 10 random Thirukkural couplets
+    const randomThirukkural = [...thirukkuralData]
+      .sort(() => Math.random() - 0.5)
+      .slice(0, 10)
+      .map(kural => ({
+        text: kural.text,
+        translation: kural.translation,
+        transliteration: kural.transliteration,
+        source: kural.source,
+        explanation: kural.explanation
+      }));
 
-    return () => clearInterval(interval);
-  }, [isMinimized]);
+    // Combine with other Tamil quotes
+    const allQuotes = [...randomThirukkural, ...tamilQuotes];
+    
+    // Shuffle the combined quotes
+    const shuffledQuotes = allQuotes.sort(() => Math.random() - 0.5);
+    setQuotes(shuffledQuotes);
+  }, []);
+
+  const nextQuote = () => {
+    setCurrentIndex((prev) => (prev + 1) % quotes.length);
+  };
+
+  const prevQuote = () => {
+    setCurrentIndex((prev) => (prev - 1 + quotes.length) % quotes.length);
+  };
 
   const handleDragStop = (_: any, data: { x: number; y: number }) => {
     setPosition({ x: data.x, y: data.y });
@@ -49,9 +56,13 @@ const QuoteWidget = () => {
     if (isMinimized) {
       setIsMinimized(false);
     } else {
-      setCurrentQuote((prev) => (prev + 1) % quotes.length);
+      nextQuote();
     }
   };
+
+  if (quotes.length === 0) return null;
+
+  const currentQuote = quotes[currentIndex];
 
   return (
     <Draggable
@@ -91,38 +102,66 @@ const QuoteWidget = () => {
               initial={{ scale: 0.8, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.8, opacity: 0 }}
-              className="quote-widget cursor-move p-6 bg-neutral-950 dark:bg-neutral-900 rounded-lg shadow-lg text-white"
-              onClick={handleClick}
+              className="quote-widget relative cursor-move w-80 bg-white dark:bg-gray-800 rounded-lg shadow-lg"
             >
-              <div className="drag-handle">
+              <div className="drag-handle absolute inset-0"></div>
+              <div className="p-4 pb-12 pt-10">
                 <AnimatePresence mode="wait">
                   <motion.div
-                    key={currentQuote}
+                    key={currentIndex}
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: -20 }}
-                    transition={{ duration: 0.5 }}
                     className="space-y-2"
                   >
-                    <p className="text-lg font-serif">{quotes[currentQuote].text}</p>
-                    <p className="text-sm italic">{quotes[currentQuote].transliteration}</p>
-                    <p className="text-sm">{quotes[currentQuote].translation}</p>
-                    <p className="text-xs text-gray-400">— {quotes[currentQuote].source}</p>
+                    <p className="text-lg font-tamil">{currentQuote.text}</p>
+                    {currentQuote.transliteration && (
+                      <p className="text-sm text-gray-600 dark:text-gray-300">
+                        {currentQuote.transliteration}
+                      </p>
+                    )}
+                    {currentQuote.translation && (
+                      <p className="text-sm text-gray-700 dark:text-gray-200">
+                        {currentQuote.translation}
+                      </p>
+                    )}
+                    {currentQuote.explanation && (
+                      <p className="text-xs text-gray-500 dark:text-gray-400">
+                        {currentQuote.explanation}
+                      </p>
+                    )}
+                    <p className="text-sm text-gray-500 dark:text-gray-400">
+                      - {currentQuote.source}
+                    </p>
                   </motion.div>
                 </AnimatePresence>
-                <button
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    setIsMinimized(true);
-                  }}
-                  className="absolute top-2 right-2 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 p-2 touch-manipulation"
-                  style={{ touchAction: 'manipulation' }}
-                >
-                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                  </svg>
-                </button>
               </div>
+
+              <button
+                onClick={prevQuote}
+                className="absolute bottom-4 left-4 text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-white"
+              >
+                ←
+              </button>
+              <button
+                onClick={nextQuote}
+                className="absolute bottom-4 right-4 text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-white"
+              >
+                →
+              </button>
+
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setIsMinimized(true);
+                }}
+                className="absolute top-2 right-2 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 p-2 touch-manipulation"
+                style={{ touchAction: 'manipulation' }}
+              >
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                </svg>
+              </button>
             </motion.div>
           )}
         </AnimatePresence>

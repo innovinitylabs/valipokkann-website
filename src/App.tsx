@@ -13,6 +13,7 @@ import Links from './pages/Links';
 import Admin from './pages/Admin';
 import NotFound from './pages/NotFound';
 import Photography from './pages/Photography';
+import Thirukkural from './pages/Thirukkural';
 import { useKonamiCode } from './utils/konami';
 
 function App() {
@@ -62,12 +63,13 @@ function App() {
           <AnimatePresence mode="wait">
             <Routes>
               <Route path="/" element={<Home />} />
-              <Route path="/art" element={<Art />} />
-              <Route path="/articles" element={<Articles />} />
-              <Route path="/music" element={<Music />} />
               <Route path="/about" element={<About />} />
-              <Route path="/links" element={<Links />} />
               <Route path="/photography" element={<Photography />} />
+              <Route path="/art" element={<Art />} />
+              <Route path="/music" element={<Music />} />
+              <Route path="/articles" element={<Articles />} />
+              <Route path="/links" element={<Links />} />
+              <Route path="/thirukkural" element={<Thirukkural />} />
               <Route path="/admin" element={<Admin />} />
               <Route path="*" element={<NotFound />} />
             </Routes>

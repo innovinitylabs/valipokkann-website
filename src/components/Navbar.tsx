@@ -13,13 +13,14 @@ const Navbar = ({ isDarkMode, toggleDarkMode }: NavbarProps) => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   
   const navItems = [
-    { path: '/', label: 'Home' },
-    { path: '/art', label: 'Art' },
-    { path: '/photography', label: 'Photography' },
-    { path: '/articles', label: 'Articles' },
-    { path: '/music', label: 'Music' },
-    { path: '/links', label: 'Links' },
-    { path: '/about', label: 'About' },
+    { name: 'Home', path: '/' },
+    { name: 'Art', path: '/art' },
+    { name: 'Photography', path: '/photography' },
+    { name: 'Music', path: '/music' },
+    { name: 'Thirukkural', path: '/thirukkural' },
+    { name: 'Articles', path: '/articles' },
+    { name: 'About', path: '/about' },
+    { name: 'Links', path: '/links' },
   ];
 
   const toggleMobileMenu = () => {
@@ -55,7 +56,7 @@ const Navbar = ({ isDarkMode, toggleDarkMode }: NavbarProps) => {
                 className="nav-link"
                 onClick={() => setIsMobileMenuOpen(false)} // Close mobile menu on click
               >
-                {item.label}
+                {item.name}
               </Link>
             ))}
 
@@ -111,7 +112,7 @@ const Navbar = ({ isDarkMode, toggleDarkMode }: NavbarProps) => {
                   className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"
                   onClick={toggleMobileMenu} // Close menu when a link is clicked
                 >
-                  {item.label}
+                  {item.name}
                 </Link>
               ))}
               {/* Mobile Dark Mode Toggle - example placement */}

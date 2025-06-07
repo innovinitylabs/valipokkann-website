@@ -1,6 +1,7 @@
 import generateSitemap from './generate-sitemap.js';
 import generateStructuredData from './generate-structured-data.js';
 import generateSitemapIndex from './generate-sitemap-index.js';
+import { generateThirukkuralQuotes } from './generate-quotes.js';
 
 const build = async () => {
   try {
@@ -11,6 +12,10 @@ const build = async () => {
     console.log('Generating structured data...');
     await generateStructuredData();
     console.log('Structured data generated successfully!');
+
+    console.log('Generating Thirukkural quotes...');
+    await generateThirukkuralQuotes();
+    console.log('Thirukkural quotes generated successfully!');
 
     console.log('Generating sitemap index...');
     await generateSitemapIndex();

@@ -94,7 +94,7 @@ const Links = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
         >
-          <h1 className="text-4xl font-serif mb-8 text-center">Links</h1>
+          <h1 className="text-4xl font-serif mb-8 text-center text-white">Links</h1>
 
           {/* Category Filter */}
           <div className="flex justify-center space-x-4 mb-8">
@@ -105,7 +105,7 @@ const Links = () => {
                 className={`px-4 py-2 rounded-full transition-colors duration-200 ${
                   activeCategory === category.id
                     ? 'bg-primary-dark text-white'
-                    : 'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700'
+                    : 'bg-neutral-950 dark:bg-neutral-900 text-gray-300 hover:bg-neutral-900 dark:hover:bg-neutral-800'
                 }`}
               >
                 {category.label}
@@ -122,13 +122,13 @@ const Links = () => {
                 target="_blank"
                 rel="noopener noreferrer"
                 whileHover={{ scale: 1.02 }}
-                className="block p-6 bg-white dark:bg-gray-900 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-200"
+                className="block p-6 bg-neutral-950 dark:bg-neutral-900 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-200"
               >
                 <div className="flex items-center space-x-4">
                   {link.icon && (
                     <span className="text-2xl">{link.icon}</span>
                   )}
-                  <span className="text-lg font-medium">{link.title}</span>
+                  <span className="text-lg font-medium text-white">{link.title}</span>
                 </div>
               </motion.a>
             ))}

@@ -68,7 +68,7 @@ const Articles = () => {
   return (
     <div className="min-h-screen py-12 px-4">
       <div className="max-w-4xl mx-auto">
-        <h1 className="text-4xl font-serif mb-8">Articles</h1>
+        <h1 className="text-4xl font-serif mb-8 text-white">Articles</h1>
 
         {/* Tag Filter */}
         <div className="mb-8">
@@ -78,7 +78,7 @@ const Articles = () => {
               className={`px-4 py-2 rounded-full transition-colors duration-200 ${
                 !selectedTag
                   ? 'bg-primary-dark text-white'
-                  : 'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700'
+                  : 'bg-neutral-950 dark:bg-neutral-900 text-gray-300 hover:bg-neutral-900 dark:hover:bg-neutral-800'
               }`}
             >
               All
@@ -90,7 +90,7 @@ const Articles = () => {
                 className={`px-4 py-2 rounded-full transition-colors duration-200 ${
                   selectedTag === tag
                     ? 'bg-primary-dark text-white'
-                    : 'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700'
+                    : 'bg-neutral-950 dark:bg-neutral-900 text-gray-300 hover:bg-neutral-900 dark:hover:bg-neutral-800'
                 }`}
               >
                 {tag}
@@ -106,23 +106,23 @@ const Articles = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               whileHover={{ scale: 1.02 }}
-              className="bg-white dark:bg-gray-900 rounded-lg shadow-lg p-6 cursor-pointer"
+              className="bg-neutral-950 dark:bg-neutral-900 rounded-lg shadow-lg p-6 cursor-pointer"
               onClick={() => setSelectedArticle(article)}
             >
-              <h2 className="text-2xl font-serif mb-2">{article.title}</h2>
-              <p className="text-gray-600 dark:text-gray-400 mb-4">{article.excerpt}</p>
+              <h2 className="text-2xl font-serif mb-2 text-white">{article.title}</h2>
+              <p className="text-gray-400 mb-4">{article.excerpt}</p>
               <div className="flex items-center justify-between">
                 <div className="flex space-x-2">
                   {article.tags.map((tag) => (
                     <span
                       key={tag}
-                      className="px-3 py-1 bg-gray-100 dark:bg-gray-800 rounded-full text-sm"
+                      className="px-3 py-1 bg-neutral-900 dark:bg-neutral-800 rounded-full text-sm text-gray-300"
                     >
                       {tag}
                     </span>
                   ))}
                 </div>
-                <time className="text-sm text-gray-500">{article.date}</time>
+                <time className="text-sm text-gray-400">{article.date}</time>
               </div>
             </motion.article>
           ))}
@@ -133,11 +133,11 @@ const Articles = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center p-4"
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-60"
             onClick={() => setSelectedArticle(null)}
           >
             <div
-              className="bg-white dark:bg-gray-900 rounded-lg p-8 max-w-3xl w-full max-h-[90vh] overflow-y-auto"
+              className="relative w-full max-w-3xl md:max-w-4xl bg-neutral-950 dark:bg-neutral-900 p-6 rounded-lg mx-2"
               onClick={(e) => e.stopPropagation()}
             >
               <button
@@ -147,14 +147,14 @@ const Articles = () => {
                 ✕
               </button>
               
-              <h2 className="text-3xl font-serif mb-4">{selectedArticle.title}</h2>
+              <h2 className="text-3xl font-serif mb-4 text-white">{selectedArticle.title}</h2>
               <div className="flex items-center space-x-4 mb-6">
-                <time className="text-gray-500">{selectedArticle.date}</time>
+                <time className="text-gray-400">{selectedArticle.date}</time>
                 <div className="flex space-x-2">
                   {selectedArticle.tags.map((tag) => (
                     <span
                       key={tag}
-                      className="px-3 py-1 bg-gray-100 dark:bg-gray-800 rounded-full text-sm"
+                      className="px-3 py-1 bg-neutral-900 dark:bg-neutral-800 rounded-full text-sm text-gray-300"
                     >
                       {tag}
                     </span>
@@ -163,7 +163,7 @@ const Articles = () => {
               </div>
               
               <div className="prose dark:prose-invert max-w-none">
-                <p>{selectedArticle.content}</p>
+                <p className="text-gray-300">{selectedArticle.content}</p>
               </div>
             </div>
           </motion.div>

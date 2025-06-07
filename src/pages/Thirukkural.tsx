@@ -212,12 +212,31 @@ const Thirukkural: React.FC = () => {
       <Helmet>
         <title>Thirukkural - Ancient Tamil Literature | Valipokkann</title>
         <meta name="description" content="Explore the timeless wisdom of Thirukkural, written over 2,000 years ago by Thiruvalluvar. Discover 1,330 couplets on ethics, politics, and love that remain relevant today." />
+        <meta name="keywords" content="Thirukkural, Thiruvalluvar, Tamil Literature, Ancient Wisdom, Ethics, Politics, Love, Tamil Poetry, Classical Literature" />
+        <meta name="author" content="Thiruvalluvar" />
+        <meta name="language" content="ta,en" />
+        
+        {/* Open Graph Meta Tags */}
         <meta property="og:title" content="Thirukkural - Ancient Tamil Literature | Valipokkann" />
         <meta property="og:description" content="Explore the timeless wisdom of Thirukkural, written over 2,000 years ago by Thiruvalluvar. Discover 1,330 couplets on ethics, politics, and love that remain relevant today." />
         <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://valipokkann.in/thirukkural" />
+        <meta property="og:image" content="https://valipokkann.in/Thiruvalluvar.jpg" />
+        <meta property="og:locale" content="ta_IN" />
+        <meta property="og:locale:alternate" content="en_IN" />
+        
+        {/* Twitter Card Meta Tags */}
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content="Thirukkural - Ancient Tamil Literature | Valipokkann" />
         <meta name="twitter:description" content="Explore the timeless wisdom of Thirukkural, written over 2,000 years ago by Thiruvalluvar. Discover 1,330 couplets on ethics, politics, and love that remain relevant today." />
+        <meta name="twitter:image" content="https://valipokkann.in/Thiruvalluvar.jpg" />
+        
+        {/* Additional Meta Tags */}
+        <meta name="robots" content="index, follow" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="canonical" href="https://valipokkann.in/thirukkural" />
+        
+        {/* Structured Data */}
         <script type="application/ld+json">
           {JSON.stringify({
             "@context": "https://schema.org",
@@ -226,10 +245,32 @@ const Thirukkural: React.FC = () => {
             "description": "Explore the timeless wisdom of Thirukkural, written over 2,000 years ago by Thiruvalluvar. Discover 1,330 couplets on ethics, politics, and love that remain relevant today.",
             "author": {
               "@type": "Person",
-              "name": "Thiruvalluvar"
+              "name": "Thiruvalluvar",
+              "birthDate": "300 BCE",
+              "deathDate": "200 BCE",
+              "nationality": "Tamil",
+              "knownFor": "Thirukkural"
             },
             "datePublished": "300 BCE",
-            "inLanguage": "ta"
+            "inLanguage": ["ta", "en"],
+            "isPartOf": {
+              "@type": "WebSite",
+              "name": "Valipokkann",
+              "url": "https://valipokkann.in"
+            },
+            "mainEntity": {
+              "@type": "Book",
+              "name": "Thirukkural",
+              "author": {
+                "@type": "Person",
+                "name": "Thiruvalluvar"
+              },
+              "numberOfPages": "1330",
+              "bookEdition": "Classical",
+              "inLanguage": ["ta", "en"],
+              "genre": ["Ethics", "Politics", "Love", "Philosophy"],
+              "description": "A classic Tamil text consisting of 1,330 couplets dealing with the everyday virtues of an individual."
+            }
           })}
         </script>
       </Helmet>

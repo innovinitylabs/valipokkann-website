@@ -73,7 +73,6 @@ const Art = () => {
         const parts = content.split('---');
         // The YAML frontmatter is the second element (index 1) after splitting by '---'
         const frontmatterStr = parts[1];
-        const markdownContent = parts.slice(2).join('---'); // Rest of the content
 
         if (frontmatterStr && frontmatterStr.trim() !== '') {
           try {

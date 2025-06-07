@@ -1,6 +1,6 @@
-import generateSitemap from './generate-sitemap';
-import generateStructuredData from './generate-structured-data';
-import generateSitemapIndex from './generate-sitemap-index';
+import generateSitemap from './generate-sitemap.js';
+import generateStructuredData from './generate-structured-data.js';
+import generateSitemapIndex from './generate-sitemap-index.js';
 
 const build = async () => {
   try {

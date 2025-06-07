@@ -4,14 +4,18 @@ A modern, responsive personal website for artist Valipokkann, built with React, 
 
 ## Features
 
-- 🎨 Art gallery with interactive image rotation
+- 🎨 Art gallery with interactive image rotation and video support
+- 📸 Photography gallery with lazy loading
 - 📝 Blog-style articles with markdown support
-- 🎵 Music section (coming soon)
-- 🌓 Dark/Light mode toggle
+- 🎵 Music section
+- 🌓 Dark mode by default (light mode optional)
 - 🌐 Responsive design for all devices
 - 🎮 Easter eggs (Konami code)
 - 💫 Smooth page transitions
 - 📱 PWA-ready
+- 🔍 SEO optimized
+- 🖼️ Image optimization and lazy loading
+- 📚 Thirukkural section with chapter navigation
 
 ## Tech Stack
 
@@ -21,6 +25,8 @@ A modern, responsive personal website for artist Valipokkann, built with React, 
 - Framer Motion
 - React Router
 - Vite
+- React Helmet Async (SEO)
+- YAML for content management
 
 ## Getting Started
 
@@ -58,50 +64,34 @@ src/
 ├── pages/         # Page components
 ├── hooks/         # Custom React hooks
 ├── utils/         # Utility functions
-├── config/        # Configuration files (e.g., Tailwind CSS)
-├── assets/        # Static assets (images, fonts, etc.)
-└── data/          # Content data (e.g., articles, artwork list)
+├── config/        # Configuration files
+├── assets/        # Static assets
+└── data/          # Content data (markdown files)
+    ├── artwork/   # Art gallery content
+    ├── articles/  # Blog articles
+    └── photography/ # Photography content
 ```
 
 ## Content Management
 
-Learn how to add/edit articles, artwork, links, and other content in the [Content Management Guide](CONTENT_GUIDE.md).
+Content is managed through markdown files in the `src/data` directory:
 
-## Deployment to GitHub Pages
+- **Art Gallery**: Add artwork in `src/data/artwork/*.md`
+- **Photography**: Add photos in `src/data/photography/*.md`
+- **Articles**: Add blog posts in `src/data/articles/*.md`
 
-This site is configured for automatic deployment to GitHub Pages using GitHub Actions.
+Each markdown file should include YAML frontmatter with required metadata.
 
-1.  **Prerequisites:**
-    *   A GitHub repository for your project.
-    *   Node.js and npm installed locally (for initial setup and local development).
+## Performance Optimizations
 
-2.  **GitHub Pages Setup:**
-    *   Go to your GitHub repository on the website.
-    *   Navigate to **Settings** -> **Pages**.
-    *   Under "Build and deployment", set the **Source** to **"GitHub Actions"**.
+- **Image Optimization**: All images are optimized for web delivery
+- **Lazy Loading**: Images load only when they enter the viewport
+- **Code Splitting**: Routes are code-split for faster initial load
+- **SEO**: Meta tags and structured data for better search visibility
 
-3.  **GitHub Actions Workflow:**
-    *   A workflow file is included in this repository at `.github/workflows/deploy.yml`.
-    *   This workflow automatically builds the project (`npm run build`) and deploys the output from the `dist` folder to the `gh-pages` branch on every push to the `main` branch.
+## Deployment
 
-4.  **Configure Workflow Permissions:**
-    *   The default GitHub Actions bot needs permission to push to the `gh-pages` branch.
-    *   Go to **Settings** -> **Actions** -> **General**.
-    *   Scroll down to "Workflow permissions" and select **"Read and write permissions"**.
-    *   Click **Save**.
-
-5.  **Custom Domain (Optional):**
-    *   If you are using a custom domain (e.g., `yourdomain.com`), create a `CNAME` file in the `public` directory of your project with your custom domain name on a single line.
-    *   Ensure your domain's DNS records are configured to point to GitHub Pages (usually using CNAME or A records).
-    *   The `vite.config.ts` file is set with `base: '/'` which is appropriate for a custom domain at the root.
-
-6.  **Triggering Deployment:**
-    *   Once the workflow file (`.github/workflows/deploy.yml`) is in your `main` branch and workflow permissions are set, any push to the `main` branch will trigger the deployment workflow.
-    *   You can monitor the deployment progress in the **Actions** tab of your repository.
-
-7.  **Verification:**
-    *   After the workflow completes successfully, it might take a few minutes for GitHub Pages to update and the CDN to refresh.
-    *   Clear your browser cache and visit your site at your GitHub Pages URL or custom domain.
+The site is automatically deployed to GitHub Pages using GitHub Actions on every push to the main branch.
 
 ## Contributing
 
@@ -121,4 +111,4 @@ Valipokkann - [@valipokkann](https://twitter.com/valipokkann)
 
 Project Link: https://github.com/innovinitylabs/valipokkann-website
 
-Last updated: July 24, 2024 
+Last updated: March 19, 2024 

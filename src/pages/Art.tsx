@@ -128,6 +128,19 @@ const Art = () => {
     loadArtworks();
   }, []); // Empty dependency array means this runs once on mount
 
+  useEffect(() => {
+    const handleEscKey = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        closeModals();
+      }
+    };
+
+    window.addEventListener('keydown', handleEscKey);
+    return () => {
+      window.removeEventListener('keydown', handleEscKey);
+    };
+  }, []);
+
   const handleBarrelRoll = () => {
     setIsBarrelRolling(prev => !prev);
   };

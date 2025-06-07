@@ -107,6 +107,19 @@ const Photography = () => {
     loadPhotographs();
   }, []);
 
+  useEffect(() => {
+    const handleEscKey = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        closeModals();
+      }
+    };
+
+    window.addEventListener('keydown', handleEscKey);
+    return () => {
+      window.removeEventListener('keydown', handleEscKey);
+    };
+  }, []);
+
   const openDetailsModal = (photograph: Photograph) => {
     setSelectedPhotograph(photograph);
     setBackgroundColor(photograph.defaultBackgroundColor || 'black');

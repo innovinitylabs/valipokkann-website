@@ -77,7 +77,7 @@ const Articles = () => {
               onClick={() => setSelectedTag(null)}
               className={`px-4 py-2 rounded-full transition-colors duration-200 ${
                 !selectedTag
-                  ? 'bg-primary text-white'
+                  ? 'bg-primary-dark text-white'
                   : 'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700'
               }`}
             >
@@ -89,7 +89,7 @@ const Articles = () => {
                 onClick={() => setSelectedTag(tag)}
                 className={`px-4 py-2 rounded-full transition-colors duration-200 ${
                   selectedTag === tag
-                    ? 'bg-primary text-white'
+                    ? 'bg-primary-dark text-white'
                     : 'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700'
                 }`}
               >
@@ -106,7 +106,7 @@ const Articles = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               whileHover={{ scale: 1.02 }}
-              className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 cursor-pointer"
+              className="bg-white dark:bg-gray-900 rounded-lg shadow-lg p-6 cursor-pointer"
               onClick={() => setSelectedArticle(article)}
             >
               <h2 className="text-2xl font-serif mb-2">{article.title}</h2>
@@ -116,7 +116,7 @@ const Articles = () => {
                   {article.tags.map((tag) => (
                     <span
                       key={tag}
-                      className="px-3 py-1 bg-gray-100 dark:bg-gray-700 rounded-full text-sm"
+                      className="px-3 py-1 bg-gray-100 dark:bg-gray-800 rounded-full text-sm"
                     >
                       {tag}
                     </span>
@@ -137,7 +137,7 @@ const Articles = () => {
             onClick={() => setSelectedArticle(null)}
           >
             <div
-              className="bg-white dark:bg-gray-800 rounded-lg p-8 max-w-3xl w-full max-h-[90vh] overflow-y-auto"
+              className="bg-white dark:bg-gray-900 rounded-lg p-8 max-w-3xl w-full max-h-[90vh] overflow-y-auto"
               onClick={(e) => e.stopPropagation()}
             >
               <button
@@ -154,7 +154,7 @@ const Articles = () => {
                   {selectedArticle.tags.map((tag) => (
                     <span
                       key={tag}
-                      className="px-3 py-1 bg-gray-100 dark:bg-gray-700 rounded-full text-sm"
+                      className="px-3 py-1 bg-gray-100 dark:bg-gray-800 rounded-full text-sm"
                     >
                       {tag}
                     </span>

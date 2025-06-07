@@ -104,7 +104,7 @@ const Links = () => {
                 onClick={() => setActiveCategory(category.id)}
                 className={`px-4 py-2 rounded-full transition-colors duration-200 ${
                   activeCategory === category.id
-                    ? 'bg-primary text-white'
+                    ? 'bg-primary-dark text-white'
                     : 'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700'
                 }`}
               >
@@ -122,7 +122,7 @@ const Links = () => {
                 target="_blank"
                 rel="noopener noreferrer"
                 whileHover={{ scale: 1.02 }}
-                className="block p-6 bg-white dark:bg-gray-800 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-200"
+                className="block p-6 bg-white dark:bg-gray-900 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-200"
               >
                 <div className="flex items-center space-x-4">
                   {link.icon && (

@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { Helmet } from 'react-helmet-async';
 import { motion } from 'framer-motion';
 import thirukkuralData from '../data/quotes/thirukkural.json';
 
@@ -160,21 +159,6 @@ const Thirukkural: React.FC = () => {
   const [chapters, setChapters] = useState<{ id: number; name: string; nameEng: string }[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  // Structured data for Thirukkural
-  const structuredData = {
-    "@context": "https://schema.org",
-    "@type": "Book",
-    "name": "Thirukkural",
-    "author": {
-      "@type": "Person",
-      "name": "Thiruvalluvar"
-    },
-    "description": "Thirukkural is a classic Tamil text consisting of 1,330 couplets dealing with the everyday virtues of an individual. It is one of the most important works in Tamil literature.",
-    "datePublished": "-300",
-    "inLanguage": "ta",
-    "isbn": "978-81-206-0020-5"
-  };
-
   useEffect(() => {
     setChapters(chapterList);
   }, []);
@@ -219,71 +203,14 @@ const Thirukkural: React.FC = () => {
   }, [searchTerm, selectedChapter]);
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      <Helmet>
-        <title>Thirukkural - Ancient Tamil Literature | Valipokkann</title>
-        <meta name="description" content="Explore Thirukkural, the ancient Tamil masterpiece by Thiruvalluvar. Discover 1,330 couplets on ethics, politics, and love that remain relevant today." />
-        <meta name="keywords" content="Thirukkural, Thiruvalluvar, Tamil literature, ancient wisdom, ethics, philosophy, Tamil poetry" />
-        
-        {/* Open Graph tags */}
-        <meta property="og:title" content="Thirukkural - Ancient Tamil Literature | Valipokkann" />
-        <meta property="og:description" content="Explore Thirukkural, the ancient Tamil masterpiece by Thiruvalluvar. Discover 1,330 couplets on ethics, politics, and love that remain relevant today." />
-        <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://valipokkann.com/thirukkural" />
-        <meta property="og:image" content="https://valipokkann.com/Thiruvalluvar.jpg" />
-        
-        {/* Twitter Card tags */}
-        <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content="Thirukkural - Ancient Tamil Literature | Valipokkann" />
-        <meta name="twitter:description" content="Explore Thirukkural, the ancient Tamil masterpiece by Thiruvalluvar. Discover 1,330 couplets on ethics, politics, and love that remain relevant today." />
-        <meta name="twitter:image" content="https://valipokkann.com/Thiruvalluvar.jpg" />
-        
-        {/* Structured data */}
-        <script type="application/ld+json">
-          {JSON.stringify(structuredData)}
-        </script>
-      </Helmet>
-
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
-        className="text-center mb-8"
-      >
-        <h1 className="text-4xl font-bold mb-4">Thirukkural</h1>
-        <p className="text-lg text-neutral-400 mb-6">
-          Ancient Tamil literature that transcends time
-        </p>
-        <div className="relative max-w-2xl mx-auto">
-          <input
-            type="text"
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            placeholder="Search by keyword..."
-            className="w-full px-4 py-2 bg-neutral-800 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
-        </div>
-      </motion.div>
-
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {filteredKurals.map((kural) => (
-          <motion.article
-            key={kural.id}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-            className="bg-neutral-800 rounded-lg p-6 hover:bg-neutral-700 transition-colors"
-          >
-            <h2 className="text-xl font-semibold mb-2">Chapter {kural.chapter}: {kural.chapter_name_eng}</h2>
-            <p className="text-lg mb-2">{kural.text}</p>
-            <p className="text-neutral-400 mb-2">{kural.translation}</p>
-            <p className="text-sm text-neutral-500 italic">{kural.transliteration}</p>
-            <p className="mt-4 text-neutral-300">{kural.explanation}</p>
-          </motion.article>
-        ))}
-      </div>
-
-      <div className="flex justify-center mt-8">
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      className="container mx-auto px-4 py-8"
+    >
+      <h1 className="text-4xl font-bold mb-8 text-center">திருக்குறள்</h1>
+      <div className="flex justify-center mb-8">
         <img
           src="/Thiruvalluvar.jpg"
           alt="Thiruvalluvar"
@@ -331,7 +258,57 @@ const Thirukkural: React.FC = () => {
           </div>
         </div>
       )}
-    </div>
+
+      <div className="mb-8 space-y-4">
+        <div className="flex flex-col md:flex-row gap-4">
+          <input
+            type="text"
+            placeholder="Search Thirukkural..."
+            className="flex-1 p-2 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-100 bg-neutral-950 dark:bg-neutral-900 placeholder-gray-400 dark:placeholder-gray-500"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
+          <select
+            className="p-2 border border-gray-300 dark:border-gray-600 rounded-lg max-w-full md:max-w-xs overflow-y-auto bg-neutral-950 dark:bg-neutral-900 text-gray-100"
+            style={{ maxHeight: '300px' }}
+            value={selectedChapter}
+            onChange={(e) => setSelectedChapter(e.target.value)}
+          >
+            <option value="all">All Chapters</option>
+            {chapters.map((chapter) => (
+              <option key={chapter.id} value={chapter.id}>
+                {chapter.name} - {chapter.nameEng}
+              </option>
+            ))}
+          </select>
+        </div>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {filteredKurals.map((kural) => (
+          <motion.div
+            key={kural.id}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="bg-neutral-950 dark:bg-neutral-900 rounded-lg shadow-lg p-6"
+          >
+            <div className="text-lg font-semibold mb-2 text-gray-900 dark:text-gray-100">
+              {kural.chapter_name} - {kural.chapter_name_eng}
+            </div>
+            <div className="text-xl mb-4 font-tamil text-gray-900 dark:text-gray-100">{kural.text}</div>
+            <div className="text-gray-600 dark:text-gray-300 mb-2">
+              {kural.transliteration}
+            </div>
+            <div className="text-gray-700 dark:text-gray-200 mb-4">
+              {kural.translation}
+            </div>
+            <div className="text-sm text-gray-500 dark:text-gray-400">
+              {kural.explanation}
+            </div>
+          </motion.div>
+        ))}
+      </div>
+    </motion.div>
   );
 };
 

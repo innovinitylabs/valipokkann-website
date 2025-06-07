@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { useState } from 'react';
 import { AnimatePresence } from 'framer-motion';
+import { NavLink } from 'react-router-dom';
 
 interface NavbarProps {
   isDarkMode: boolean;
@@ -49,16 +50,29 @@ const Navbar = ({ isDarkMode, toggleDarkMode }: NavbarProps) => {
 
           {/* Desktop Menu and Theme Toggle */}
           <div className="hidden md:flex items-center space-x-4">
-            {navItems.map((item) => (
-              <Link
-                key={item.path}
-                to={item.path}
-                className="nav-link"
-                onClick={() => setIsMobileMenuOpen(false)} // Close mobile menu on click
-              >
-                {item.name}
-              </Link>
-            ))}
+            <div className="flex space-x-4">
+              <NavLink to="/" className={({ isActive }) => isActive ? 'text-blue-500' : 'text-gray-300 hover:text-white'}>
+                Home
+              </NavLink>
+              <NavLink to="/about" className={({ isActive }) => isActive ? 'text-blue-500' : 'text-gray-300 hover:text-white'}>
+                About
+              </NavLink>
+              <NavLink to="/articles" className={({ isActive }) => isActive ? 'text-blue-500' : 'text-gray-300 hover:text-white'}>
+                Articles
+              </NavLink>
+              <NavLink to="/music" className={({ isActive }) => isActive ? 'text-blue-500' : 'text-gray-300 hover:text-white'}>
+                Music
+              </NavLink>
+              <NavLink to="/art" className={({ isActive }) => isActive ? 'text-blue-500' : 'text-gray-300 hover:text-white'}>
+                Art
+              </NavLink>
+              <NavLink to="/thirukkural" className={({ isActive }) => isActive ? 'text-blue-500' : 'text-gray-300 hover:text-white'}>
+                Thirukkural
+              </NavLink>
+              <NavLink to="/links" className={({ isActive }) => isActive ? 'text-blue-500' : 'text-gray-300 hover:text-white'}>
+                Links
+              </NavLink>
+            </div>
 
             <button
               onClick={toggleDarkMode}
@@ -105,16 +119,29 @@ const Navbar = ({ isDarkMode, toggleDarkMode }: NavbarProps) => {
             className="md:hidden bg-white dark:bg-black shadow-md"
           >
             <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-              {navItems.map((item) => (
-                <Link
-                  key={item.path}
-                  to={item.path}
-                  className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"
-                  onClick={toggleMobileMenu} // Close menu when a link is clicked
-                >
-                  {item.name}
-                </Link>
-              ))}
+              <div className="flex space-x-4">
+                <NavLink to="/" className={({ isActive }) => isActive ? 'text-blue-500' : 'text-gray-300 hover:text-white'}>
+                  Home
+                </NavLink>
+                <NavLink to="/about" className={({ isActive }) => isActive ? 'text-blue-500' : 'text-gray-300 hover:text-white'}>
+                  About
+                </NavLink>
+                <NavLink to="/articles" className={({ isActive }) => isActive ? 'text-blue-500' : 'text-gray-300 hover:text-white'}>
+                  Articles
+                </NavLink>
+                <NavLink to="/music" className={({ isActive }) => isActive ? 'text-blue-500' : 'text-gray-300 hover:text-white'}>
+                  Music
+                </NavLink>
+                <NavLink to="/art" className={({ isActive }) => isActive ? 'text-blue-500' : 'text-gray-300 hover:text-white'}>
+                  Art
+                </NavLink>
+                <NavLink to="/thirukkural" className={({ isActive }) => isActive ? 'text-blue-500' : 'text-gray-300 hover:text-white'}>
+                  Thirukkural
+                </NavLink>
+                <NavLink to="/links" className={({ isActive }) => isActive ? 'text-blue-500' : 'text-gray-300 hover:text-white'}>
+                  Links
+                </NavLink>
+              </div>
               {/* Mobile Dark Mode Toggle - example placement */}
               <button
                 onClick={() => { toggleDarkMode(); toggleMobileMenu(); }}

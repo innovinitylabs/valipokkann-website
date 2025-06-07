@@ -57,7 +57,7 @@ const Music = () => {
                   href="https://soundcloud.com/valipokkann"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="block text-gray-600 dark:text-gray-400 hover:text-primary"
+                  className="block text-gray-600 dark:text-gray-400 hover:text-primary-dark"
                 >
                   SoundCloud Profile
                 </a>
@@ -65,7 +65,7 @@ const Music = () => {
                   href="https://www.linkedin.com/in/valipokkann/"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="block text-gray-600 dark:text-gray-400 hover:text-primary"
+                  className="block text-gray-600 dark:text-gray-400 hover:text-primary-dark"
                 >
                   LinkedIn
                 </a>
@@ -75,7 +75,7 @@ const Music = () => {
 
           <div className="space-y-8 mt-12">
             {playlists.map(playlist => (
-              <div key={playlist.id} className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6">
+              <div key={playlist.id} className="bg-white dark:bg-gray-900 rounded-lg shadow-lg p-6">
                 <h2 className="text-2xl font-serif mb-4">{playlist.title}</h2>
                 <div className="aspect-w-16 aspect-h-9">
                   <iframe
@@ -99,7 +99,7 @@ const Music = () => {
                 href="https://open.spotify.com/user/valipokkann"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-primary hover:text-primary-dark"
+                className="text-primary-dark hover:text-primary"
               >
                 Spotify
               </a>
@@ -108,7 +108,7 @@ const Music = () => {
                 href="https://music.apple.com/profile/valipokkann"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-primary hover:text-primary-dark"
+                className="text-primary-dark hover:text-primary"
               >
                 Apple Music
               </a>

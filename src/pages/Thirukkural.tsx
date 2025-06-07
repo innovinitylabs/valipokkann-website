@@ -157,13 +157,32 @@ const Thirukkural: React.FC = () => {
   const [selectedChapter, setSelectedChapter] = useState<string>('all');
   const [filteredKurals, setFilteredKurals] = useState<Thirukkural[]>([]);
   const [chapters, setChapters] = useState<{ id: number; name: string; nameEng: string }[]>([]);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
     setChapters(chapterList);
   }, []);
 
   useEffect(() => {
-    let filtered = thirukkuralData;
+    const handleEscape = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        setIsModalOpen(false);
+      }
+    };
+
+    if (isModalOpen) {
+      document.addEventListener('keydown', handleEscape);
+    } else {
+      document.removeEventListener('keydown', handleEscape);
+    }
+
+    return () => {
+      document.removeEventListener('keydown', handleEscape);
+    };
+  }, [isModalOpen]);
+
+  useEffect(() => {
+    let filtered: Thirukkural[] = thirukkuralData as Thirukkural[];
 
     if (searchTerm) {
       const searchLower = searchTerm.toLowerCase();
@@ -195,10 +214,51 @@ const Thirukkural: React.FC = () => {
         <img
           src="/Thiruvalluvar.jpg"
           alt="Thiruvalluvar"
-          className="w-32 h-32 rounded-full object-cover object-top shadow-lg"
+          className="w-32 h-32 rounded-full object-cover object-top shadow-lg cursor-pointer"
+          onClick={() => setIsModalOpen(true)}
         />
       </div>
       
+      {isModalOpen && (
+        <div
+          className="fixed inset-0 bg-black bg-opacity-90 flex items-center justify-center z-50 p-4 overflow-y-auto"
+          onClick={() => setIsModalOpen(false)}
+        >
+          <div
+            className="relative bg-neutral-900 rounded-lg shadow-2xl w-full max-w-4xl mx-auto my-8 max-h-[90vh] overflow-y-auto"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button
+              className="absolute top-4 right-4 text-white text-3xl font-bold hover:text-neutral-300 transition-colors focus:outline-none z-10"
+              onClick={() => setIsModalOpen(false)}
+            >
+              &times;
+            </button>
+            <div className="p-6 md:p-8">
+              <img
+                src="/Thiruvalluvar.jpg"
+                alt="Thiruvalluvar"
+                className="w-full h-auto max-h-[50vh] object-contain mx-auto mb-8 rounded-lg"
+              />
+              <div className="max-w-[600px] mx-auto text-neutral-300">
+                <p className="text-[1.1rem] leading-[1.7] mb-6">
+                  Thiruvalluvar, the legendary Tamil poet-philosopher, authored the Thirukkural over 2,000 years ago — around 300 BCE or earlier. It predates most so-called "ancient" texts, including the Bible, and yet, its truths remain unchanged and undiluted.
+                </p>
+                <p className="text-[1.1rem] leading-[1.7] mb-6">
+                  Comprising 1,330 couplets on ethics (aram), political and economic life (porul), and love (inbam), the Thirukkural offers timeless wisdom with no allegiance to any religion, caste, or region. It's a universal scripture written for all humanity — not to command obedience, but to elevate understanding.
+                </p>
+                <p className="text-[1.1rem] leading-[1.7] mb-6">
+                  What makes it remarkable? It remains "relevant till date without any rephrasing", even after millennia. Its secular tone, moral precision, and poetic conciseness are unparalleled.
+                </p>
+                <p className="text-[1.1rem] leading-[1.7]">
+                  Many Western thinkers — from Tolstoy to Gandhi — praised ideas from the Kural, often unknowingly echoing its verses. Yet the source has rarely been credited in global discourse.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
       <div className="mb-8 space-y-4">
         <div className="flex flex-col md:flex-row gap-4">
           <input

@@ -12,7 +12,11 @@ interface KuralData {
   Translation: string;
   transliteration1: string;
   transliteration2: string;
-  // There are other fields in the source JSON, but we only need these for the Quote interface
+  chapter: number;
+  chapter_name: string;
+  chapter_name_eng: string;
+  couplet_number: number;
+  explanation: string;
 }
 
 interface ThirukkuralApiResponse {
@@ -20,9 +24,15 @@ interface ThirukkuralApiResponse {
 }
 
 interface Quote {
+  id: number;
+  chapter: number;
+  chapter_name: string;
+  chapter_name_eng: string;
+  couplet_number: number;
   text: string;
   translation: string;
   transliteration: string;
+  explanation: string;
   source: string;
 }
 
@@ -40,9 +50,15 @@ export async function generateThirukkuralQuotes() {
     const apiData: ThirukkuralApiResponse = await response.json();
 
     const quotes: Quote[] = apiData.Thirukkural.map((kural: KuralData) => ({
+      id: kural.Number,
+      chapter: kural.chapter,
+      chapter_name: kural.chapter_name,
+      chapter_name_eng: kural.chapter_name_eng,
+      couplet_number: kural.couplet_number,
       text: `${kural.Line1}\n${kural.Line2}`,
       translation: kural.Translation,
       transliteration: `${kural.transliteration1}\n${kural.transliteration2}`,
+      explanation: kural.explanation,
       source: 'Thirukkural',
     }));
 

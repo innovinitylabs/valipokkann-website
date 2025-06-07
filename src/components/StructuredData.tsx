@@ -1,33 +1,117 @@
 import { useEffect } from 'react';
 
 interface StructuredDataProps {
-  type: 'artwork' | 'photography';
+  type: 'artwork' | 'photography' | 'article' | 'person' | 'website';
   data: any;
 }
 
 const StructuredData = ({ type, data }: StructuredDataProps) => {
   useEffect(() => {
-    // Load the appropriate structured data file
-    fetch(`/structured-data-${type}.json`)
-      .then(response => response.json())
-      .then(structuredData => {
-        // Find the matching item
-        const item = structuredData.find((item: any) => item.url === window.location.href);
-        if (item) {
-          // Add the structured data to the page
-          const script = document.createElement('script');
-          script.type = 'application/ld+json';
-          script.text = JSON.stringify(item);
-          document.head.appendChild(script);
-        }
-      })
-      .catch(error => console.error('Error loading structured data:', error));
+    const generateStructuredData = () => {
+      let structuredData: any = {
+        "@context": "https://schema.org",
+      };
 
-    return () => {
-      // Clean up the script when the component unmounts
-      const scripts = document.querySelectorAll('script[type="application/ld+json"]');
-      scripts.forEach(script => script.remove());
+      switch (type) {
+        case 'artwork':
+          structuredData = {
+            ...structuredData,
+            "@type": "VisualArtwork",
+            "name": data.title || "Untitled Artwork",
+            "image": data.thumbnail || data.fullImage,
+            "description": data.description,
+            "dateCreated": data.year,
+            "creator": {
+              "@type": "Person",
+              "name": "VALIPOKKANN"
+            },
+            "url": window.location.href
+          };
+          break;
+
+        case 'photography':
+          structuredData = {
+            ...structuredData,
+            "@type": "Photograph",
+            "name": data.title || "Untitled Photograph",
+            "image": data.image,
+            "description": data.description,
+            "dateCreated": data.dateTaken,
+            "creator": {
+              "@type": "Person",
+              "name": "VALIPOKKANN"
+            },
+            "url": window.location.href
+          };
+          break;
+
+        case 'article':
+          structuredData = {
+            ...structuredData,
+            "@type": "Article",
+            "headline": data.title,
+            "image": data.thumbnail,
+            "description": data.description,
+            "datePublished": data.date,
+            "author": {
+              "@type": "Person",
+              "name": "VALIPOKKANN"
+            },
+            "url": window.location.href
+          };
+          break;
+
+        case 'person':
+          structuredData = {
+            ...structuredData,
+            "@type": "Person",
+            "name": "VALIPOKKANN",
+            "url": "https://valipokkann.in",
+            "image": "https://valipokkann.in/valipokkann_transparent_logo.png",
+            "sameAs": [
+              "https://github.com/valipokkann",
+              "https://instagram.com/valipokkann"
+            ],
+            "jobTitle": "Artist",
+            "description": "A contemporary artist, revolutionary, and visionary exploring the intersection of art, technology, and social change.",
+            "worksFor": {
+              "@type": "Organization",
+              "name": "VALIPOKKANN"
+            }
+          };
+          break;
+
+        case 'website':
+          structuredData = {
+            ...structuredData,
+            "@type": "WebSite",
+            "name": "VALIPOKKANN",
+            "url": "https://valipokkann.in",
+            "description": "VALIPOKKANN - Artist • Revolutionary • Visionary",
+            "publisher": {
+              "@type": "Person",
+              "name": "VALIPOKKANN"
+            }
+          };
+          break;
+      }
+
+      return structuredData;
     };
+
+    try {
+      const structuredData = generateStructuredData();
+      const script = document.createElement('script');
+      script.type = 'application/ld+json';
+      script.text = JSON.stringify(structuredData);
+      document.head.appendChild(script);
+
+      return () => {
+        script.remove();
+      };
+    } catch (error) {
+      console.error('Error generating structured data:', error);
+    }
   }, [type, data]);
 
   return null;

@@ -19,7 +19,8 @@
     "react-dom": "^18.2.0",
     "react-draggable": "^4.4.6",
     "react-helmet-async": "^2.0.5",
-    "react-router-dom": "^6.20.0"
+    "react-router-dom": "^6.20.0",
+    "web-vitals": "^3.5.2"
   },
   "devDependencies": {
     "@types/glob": "^8.1.0",

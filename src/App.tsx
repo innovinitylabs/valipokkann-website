@@ -30,9 +30,19 @@ function App() {
   });
 
   useEffect(() => {
-    const isDark = localStorage.getItem('darkMode') === 'true';
-    setIsDarkMode(isDark);
-    document.documentElement.classList.toggle('dark', isDark);
+    // Check if darkMode is set in localStorage
+    const storedDarkMode = localStorage.getItem('darkMode');
+    
+    // If not set, default to dark mode
+    if (storedDarkMode === null) {
+      setIsDarkMode(true);
+      localStorage.setItem('darkMode', 'true');
+      document.documentElement.classList.add('dark');
+    } else {
+      const isDark = storedDarkMode === 'true';
+      setIsDarkMode(isDark);
+      document.documentElement.classList.toggle('dark', isDark);
+    }
   }, []);
 
   const toggleDarkMode = () => {

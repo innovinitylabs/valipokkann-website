@@ -1,6 +1,5 @@
 import fs from 'fs';
 import path from 'path';
-import glob from 'glob';
 import siteConfig from '../config/site-config.js';
 
 interface SitemapUrl {
@@ -11,6 +10,7 @@ interface SitemapUrl {
 }
 
 const generateSitemap = async (): Promise<void> => {
+  const { glob } = await import('glob');
   const baseUrl = `https://${siteConfig.domain}`;
   const urls: SitemapUrl[] = [];
 

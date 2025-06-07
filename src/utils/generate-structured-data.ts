@@ -1,6 +1,5 @@
 import fs from 'fs';
 import path from 'path';
-import glob from 'glob';
 import siteConfig from '../config/site-config.js';
 
 interface ArtworkData {
@@ -18,6 +17,7 @@ interface ArtworkData {
 }
 
 const generateStructuredData = async (): Promise<void> => {
+  const { glob } = await import('glob');
   const baseUrl = `https://${siteConfig.domain}`;
   const structuredData: { [key: string]: ArtworkData[] } = {
     artwork: [],

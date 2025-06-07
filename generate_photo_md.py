@@ -1,6 +1,6 @@
 import os
 import yaml
-from PIL import Image, ExifTags
+from PIL import Image, ExifTags, ImageOps
 from datetime import datetime
 import pillow_heif
 import logging
@@ -10,6 +10,9 @@ from typing import Dict, Any, Optional, List, Tuple
 import piexif
 from tqdm import tqdm
 import sys
+import math
+from fractions import Fraction
+from PIL.TiffImagePlugin import IFDRational
 
 # Configure logging
 logging.basicConfig(
@@ -109,6 +112,26 @@ def convert_heic_to_jpeg(input_path: str, output_path: str) -> bool:
             return False
         if image.mode in ('RGBA', 'P'):
             image = image.convert('RGB')
+
+        # Apply EXIF orientation using ImageOps.exif_transpose
+        try:
+            exif_dict = piexif.load(exif_bytes)
+            logger.debug(f"EXIF dictionary after loading for {input_path}: {exif_dict.keys()}")
+            if '0th' in exif_dict and piexif.ImageIFD.Orientation in exif_dict['0th']:
+                orientation = exif_dict['0th'][piexif.ImageIFD.Orientation]
+                logger.debug(f"Original Orientation for {input_path}: {orientation}")
+                logger.debug(f"Image size before rotation: {image.size}")
+
+                image = ImageOps.exif_transpose(image)
+
+                # Reset orientation tag after rotating
+                exif_dict['0th'][piexif.ImageIFD.Orientation] = 1
+                exif_bytes = piexif.dump(exif_dict)
+                logger.debug(f"Image size after rotation: {image.size}")
+                logger.debug(f"Orientation set to 1 for {input_path}")
+        except Exception as e:
+            logger.warning(f"Failed to apply EXIF orientation: {e}")
+
         try:
             image.save(output_path, 'JPEG', quality=95, exif=exif_bytes)
             logger.debug(f"Saved JPEG with EXIF (GPS stripped) for {input_path}")
@@ -185,21 +208,46 @@ def optimize_image(input_path: str, output_path: str, max_size: tuple = (1920, 1
         logger.error(f"Failed to optimize {input_path}: {e}")
         return False
 
+def _convert_rational(value, as_fraction_string: bool = False) -> Any:
+    """Helper to convert rational numbers (tuples or IFDRational) to float or fraction string."""
+    if isinstance(value, IFDRational):
+        try:
+            value = (value.numerator, value.denominator)
+        except AttributeError:
+            return value # Cannot extract numerator/denominator, return as is
+
+    if isinstance(value, tuple) and len(value) == 2:
+        try:
+            numerator, denominator = value
+            if denominator == 0:
+                return 0.0 # Avoid ZeroDivisionError
+
+            if as_fraction_string:
+                if numerator == 1:
+                    return f"1/{denominator}s"
+                else:
+                    f = Fraction(numerator, denominator).limit_denominator()
+                    return f"{f.numerator}/{f.denominator}s"
+            else:
+                return float(numerator) / float(denominator)
+        except (TypeError, ValueError, ZeroDivisionError):
+            pass
+    return value
+
 def convert_exif_value(key: str, value: Any) -> Any:
     """Converts EXIF values to more readable/storable formats."""
-    if key == 'FNumber' and isinstance(value, tuple) and len(value) == 2:
+    if isinstance(value, bytes):
         try:
-            return f"f/{value[0]/value[1]:.1f}"
-        except ZeroDivisionError:
-            pass
-    elif key == 'ExposureTime' and isinstance(value, tuple) and len(value) == 2:
-        try:
-            if value[0] == 1:
-                return f"1/{value[1]}s"
-            else:
-                return f"{value[0]/value[1]:.0f}s"
-        except ZeroDivisionError:
-            pass
+            return value.decode('utf-8')
+        except UnicodeDecodeError:
+            return str(value) # Fallback for undecodable bytes
+    elif key == 'FNumber' and (isinstance(value, tuple) or isinstance(value, IFDRational)):
+        return _convert_rational(value, as_fraction_string=False)
+    elif key == 'ExposureTime' and (isinstance(value, tuple) or isinstance(value, IFDRational)):
+        return _convert_rational(value, as_fraction_string=True)
+    # For other rational values like ShutterSpeedValue, ApertureValue
+    elif (isinstance(value, tuple) and len(value) == 2 and all(isinstance(v, (int, float)) for v in value)) or isinstance(value, IFDRational):
+        return _convert_rational(value, as_fraction_string=False)
     return value
 
 def extract_exif(image_path: str) -> Dict[str, Any]:
@@ -317,11 +365,7 @@ def extract_exif(image_path: str) -> Dict[str, Any]:
                                 processed_exif[field_name] = processed_value
                 else:
                     # Ensure value is a simple type for YAML serialization
-                    if isinstance(value, (int, float, str)):
-                        processed_value = value
-                    else:
-                        processed_value = str(convert_exif_value(exif_key, value))
-                    processed_exif[field_name] = processed_value
+                    processed_exif[field_name] = convert_exif_value(exif_key, value)
 
         return processed_exif
     except Exception as e:
@@ -412,18 +456,49 @@ def verify_exif_preservation(original_path: str, converted_path: str) -> bool:
         # Compare critical EXIF fields
         critical_fields = ['dateTaken', 'make', 'model', 'focalLength', 'aperture', 'shutterSpeed', 'iso', 'lens']
         
+        all_preserved = True
         for field in critical_fields:
-            if field in original_exif and field not in converted_exif:
-                logger.warning(f"EXIF field '{field}' was not preserved during conversion")
-                return False
-            if field in original_exif and field in converted_exif:
-                if original_exif[field] != converted_exif[field]:
-                    logger.warning(f"EXIF field '{field}' value changed during conversion")
-                    return False
+            original_value = original_exif.get(field)
+            converted_value = converted_exif.get(field)
+
+            if original_value is None and converted_value is None:
+                continue
+            
+            if original_value is None and converted_value is not None:
+                logger.warning(f"EXIF field '{field}' present in converted but not original ({converted_path})")
+                all_preserved = False
+                continue
+
+            if original_value is not None and converted_value is None:
+                logger.warning(f"EXIF field '{field}' was not preserved for {converted_path}")
+                all_preserved = False
+                continue
+
+            # Convert values to comparable types
+            if field == 'shutterSpeed' and original_value is not None and converted_value is not None:
+                try:
+                    # Attempt to convert to float for comparison if it's a string like '1/X s'
+                    original_comp_value = float(eval(original_value.replace('s', ''))) if isinstance(original_value, str) and '/' in original_value else float(original_value)
+                    converted_comp_value = float(eval(converted_value.replace('s', ''))) if isinstance(converted_value, str) and '/' in converted_value else float(converted_value)
+                except (ValueError, TypeError, SyntaxError):
+                    original_comp_value = original_value
+                    converted_comp_value = converted_value
+            else:
+                original_comp_value = convert_exif_value(field, original_value)
+                converted_comp_value = convert_exif_value(field, converted_value)
+
+            # Compare numerical values with tolerance
+            if isinstance(original_comp_value, (int, float)) and isinstance(converted_comp_value, (int, float)):
+                if not math.isclose(original_comp_value, converted_comp_value, rel_tol=1e-3, abs_tol=1e-6):
+                    logger.warning(f"EXIF field '{field}' value changed during conversion for {converted_path}: Original '{original_comp_value}', Converted '{converted_comp_value}'")
+                    all_preserved = False
+            elif original_comp_value != converted_comp_value:
+                logger.warning(f"EXIF field '{field}' value changed during conversion for {converted_path}: Original '{original_comp_value}', Converted '{converted_comp_value}'")
+                all_preserved = False
         
-        return True
+        return all_preserved
     except Exception as e:
-        logger.error(f"Error verifying EXIF preservation: {e}")
+        logger.error(f"Error verifying EXIF preservation for {converted_path}: {e}")
         return False
 
 def cleanup_temp_files(directory: str, pattern: str = "*.temp.jpg") -> None:

@@ -31,7 +31,7 @@ const siteConfig: SiteConfig = {
   social: {
     instagram: 'https://instagram.com/valipokkann',
     twitter: 'https://twitter.com/valipokkann',
-    email: 'contact@valipokkann.in',
+    email: 'valipokkann@proton.me',
   },
 };
 

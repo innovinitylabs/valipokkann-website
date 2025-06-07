@@ -75,10 +75,10 @@ const About = () => {
               <h2 className="text-2xl font-serif mt-8 mb-4">Connect</h2>
               <div className="space-y-4">
                 <a
-                  href="mailto:contact@valipokkann.in"
+                  href="mailto:valipokkann@proton.me"
                   className="block text-gray-600 dark:text-gray-400 hover:text-primary"
                 >
-                  contact@valipokkann.in
+                  valipokkann@proton.me
                 </a>
                 <div className="flex space-x-4">
                   <a

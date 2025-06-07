@@ -29,16 +29,17 @@ function App() {
     console.log('Konami code entered! Barrel roll toggled.');
   });
 
+  // Set dark mode immediately on mount
   useEffect(() => {
-    // Check if darkMode is set in localStorage
+    document.documentElement.classList.add('dark');
+    setIsDarkMode(true);
+    localStorage.setItem('darkMode', 'true');
+  }, []);
+
+  // Handle theme persistence
+  useEffect(() => {
     const storedDarkMode = localStorage.getItem('darkMode');
-    
-    // If not set, default to dark mode
-    if (storedDarkMode === null) {
-      setIsDarkMode(true);
-      localStorage.setItem('darkMode', 'true');
-      document.documentElement.classList.add('dark');
-    } else {
+    if (storedDarkMode !== null) {
       const isDark = storedDarkMode === 'true';
       setIsDarkMode(isDark);
       document.documentElement.classList.toggle('dark', isDark);

@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import QuoteWidget from './components/QuoteWidget';
+import Breadcrumbs from './components/Breadcrumbs';
 import Home from './pages/Home';
 import Art from './pages/Art';
 import Articles from './pages/Articles';
@@ -81,6 +82,9 @@ function App() {
                 <Route path="*" element={<NotFound />} />
               </Routes>
             </AnimatePresence>
+            <div className="container mx-auto px-4">
+              <Breadcrumbs />
+            </div>
           </main>
           <QuoteWidget />
           <Footer />

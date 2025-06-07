@@ -10,7 +10,7 @@ export const initGA = () => {
 
   window.dataLayer = window.dataLayer || [];
   function gtag(...args: any[]) {
-    window.dataLayer.push(arguments);
+    window.dataLayer.push(args);
   }
   gtag('js', new Date());
   gtag('config', GA_MEASUREMENT_ID);
@@ -37,11 +37,11 @@ export const trackEvent = (action: string, category: string, label: string, valu
 };
 
 // Track Core Web Vitals
-export const trackWebVitals = (metric: any) => {
-  if (typeof window.gtag !== 'undefined') {
-    window.gtag('event', metric.name, {
+export const trackWebVitals = (metric: { name: string; value: number; delta: number; id: string }) => {
+  if (typeof window.gtag === 'function') {
+    window.gtag('event', 'web_vitals', {
       event_category: 'Web Vitals',
-      event_label: metric.id,
+      event_label: metric.name,
       value: Math.round(metric.value),
       non_interaction: true,
     });

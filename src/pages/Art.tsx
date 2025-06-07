@@ -66,48 +66,46 @@ const Art = () => {
         eager: true,
         as: 'raw'
       });
-      console.log('Loaded modules:', modules); // Debug log
+      console.log('Loaded artwork modules:', modules);
       const loadedArtworks: Artwork[] = [];
 
       for (const path in modules) {
         const content = modules[path] as string;
-        console.log(`Content for ${path}:`, content); // Debug log
-        // Split the content by the first occurrence of '---'
+        console.log(`Processing content from ${path}:`, content);
         const parts = content.split('---');
-        // The YAML frontmatter is the second element (index 1) after splitting by '---'
         const frontmatterStr = parts[1];
 
         if (frontmatterStr && frontmatterStr.trim() !== '') {
           try {
-            // Parse the frontmatter YAML
             const frontmatter = yaml.load(frontmatterStr.trim()) as Artwork;
-            console.log(`Parsed frontmatter for ${path}:`, frontmatter); // Debug log
-            // Assuming frontmatter directly matches Artwork interface fields
-            loadedArtworks.push({
-              ...frontmatter, // Spread everything from frontmatter first
-              id: path.replace('/src/data/artwork/', '').replace('.md', ''), // Ensure generated ID overwrites any potential frontmatter ID
-              // Ensure thumbnail is present, use fullImage or placeholder if not
+            console.log(`Parsed frontmatter for ${path}:`, frontmatter);
+
+            // Validate required fields
+            if (!frontmatter.year) {
+              console.warn(`Skipping ${path}: Missing required field (year)`);
+              continue;
+            }
+
+            const artwork: Artwork = {
+              ...frontmatter,
+              id: path.replace('/src/data/artwork/', '').replace('.md', ''),
               thumbnail: frontmatter.thumbnail || frontmatter.fullImage || FALLBACK_IMAGE,
-              // Set default background color if provided in frontmatter
-              defaultBackgroundColor: frontmatter.defaultBackgroundColor || 'black', // Default to black if not specified
-            });
+              fullImage: frontmatter.fullImage || frontmatter.thumbnail || FALLBACK_IMAGE,
+              defaultBackgroundColor: frontmatter.defaultBackgroundColor || 'black',
+            };
+
+            console.log('Processed artwork:', artwork);
+            loadedArtworks.push(artwork);
           } catch (error) {
             console.error(`Error parsing frontmatter for ${path}:`, error);
           }
         }
       }
 
-      console.log('Loaded artworks before sorting:', loadedArtworks); // Debug log
+      console.log('All loaded artworks:', loadedArtworks);
 
-      // Sort artworks (e.g., by year, then created date)
-      loadedArtworks.sort((a, b) => {
-        if (b.year !== a.year) {
-          return b.year - a.year; // Sort descending by year
-        }
-        // Optional: sort by createdDate if years are the same
-        // return new Date(b.createdDate).getTime() - new Date(a.createdDate).getTime();
-        return 0; // Keep original order if years are same and no date sort
-      });
+      // Sort artworks by year
+      loadedArtworks.sort((a, b) => b.year - a.year);
 
       // Group artworks by year
       const artworksByYear: { [year: number]: Artwork[] } = {};
@@ -118,18 +116,20 @@ const Art = () => {
         artworksByYear[artwork.year].push(artwork);
       });
 
-      // Convert the grouped object back to an array of objects for easier mapping
-      const groupedArtworksArray = Object.keys(artworksByYear).map(year => ({
-        year: parseInt(year, 10),
-        artworks: artworksByYear[parseInt(year, 10)],
-      })).sort((a, b) => b.year - a.year); // Ensure years are sorted descending
+      // Convert to array format and sort by year
+      const groupedArtworksArray = Object.entries(artworksByYear)
+        .map(([year, artworks]) => ({
+          year: parseInt(year, 10),
+          artworks: artworks || []
+        }))
+        .sort((a, b) => b.year - a.year);
 
+      console.log('Grouped artworks by year:', groupedArtworksArray);
       setArtworksByYear(groupedArtworksArray);
-      console.log('Artworks grouped by year:', groupedArtworksArray); // Debug log
     }
 
     loadArtworks();
-  }, []); // Empty dependency array means this runs once on mount
+  }, []);
 
   useEffect(() => {
     const handleEscKey = (event: KeyboardEvent) => {
@@ -270,49 +270,45 @@ const Art = () => {
                     <div className="absolute left-0 top-0 h-full w-1 bg-gray-400 dark:bg-gray-500"></div>
                   </div>
                   <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2">
-                    {artworks.map((artwork) => (
-                      <motion.div
-                        key={artwork.id}
-                        whileHover={{ scale: 1.03 }}
-                        className="relative cursor-pointer group"
-                        onClick={() => openDetailsModal(artwork)}
-                      >
-                        {artwork.video ? (
-                          <video
-                            src={artwork.video}
-                            loop
-                            muted
-                            autoPlay
-                            playsInline
-                            onError={(e) => {
-                              const target = e.target as HTMLVideoElement;
-                              target.src = FALLBACK_IMAGE;
-                            }}
-                            className="w-full h-auto object-contain bg-black dark:bg-black transition-all duration-200"
-                            onLoadedData={() => console.log(`Video loaded in gallery: ${artwork.video}`)}
-                            onPlay={() => console.log(`Video playing in gallery: ${artwork.video}`)}
-                            onPause={() => console.log(`Video paused in gallery: ${artwork.video}`)}
-                            onClick={(e) => e.stopPropagation()} // Prevent modal from opening on video click
-                          />
-                        ) : (
-                          <img
-                            src={artwork.thumbnail}
-                            alt={artwork.title || 'Artwork'}
-                            loading="lazy"
-                            onError={(e) => {
-                              const target = e.target as HTMLImageElement;
-                              target.src = FALLBACK_IMAGE;
-                            }}
-                            className="w-full h-auto object-contain bg-black dark:bg-black transition-all duration-200"
-                          />
-                        )}
-                        {/* Overlay on hover */}
-                        <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-40 transition-all duration-200 flex flex-col items-center justify-end opacity-0 group-hover:opacity-100 p-2">
-                          <span className="text-white text-base font-semibold drop-shadow mb-1">{artwork.title || 'Untitled'}</span>
-                          <span className="text-gray-200 text-xs mb-2">{artwork.year}</span>
-                        </div>
-                      </motion.div>
-                    ))}
+                    {Array.isArray(artworks) && artworks.length > 0 ? (
+                      artworks.map((artwork) => (
+                        <motion.div
+                          key={artwork.id}
+                          className="relative aspect-square overflow-hidden cursor-pointer group"
+                          onClick={() => openDetailsModal(artwork)}
+                          whileHover={{ scale: 1.02 }}
+                          transition={{ duration: 0.2 }}
+                        >
+                          {artwork.video ? (
+                            <video
+                              src={artwork.video}
+                              loop
+                              muted
+                              autoPlay
+                              playsInline
+                              onError={(e) => {
+                                const target = e.target as HTMLVideoElement;
+                                target.src = FALLBACK_IMAGE;
+                              }}
+                              className="w-full h-full object-contain bg-black dark:bg-black"
+                              onClick={(e) => e.stopPropagation()}
+                            />
+                          ) : (
+                            <img
+                              src={artwork.thumbnail}
+                              alt={artwork.title || `Artwork ${artwork.id}`}
+                              className="w-full h-full object-contain bg-black dark:bg-black"
+                              loading="lazy"
+                              onError={(e) => {
+                                const target = e.target as HTMLImageElement;
+                                target.src = FALLBACK_IMAGE;
+                              }}
+                            />
+                          )}
+                          <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-20 transition-all duration-300" />
+                        </motion.div>
+                      ))
+                    ) : null}
                   </div>
                 </div>
               </div>

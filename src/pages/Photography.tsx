@@ -27,6 +27,7 @@ interface Photograph {
   priceEth?: number;
   links?: LinkItem[];
   defaultBackgroundColor?: 'black' | 'white';
+  thumbnail: string;
 }
 
 interface LinkItem {
@@ -57,6 +58,7 @@ const Photography = () => {
           eager: true,
           as: 'raw'
         });
+        console.log('Loaded photography modules:', modules);
         const loadedPhotographs: Photograph[] = [];
 
         for (const path in modules) {
@@ -67,6 +69,7 @@ const Photography = () => {
           if (frontmatterStr && frontmatterStr.trim() !== '') {
             try {
               const frontmatter = yaml.load(frontmatterStr.trim()) as Photograph;
+              console.log(`Processing photograph from ${path}:`, frontmatter);
               
               // Validate required fields
               if (!frontmatter.year || !frontmatter.image) {
@@ -81,11 +84,12 @@ const Photography = () => {
                 continue;
               }
 
-              loadedPhotographs.push({
+              const photograph: Photograph = {
                 ...frontmatter,
                 id: path.replace('/src/data/photography/', '').replace('.md', ''),
                 year,
                 image: frontmatter.image || FALLBACK_IMAGE,
+                thumbnail: frontmatter.thumbnail || frontmatter.image || FALLBACK_IMAGE,
                 mintDate: frontmatter.mintDate,
                 blockchain: frontmatter.blockchain,
                 contractAddress: frontmatter.contractAddress,
@@ -93,14 +97,17 @@ const Photography = () => {
                 priceEth: frontmatter.priceEth,
                 links: frontmatter.links,
                 defaultBackgroundColor: frontmatter.defaultBackgroundColor || 'black',
-              });
+              };
+
+              console.log('Processed photograph:', photograph);
+              loadedPhotographs.push(photograph);
             } catch (error) {
               console.error(`Error parsing frontmatter for ${path}:`, error);
             }
           }
         }
 
-        console.log('Loaded photographs:', loadedPhotographs);
+        console.log('All loaded photographs:', loadedPhotographs);
 
         // Sort by year (newest first)
         loadedPhotographs.sort((a, b) => b.year - a.year);
@@ -122,6 +129,7 @@ const Photography = () => {
           }))
           .sort((a, b) => b.year - a.year);
 
+        console.log('Grouped photographs by year:', groupedPhotographsArray);
         setPhotographsByYear(groupedPhotographsArray);
       } catch (error) {
         console.error('Error loading photographs:', error);
@@ -245,35 +253,28 @@ const Photography = () => {
                   </div>
                   <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2">
                     {Array.isArray(photographs) && photographs.length > 0 ? (
-                      photographs.map((photograph) => (
+                      photographs.map((photo) => (
                         <motion.div
-                          key={photograph.id}
-                          whileHover={{ scale: 1.03 }}
-                          className="relative cursor-pointer group"
-                          onClick={() => openDetailsModal(photograph)}
+                          key={photo.id}
+                          className="relative aspect-square overflow-hidden cursor-pointer group"
+                          onClick={() => openDetailsModal(photo)}
+                          whileHover={{ scale: 1.02 }}
+                          transition={{ duration: 0.2 }}
                         >
                           <img
-                            src={photograph.image}
-                            alt={photograph.title || 'Photograph'}
+                            src={photo.image}
+                            alt={photo.title || `Photo ${photo.id}`}
+                            className="w-full h-full object-cover"
                             loading="lazy"
                             onError={(e) => {
                               const target = e.target as HTMLImageElement;
                               target.src = FALLBACK_IMAGE;
                             }}
-                            className="w-full h-auto object-contain bg-black dark:bg-black transition-all duration-200"
                           />
-                          {/* Overlay on hover */}
-                          <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-40 transition-all duration-200 flex flex-col items-center justify-end opacity-0 group-hover:opacity-100 p-2">
-                            <span className="text-white text-base font-semibold drop-shadow mb-1">{photograph.title || 'Untitled'}</span>
-                            <span className="text-gray-200 text-xs mb-2">{photograph.year}</span>
-                          </div>
+                          <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-20 transition-all duration-300" />
                         </motion.div>
                       ))
-                    ) : (
-                      <div className="col-span-full text-center text-gray-600 dark:text-gray-400 py-4">
-                        No photographs for this year.
-                      </div>
-                    )}
+                    ) : null}
                   </div>
                 </div>
               </div>

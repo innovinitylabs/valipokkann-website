@@ -1,5 +1,5 @@
 // Google Analytics Measurement ID
-export const GA_MEASUREMENT_ID = 'G-PRNDZ1FGR5';
+export const GA_MEASUREMENT_ID = 'G-JGDQ4FE21R';
 
 // Initialize Google Analytics
 export const initGA = () => {

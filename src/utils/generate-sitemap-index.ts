@@ -1,5 +1,5 @@
 import fs from 'fs';
-import siteConfig from '../config/site-config';
+import siteConfig from '../config/site-config.js';
 
 const generateSitemapIndex = async (): Promise<void> => {
   const baseUrl = `https://${siteConfig.domain}`;

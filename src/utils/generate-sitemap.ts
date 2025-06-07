@@ -1,7 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import { glob } from 'glob';
-import siteConfig from '../config/site-config';
+import siteConfig from '../config/site-config.js';
 
 interface SitemapUrl {
   loc: string;

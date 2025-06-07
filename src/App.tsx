@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useState, useEffect } from 'react';
 import Navbar from './components/Navbar';
@@ -17,6 +17,19 @@ import Photography from './pages/Photography';
 import Thirukkural from './pages/Thirukkural';
 import { useKonamiCode } from './utils/konami';
 import { HelmetProvider } from 'react-helmet-async';
+import { initGA, trackPageView, trackWebVitals } from './utils/analytics';
+import { Metric } from 'web-vitals';
+
+// Analytics wrapper component
+const AnalyticsWrapper: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const location = useLocation();
+
+  useEffect(() => {
+    trackPageView(location.pathname);
+  }, [location]);
+
+  return <>{children}</>;
+};
 
 function App() {
   // App component main function
@@ -62,45 +75,65 @@ function App() {
     };
   }, []);
 
+  // Initialize Google Analytics
+  useEffect(() => {
+    initGA();
+  }, []);
+
+  // Track Core Web Vitals
+  useEffect(() => {
+    if ('web-vital' in window) {
+      import('web-vitals').then(({ getCLS, getFID, getFCP, getLCP, getTTFB }) => {
+        getCLS((metric: Metric) => trackWebVitals(metric));
+        getFID((metric: Metric) => trackWebVitals(metric));
+        getFCP((metric: Metric) => trackWebVitals(metric));
+        getLCP((metric: Metric) => trackWebVitals(metric));
+        getTTFB((metric: Metric) => trackWebVitals(metric));
+      });
+    }
+  }, []);
+
   return (
     <HelmetProvider>
       <Router basename="/" future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
-        <div className={`min-h-screen flex flex-col transition-transform duration-1000 ${isSiteBarrelRolling ? 'rotate-180' : ''}`}>
-          <Navbar isDarkMode={isDarkMode} toggleDarkMode={toggleDarkMode} />
-          <main className="flex-grow">
-            <AnimatePresence mode="wait">
-              <Routes>
-                <Route path="/" element={<Home />} />
-                <Route path="/about" element={<About />} />
-                <Route path="/photography" element={<Photography />} />
-                <Route path="/art" element={<Art />} />
-                <Route path="/music" element={<Music />} />
-                <Route path="/articles" element={<Articles />} />
-                <Route path="/links" element={<Links />} />
-                <Route path="/thirukkural" element={<Thirukkural />} />
-                <Route path="/admin" element={<Admin />} />
-                <Route path="*" element={<NotFound />} />
-              </Routes>
+        <AnalyticsWrapper>
+          <div className={`min-h-screen flex flex-col transition-transform duration-1000 ${isSiteBarrelRolling ? 'rotate-180' : ''}`}>
+            <Navbar isDarkMode={isDarkMode} toggleDarkMode={toggleDarkMode} />
+            <main className="flex-grow">
+              <AnimatePresence mode="wait">
+                <Routes>
+                  <Route path="/" element={<Home />} />
+                  <Route path="/about" element={<About />} />
+                  <Route path="/photography" element={<Photography />} />
+                  <Route path="/art" element={<Art />} />
+                  <Route path="/music" element={<Music />} />
+                  <Route path="/articles" element={<Articles />} />
+                  <Route path="/links" element={<Links />} />
+                  <Route path="/thirukkural" element={<Thirukkural />} />
+                  <Route path="/admin" element={<Admin />} />
+                  <Route path="*" element={<NotFound />} />
+                </Routes>
+              </AnimatePresence>
+              <div className="container mx-auto px-4">
+                <Breadcrumbs />
+              </div>
+            </main>
+            <QuoteWidget />
+            <Footer />
+            <AnimatePresence>
+              {showTooltip && (
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -20 }}
+                  className="fixed top-20 right-4 bg-gray-800 text-white px-4 py-2 rounded-lg shadow-lg z-50"
+                >
+                  <p className="text-sm">Light mode? I'm judging you... 👀</p>
+                </motion.div>
+              )}
             </AnimatePresence>
-            <div className="container mx-auto px-4">
-              <Breadcrumbs />
-            </div>
-          </main>
-          <QuoteWidget />
-          <Footer />
-          <AnimatePresence>
-            {showTooltip && (
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -20 }}
-                className="fixed top-20 right-4 bg-gray-800 text-white px-4 py-2 rounded-lg shadow-lg z-50"
-              >
-                <p className="text-sm">Light mode? I'm judging you... 👀</p>
-              </motion.div>
-            )}
-          </AnimatePresence>
-        </div>
+          </div>
+        </AnalyticsWrapper>
       </Router>
     </HelmetProvider>
   );

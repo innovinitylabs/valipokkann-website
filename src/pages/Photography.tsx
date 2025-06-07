@@ -43,65 +43,89 @@ const Photography = () => {
   const [rotationSlider, setRotationSlider] = useState(0);
   const [photographsByYear, setPhotographsByYear] = useState<{ year: number; photographs: Photograph[] }[]>([]);
   const [backgroundColor, setBackgroundColor] = useState<'black' | 'white'>('black');
+  const [isLoading, setIsLoading] = useState(true);
 
   // --- Data Loading --- //
   useEffect(() => {
     async function loadPhotographs() {
-      const modules = import.meta.glob('/src/data/photography/*.md', {
-        eager: true,
-        as: 'raw'
-      });
-      const loadedPhotographs: Photograph[] = [];
+      setIsLoading(true);
+      try {
+        const modules = import.meta.glob('/src/data/photography/*.md', {
+          eager: true,
+          as: 'raw'
+        });
+        const loadedPhotographs: Photograph[] = [];
 
-      for (const path in modules) {
-        const content = modules[path] as string;
-        const parts = content.split('---');
-        const frontmatterStr = parts[1];
+        for (const path in modules) {
+          const content = modules[path] as string;
+          const parts = content.split('---');
+          const frontmatterStr = parts[1];
 
-        if (frontmatterStr && frontmatterStr.trim() !== '') {
-          try {
-            const frontmatter = yaml.load(frontmatterStr.trim()) as Photograph;
-            loadedPhotographs.push({
-              ...frontmatter,
-              id: path.replace('/src/data/photography/', '').replace('.md', ''),
-              image: frontmatter.image || FALLBACK_IMAGE,
-              mintDate: frontmatter.mintDate,
-              blockchain: frontmatter.blockchain,
-              contractAddress: frontmatter.contractAddress,
-              tokenId: frontmatter.tokenId,
-              priceEth: frontmatter.priceEth,
-              links: frontmatter.links,
-              defaultBackgroundColor: frontmatter.defaultBackgroundColor || 'black',
-            });
-          } catch (error) {
-            console.error(`Error parsing frontmatter for ${path}:`, error);
+          if (frontmatterStr && frontmatterStr.trim() !== '') {
+            try {
+              const frontmatter = yaml.load(frontmatterStr.trim()) as Photograph;
+              
+              // Validate required fields
+              if (!frontmatter.year || !frontmatter.image) {
+                console.warn(`Skipping ${path}: Missing required fields (year or image)`);
+                continue;
+              }
+
+              // Ensure year is a number
+              const year = typeof frontmatter.year === 'string' ? parseInt(frontmatter.year, 10) : frontmatter.year;
+              if (isNaN(year)) {
+                console.warn(`Skipping ${path}: Invalid year value`);
+                continue;
+              }
+
+              loadedPhotographs.push({
+                ...frontmatter,
+                id: path.replace('/src/data/photography/', '').replace('.md', ''),
+                year,
+                image: frontmatter.image || FALLBACK_IMAGE,
+                mintDate: frontmatter.mintDate,
+                blockchain: frontmatter.blockchain,
+                contractAddress: frontmatter.contractAddress,
+                tokenId: frontmatter.tokenId,
+                priceEth: frontmatter.priceEth,
+                links: frontmatter.links,
+                defaultBackgroundColor: frontmatter.defaultBackgroundColor || 'black',
+              });
+            } catch (error) {
+              console.error(`Error parsing frontmatter for ${path}:`, error);
+            }
           }
         }
+
+        console.log('Loaded photographs:', loadedPhotographs);
+
+        // Sort by year (newest first)
+        loadedPhotographs.sort((a, b) => b.year - a.year);
+
+        // Group by year
+        const photographsByYear: { [year: number]: Photograph[] } = {};
+        loadedPhotographs.forEach(photograph => {
+          if (!photographsByYear[photograph.year]) {
+            photographsByYear[photograph.year] = [];
+          }
+          photographsByYear[photograph.year].push(photograph);
+        });
+
+        // Convert to array format and sort by year
+        const groupedPhotographsArray = Object.entries(photographsByYear)
+          .map(([year, photographs]) => ({
+            year: parseInt(year, 10),
+            photographs: photographs || []
+          }))
+          .sort((a, b) => b.year - a.year);
+
+        setPhotographsByYear(groupedPhotographsArray);
+      } catch (error) {
+        console.error('Error loading photographs:', error);
+        setPhotographsByYear([]);
+      } finally {
+        setIsLoading(false);
       }
-
-      console.log('Loaded photographs:', loadedPhotographs); // Debug log to see loaded data
-
-      loadedPhotographs.sort((a, b) => {
-        if (b.year !== a.year) {
-          return b.year - a.year;
-        }
-        return 0;
-      });
-
-      const photographsByYear: { [year: number]: Photograph[] } = {};
-      loadedPhotographs.forEach(photograph => {
-        if (!photographsByYear[photograph.year]) {
-          photographsByYear[photograph.year] = [];
-        }
-        photographsByYear[photograph.year].push(photograph);
-      });
-
-      const groupedPhotographsArray = Object.keys(photographsByYear).map(year => ({
-        year: parseInt(year, 10),
-        photographs: photographsByYear[parseInt(year, 10)],
-      })).sort((a, b) => b.year - a.year);
-
-      setPhotographsByYear(groupedPhotographsArray);
     }
 
     loadPhotographs();
@@ -160,44 +184,60 @@ const Photography = () => {
       <div className="max-w-7xl mx-auto px-4 py-12">
         <h1 className="text-4xl font-serif mb-8">Photography</h1>
 
-        {photographsByYear.map(({ year, photographs }) => (
-          <div key={year} className="mb-0 relative">
-            <h2 className="text-xl font-serif absolute right-full top-0 mt-0 mr-2 text-gray-700 dark:text-gray-300 sticky top-12 z-10">
-              {year}
-            </h2>
-            <div className="ml-16">
-              <div className="border-b border-gray-400 dark:border-gray-500 mb-2 pb-0 relative">
-                <div className="absolute left-0 top-0 h-full w-1 bg-gray-400 dark:bg-gray-500"></div>
-              </div>
-              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2">
-                {photographs.map((photograph) => (
-                  <motion.div
-                    key={photograph.id}
-                    whileHover={{ scale: 1.03 }}
-                    className="relative cursor-pointer group"
-                    onClick={() => openDetailsModal(photograph)}
-                  >
-                    <img
-                      src={photograph.image}
-                      alt={photograph.title || 'Photograph'}
-                      loading="lazy"
-                      onError={(e) => {
-                        const target = e.target as HTMLImageElement;
-                        target.src = FALLBACK_IMAGE;
-                      }}
-                      className="w-full h-auto object-contain bg-black dark:bg-black transition-all duration-200"
-                    />
-                    {/* Overlay on hover */}
-                    <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-40 transition-all duration-200 flex flex-col items-center justify-end opacity-0 group-hover:opacity-100 p-2">
-                      <span className="text-white text-base font-semibold drop-shadow mb-1">{photograph.title || 'Untitled'}</span>
-                      <span className="text-gray-200 text-xs mb-2">{photograph.year}</span>
+        {isLoading ? (
+          <div className="flex justify-center items-center h-64">
+            <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-gray-900 dark:border-gray-100"></div>
+          </div>
+        ) : photographsByYear.length === 0 ? (
+          <div className="text-center text-gray-600 dark:text-gray-400 py-12">
+            No photographs found.
+          </div>
+        ) : (
+          photographsByYear.map(({ year, photographs }) => (
+            <div key={year} className="mb-0 relative">
+              <h2 className="text-xl font-serif absolute right-full top-0 mt-0 mr-2 text-gray-700 dark:text-gray-300 sticky top-12 z-10">
+                {year}
+              </h2>
+              <div className="ml-16">
+                <div className="border-b border-gray-400 dark:border-gray-500 mb-2 pb-0 relative">
+                  <div className="absolute left-0 top-0 h-full w-1 bg-gray-400 dark:bg-gray-500"></div>
+                </div>
+                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2">
+                  {Array.isArray(photographs) && photographs.length > 0 ? (
+                    photographs.map((photograph) => (
+                      <motion.div
+                        key={photograph.id}
+                        whileHover={{ scale: 1.03 }}
+                        className="relative cursor-pointer group"
+                        onClick={() => openDetailsModal(photograph)}
+                      >
+                        <img
+                          src={photograph.image}
+                          alt={photograph.title || 'Photograph'}
+                          loading="lazy"
+                          onError={(e) => {
+                            const target = e.target as HTMLImageElement;
+                            target.src = FALLBACK_IMAGE;
+                          }}
+                          className="w-full h-auto object-contain bg-black dark:bg-black transition-all duration-200"
+                        />
+                        {/* Overlay on hover */}
+                        <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-40 transition-all duration-200 flex flex-col items-center justify-end opacity-0 group-hover:opacity-100 p-2">
+                          <span className="text-white text-base font-semibold drop-shadow mb-1">{photograph.title || 'Untitled'}</span>
+                          <span className="text-gray-200 text-xs mb-2">{photograph.year}</span>
+                        </div>
+                      </motion.div>
+                    ))
+                  ) : (
+                    <div className="col-span-full text-center text-gray-600 dark:text-gray-400 py-4">
+                      No photographs for this year.
                     </div>
-                  </motion.div>
-                ))}
+                  )}
+                </div>
               </div>
             </div>
-          </div>
-        ))}
+          ))
+        )}
       </div>
 
       {/* Details Modal */}

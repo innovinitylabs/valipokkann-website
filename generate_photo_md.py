@@ -216,7 +216,12 @@ def extract_exif(image_path: str) -> Dict[str, Any]:
                     if exif_bytes:
                         logger.debug(f"Found EXIF in heif_file.info['exif'] for {image_path}")
                         try:
-                            exif_data_raw = piexif.load(exif_bytes)
+                            loaded_exif = piexif.load(exif_bytes)
+                            if loaded_exif is not None:
+                                exif_data_raw = loaded_exif
+                            else:
+                                logger.warning(f"piexif.load returned None or empty for {image_path}.")
+                                exif_data_raw = {}
                         except Exception as exif_e:
                             logger.warning(f"piexif.load failed for {image_path}: {exif_e}")
                             exif_data_raw = {}
@@ -227,7 +232,12 @@ def extract_exif(image_path: str) -> Dict[str, Any]:
                             if metadata.get('type') == 'Exif' and metadata.get('data'):
                                 logger.debug(f"Found EXIF in metadata for {image_path}")
                                 try:
-                                    exif_data_raw = piexif.load(metadata['data'])
+                                    loaded_exif = piexif.load(metadata['data'])
+                                    if loaded_exif is not None:
+                                        exif_data_raw = loaded_exif
+                                    else:
+                                        logger.warning(f"piexif.load returned None or empty for {image_path} (metadata).")
+                                        exif_data_raw = {}
                                 except Exception as exif_e:
                                     logger.warning(f"piexif.load failed for {image_path} (metadata): {exif_e}")
                                     exif_data_raw = {}
@@ -244,6 +254,9 @@ def extract_exif(image_path: str) -> Dict[str, Any]:
         else:
             img = Image.open(image_path)
             exif_data_raw = img._getexif()
+            if exif_data_raw is None:
+                logger.warning(f"_getexif() returned None for {image_path}")
+                return {}
 
         if not exif_data_raw:
             return {}
@@ -253,9 +266,11 @@ def extract_exif(image_path: str) -> Dict[str, Any]:
         if isinstance(exif_data_raw, dict) and '0th' in exif_data_raw: # piexif format
             for ifd_name in ['0th', 'Exif', 'GPS', 'Interop', '1st', 'thumbnail']:
                 if ifd_name in exif_data_raw:
-                    for tag_key, value in exif_data_raw[ifd_name].items():
-                        tag_name = ExifTags.TAGS.get(tag_key, tag_key)
-                        exif[tag_name] = value
+                    # Ensure the value for the IFD is a dictionary before calling .items()
+                    if isinstance(exif_data_raw[ifd_name], dict):
+                        for tag_key, value in exif_data_raw[ifd_name].items():
+                            tag_name = ExifTags.TAGS.get(tag_key, tag_key)
+                            exif[tag_name] = value
         elif isinstance(exif_data_raw, dict): # Pillow _getexif() format
             exif = {
                 ExifTags.TAGS[k]: v
@@ -338,33 +353,35 @@ def generate_markdown_file(image_filename: str, exif_data: Dict[str, Any], force
     # Read existing markdown if it exists
     existing_data = read_existing_markdown(output_path) if not force_update else None
 
-    exif_data = extract_exif(os.path.join(PHOTOGRAPHS_DIR, image_filename))
-    logger.debug(f"EXIF data returned to generate_markdown_file: {exif_data}")
-    if 'dateTaken' in exif_data:
-        logger.debug(f"dateTaken in exif_data: {exif_data['dateTaken']}")
+    # Extract EXIF data from the optimized image if it exists, otherwise from original
+    if os.path.exists(optimized_path):
+        exif_data = extract_exif(optimized_path)
+        logger.debug(f"EXIF data from optimized image: {exif_data}")
     else:
-        logger.debug(f"dateTaken not found in exif_data.")
+        original_image_path = os.path.join(PHOTOGRAPHS_DIR, image_filename)
+        exif_data = extract_exif(original_image_path)
+        logger.debug(f"EXIF data from original image: {exif_data}")
 
     # Prepare frontmatter
     frontmatter = {
         'title': existing_data.get('title') if existing_data else None,
         'description': existing_data.get('description') if existing_data else None,
-        'year': int(exif_data['dateTaken'][:4]) if 'dateTaken' in exif_data and exif_data['dateTaken'] and isinstance(exif_data['dateTaken'], str) and len(exif_data['dateTaken']) >= 4 else datetime.now().year,
+        'year': int(exif_data['dateTaken'][:4]) if 'dateTaken' in exif_data and exif_data['dateTaken'] else None,
+        'dateTaken': exif_data.get('dateTaken'),
         'image': image_path_for_md,
         'defaultBackgroundColor': 'black',
     }
     
     # Add extracted EXIF data, preserving manual edits
     for key, value in exif_data.items():
-        if key not in ['title', 'description', 'image', 'defaultBackgroundColor']:
+        if key not in ['title', 'description', 'image', 'defaultBackgroundColor', 'dateTaken']:
             frontmatter[key] = value
 
     # Sort keys for cleaner YAML
     frontmatter_sorted = {k: frontmatter[k] for k in sorted(frontmatter.keys(), 
-        key=lambda x: (x != 'title', x != 'description', x != 'year', x != 'image', 
+        key=lambda x: (x != 'title', x != 'description', x != 'year', x != 'dateTaken', x != 'image', 
                       x != 'make', x != 'model', x != 'focalLength', x != 'aperture', 
-                      x != 'shutterSpeed', x != 'iso', x != 'lens', x != 'dateTaken', 
-                      x != 'defaultBackgroundColor', x))}
+                      x != 'shutterSpeed', x != 'iso', x != 'lens', x != 'defaultBackgroundColor', x))}
 
     # Remove None values
     final_frontmatter = {k: v for k, v in frontmatter_sorted.items() if v is not None}
@@ -384,7 +401,7 @@ def generate_markdown_file(image_filename: str, exif_data: Dict[str, Any], force
         if optimize_image(input_path, optimized_path):
             logger.info(f"Optimized: {optimized_path}")
         else:
-            logger.error(f"Failed to optimize: {image_filename}")
+            logger.error(f"Failed to optimize: {optimized_path}")
 
 def verify_exif_preservation(original_path: str, converted_path: str) -> bool:
     """Verifies that EXIF data was properly preserved during conversion."""

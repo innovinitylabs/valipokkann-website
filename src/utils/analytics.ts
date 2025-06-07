@@ -13,14 +13,12 @@ export const initGA = () => {
     window.dataLayer.push(arguments);
   }
   gtag('js', new Date());
-  gtag('config', GA_MEASUREMENT_ID, {
-    page_path: window.location.pathname,
-  });
+  gtag('config', GA_MEASUREMENT_ID);
 };
 
 // Track page views
 export const trackPageView = (path: string) => {
-  if (typeof window.gtag !== 'undefined') {
+  if (typeof window.gtag === 'function') {
     window.gtag('config', GA_MEASUREMENT_ID, {
       page_path: path,
     });
@@ -29,7 +27,7 @@ export const trackPageView = (path: string) => {
 
 // Track events
 export const trackEvent = (action: string, category: string, label: string, value?: number) => {
-  if (typeof window.gtag !== 'undefined') {
+  if (typeof window.gtag === 'function') {
     window.gtag('event', action, {
       event_category: category,
       event_label: label,
@@ -52,7 +50,7 @@ export const trackWebVitals = (metric: any) => {
 
 // Track search queries
 export const trackSearch = (query: string) => {
-  if (typeof window.gtag !== 'undefined') {
+  if (typeof window.gtag === 'function') {
     window.gtag('event', 'search', {
       search_term: query,
     });
@@ -61,7 +59,7 @@ export const trackSearch = (query: string) => {
 
 // Track outbound links
 export const trackOutboundLink = (url: string) => {
-  if (typeof window.gtag !== 'undefined') {
+  if (typeof window.gtag === 'function') {
     window.gtag('event', 'click', {
       event_category: 'outbound',
       event_label: url,

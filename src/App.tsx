@@ -1,7 +1,6 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useState, useEffect } from 'react';
-import { HelmetProvider } from 'react-helmet-async';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import QuoteWidget from './components/QuoteWidget';
@@ -16,6 +15,7 @@ import NotFound from './pages/NotFound';
 import Photography from './pages/Photography';
 import Thirukkural from './pages/Thirukkural';
 import { useKonamiCode } from './utils/konami';
+import { HelmetProvider } from 'react-helmet-async';
 
 function App() {
   // App component main function

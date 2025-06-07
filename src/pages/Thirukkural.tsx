@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Helmet } from 'react-helmet-async';
 import { motion } from 'framer-motion';
 import thirukkuralData from '../data/quotes/thirukkural.json';
 
@@ -196,119 +197,155 @@ const Thirukkural: React.FC = () => {
     }
 
     if (selectedChapter !== 'all') {
-      filtered = filtered.filter((kural) => kural.chapter.toString() === selectedChapter);
+      const chapterNum = parseInt(selectedChapter);
+      filtered = filtered.filter((kural) => {
+        const kuralChapter = Math.ceil(kural.id / 10);
+        return kuralChapter === chapterNum;
+      });
     }
 
     setFilteredKurals(filtered);
   }, [searchTerm, selectedChapter]);
 
   return (
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      className="container mx-auto px-4 py-8"
-    >
-      <h1 className="text-4xl font-bold mb-8 text-center">திருக்குறள்</h1>
-      <div className="flex justify-center mb-8">
-        <img
-          src="/Thiruvalluvar.jpg"
-          alt="Thiruvalluvar"
-          className="w-32 h-32 rounded-full object-cover object-top shadow-lg cursor-pointer"
-          onClick={() => setIsModalOpen(true)}
-        />
-      </div>
-      
-      {isModalOpen && (
-        <div
-          className="fixed inset-0 bg-black bg-opacity-90 flex items-center justify-center z-50 p-4 overflow-y-auto"
-          onClick={() => setIsModalOpen(false)}
-        >
+    <div className="container mx-auto px-4 py-8">
+      <Helmet>
+        <title>Thirukkural - Ancient Tamil Literature | Valipokkann</title>
+        <meta name="description" content="Explore the timeless wisdom of Thirukkural, written over 2,000 years ago by Thiruvalluvar. Discover 1,330 couplets on ethics, politics, and love that remain relevant today." />
+        <meta property="og:title" content="Thirukkural - Ancient Tamil Literature | Valipokkann" />
+        <meta property="og:description" content="Explore the timeless wisdom of Thirukkural, written over 2,000 years ago by Thiruvalluvar. Discover 1,330 couplets on ethics, politics, and love that remain relevant today." />
+        <meta property="og:type" content="website" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="Thirukkural - Ancient Tamil Literature | Valipokkann" />
+        <meta name="twitter:description" content="Explore the timeless wisdom of Thirukkural, written over 2,000 years ago by Thiruvalluvar. Discover 1,330 couplets on ethics, politics, and love that remain relevant today." />
+        <script type="application/ld+json">
+          {JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "WebPage",
+            "name": "Thirukkural - Ancient Tamil Literature",
+            "description": "Explore the timeless wisdom of Thirukkural, written over 2,000 years ago by Thiruvalluvar. Discover 1,330 couplets on ethics, politics, and love that remain relevant today.",
+            "author": {
+              "@type": "Person",
+              "name": "Thiruvalluvar"
+            },
+            "datePublished": "300 BCE",
+            "inLanguage": "ta"
+          })}
+        </script>
+      </Helmet>
+
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        className="container mx-auto px-4 py-8"
+      >
+        <h1 className="text-4xl font-bold mb-8 text-center">திருக்குறள்</h1>
+        <div className="flex justify-center mb-8">
+          <img
+            src="/Thiruvalluvar.jpg"
+            alt="Thiruvalluvar - Author of Thirukkural"
+            className="w-32 h-32 rounded-full object-cover object-top shadow-lg cursor-pointer"
+            onClick={() => setIsModalOpen(true)}
+          />
+        </div>
+
+        {isModalOpen && (
           <div
-            className="relative bg-neutral-900 rounded-lg shadow-2xl w-full max-w-4xl mx-auto my-8 max-h-[90vh] overflow-y-auto"
-            onClick={(e) => e.stopPropagation()}
+            className="fixed inset-0 bg-black bg-opacity-90 flex items-center justify-center z-50 p-4 overflow-y-auto"
+            onClick={() => setIsModalOpen(false)}
           >
-            <button
-              className="absolute top-4 right-4 text-white text-3xl font-bold hover:text-neutral-300 transition-colors focus:outline-none z-10"
-              onClick={() => setIsModalOpen(false)}
+            <div
+              className="relative bg-neutral-900 rounded-lg shadow-2xl w-full max-w-4xl mx-auto my-8 max-h-[90vh] overflow-y-auto"
+              onClick={(e) => e.stopPropagation()}
             >
-              &times;
-            </button>
-            <div className="p-6 md:p-8">
-              <img
-                src="/Thiruvalluvar.jpg"
-                alt="Thiruvalluvar"
-                className="w-full h-auto max-h-[50vh] object-contain mx-auto mb-8 rounded-lg"
-              />
-              <div className="max-w-[600px] mx-auto text-neutral-300">
-                <p className="text-[1.1rem] leading-[1.7] mb-6">
-                  Thiruvalluvar, the legendary Tamil poet-philosopher, authored the Thirukkural over 2,000 years ago — around 300 BCE or earlier. It predates most so-called "ancient" texts, including the Bible, and yet, its truths remain unchanged and undiluted.
-                </p>
-                <p className="text-[1.1rem] leading-[1.7] mb-6">
-                  Comprising 1,330 couplets on ethics (aram), political and economic life (porul), and love (inbam), the Thirukkural offers timeless wisdom with no allegiance to any religion, caste, or region. It's a universal scripture written for all humanity — not to command obedience, but to elevate understanding.
-                </p>
-                <p className="text-[1.1rem] leading-[1.7] mb-6">
-                  What makes it remarkable? It remains "relevant till date without any rephrasing", even after millennia. Its secular tone, moral precision, and poetic conciseness are unparalleled.
-                </p>
-                <p className="text-[1.1rem] leading-[1.7]">
-                  Many Western thinkers — from Tolstoy to Gandhi — praised ideas from the Kural, often unknowingly echoing its verses. Yet the source has rarely been credited in global discourse.
-                </p>
+              <button
+                className="absolute top-4 right-4 text-white text-3xl font-bold hover:text-neutral-300 transition-colors focus:outline-none z-10"
+                onClick={() => setIsModalOpen(false)}
+              >
+                &times;
+              </button>
+              <div className="p-6 md:p-8">
+                <img
+                  src="/Thiruvalluvar.jpg"
+                  alt="Thiruvalluvar - Author of Thirukkural"
+                  className="w-full h-auto max-h-[50vh] object-contain mx-auto mb-8 rounded-lg"
+                />
+                <div className="max-w-[600px] mx-auto text-neutral-300">
+                  <p className="text-[1.1rem] leading-[1.7] mb-6">
+                    Thiruvalluvar, the legendary Tamil poet-philosopher, authored the Thirukkural over 2,000 years ago — around 300 BCE or earlier. It predates most so-called "ancient" texts, including the Bible, and yet, its truths remain unchanged and undiluted.
+                  </p>
+                  <p className="text-[1.1rem] leading-[1.7] mb-6">
+                    Comprising 1,330 couplets on ethics (aram), political and economic life (porul), and love (inbam), the Thirukkural offers timeless wisdom with no allegiance to any religion, caste, or region. It's a universal scripture written for all humanity — not to command obedience, but to elevate understanding.
+                  </p>
+                  <p className="text-[1.1rem] leading-[1.7] mb-6">
+                    What makes it remarkable? It remains "relevant till date without any rephrasing", even after millennia. Its secular tone, moral precision, and poetic conciseness are unparalleled.
+                  </p>
+                  <p className="text-[1.1rem] leading-[1.7]">
+                    Many Western thinkers — from Tolstoy to Gandhi — praised ideas from the Kural, often unknowingly echoing its verses. Yet the source has rarely been credited in global discourse.
+                  </p>
+                </div>
               </div>
             </div>
           </div>
-        </div>
-      )}
+        )}
 
-      <div className="mb-8 space-y-4">
-        <div className="flex flex-col md:flex-row gap-4">
-          <input
-            type="text"
-            placeholder="Search Thirukkural..."
-            className="flex-1 p-2 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-100 bg-neutral-950 dark:bg-neutral-900 placeholder-gray-400 dark:placeholder-gray-500"
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-          />
-          <select
-            className="p-2 border border-gray-300 dark:border-gray-600 rounded-lg max-w-full md:max-w-xs overflow-y-auto bg-neutral-950 dark:bg-neutral-900 text-gray-100"
-            style={{ maxHeight: '300px' }}
-            value={selectedChapter}
-            onChange={(e) => setSelectedChapter(e.target.value)}
-          >
-            <option value="all">All Chapters</option>
-            {chapters.map((chapter) => (
-              <option key={chapter.id} value={chapter.id}>
-                {chapter.name} - {chapter.nameEng}
-              </option>
-            ))}
-          </select>
+        <div className="mb-8 space-y-4">
+          <div className="flex flex-col md:flex-row gap-4">
+            <div className="relative flex-1">
+              <input
+                type="text"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                placeholder="Search Thirukkural..."
+                className="w-full px-4 py-2 bg-neutral-800 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+              {searchTerm && (
+                <button
+                  onClick={() => setSearchTerm('')}
+                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-neutral-400 hover:text-white"
+                >
+                  ×
+                </button>
+              )}
+            </div>
+            <select
+              className="px-4 py-2 bg-neutral-800 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 max-w-full md:max-w-xs"
+              value={selectedChapter}
+              onChange={(e) => setSelectedChapter(e.target.value)}
+            >
+              <option value="all">All Chapters</option>
+              {chapters.map((chapter) => (
+                <option key={chapter.id} value={chapter.id}>
+                  {chapter.name} - {chapter.nameEng}
+                </option>
+              ))}
+            </select>
+          </div>
         </div>
-      </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {filteredKurals.map((kural) => (
-          <motion.div
-            key={kural.id}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="bg-neutral-950 dark:bg-neutral-900 rounded-lg shadow-lg p-6"
-          >
-            <div className="text-lg font-semibold mb-2 text-gray-900 dark:text-gray-100">
-              {kural.chapter_name} - {kural.chapter_name_eng}
-            </div>
-            <div className="text-xl mb-4 font-tamil text-gray-900 dark:text-gray-100">{kural.text}</div>
-            <div className="text-gray-600 dark:text-gray-300 mb-2">
-              {kural.transliteration}
-            </div>
-            <div className="text-gray-700 dark:text-gray-200 mb-4">
-              {kural.translation}
-            </div>
-            <div className="text-sm text-gray-500 dark:text-gray-400">
-              {kural.explanation}
-            </div>
-          </motion.div>
-        ))}
-      </div>
-    </motion.div>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {filteredKurals.map((kural) => (
+            <motion.div
+              key={kural.id}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="bg-neutral-800 rounded-lg p-6 hover:bg-neutral-700 transition-colors"
+            >
+              <div className="flex items-start justify-between mb-4">
+                <div>
+                  <h3 className="text-xl font-bold mb-2">{kural.text}</h3>
+                  <p className="text-neutral-400 mb-2">{kural.transliteration}</p>
+                </div>
+                <span className="text-sm text-neutral-500">#{kural.id}</span>
+              </div>
+              <p className="text-neutral-300 mb-4">{kural.translation}</p>
+              <p className="text-sm text-neutral-400">{kural.explanation}</p>
+            </motion.div>
+          ))}
+        </div>
+      </motion.div>
+    </div>
   );
 };
 

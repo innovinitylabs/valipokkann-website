@@ -4,17 +4,16 @@ Allow: /
 # Sitemap location
 Sitemap: https://valipokkann.in/sitemap.xml
 
-# Crawl-delay for all bots
-Crawl-delay: 10
-
-# Disallow admin and private areas
-Disallow: /admin/
-Disallow: /private/
-Disallow: /api/
-
-# Allow all other content
+# Allow all content
 Allow: /art/
 Allow: /photography/
 Allow: /articles/
 Allow: /music/
-Allow: /about/ 
+Allow: /about/
+Allow: /thirukkural/
+Allow: /links/
+
+# Only disallow admin areas
+Disallow: /admin/
+Disallow: /private/
+Disallow: /api/ 

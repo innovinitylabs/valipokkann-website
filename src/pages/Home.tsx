@@ -74,14 +74,14 @@ const Home = () => {
             {/* Featured Art */}
             <motion.div
               whileHover={{ y: -10 }}
-              className="bg-white dark:bg-gray-900 rounded-lg shadow-lg overflow-hidden"
+              className="bg-neutral-950 dark:bg-neutral-900 rounded-lg shadow-lg overflow-hidden"
             >
               <div className="aspect-w-16 aspect-h-9">
                 <img src="/valipokkann_transparent_logo.png" alt="Featured Art" className="object-cover w-full h-full" />
               </div>
               <div className="p-6">
-                <h3 className="text-xl font-semibold mb-2">Latest Artwork</h3>
-                <p className="text-gray-600 dark:text-gray-400 mb-4">
+                <h3 className="text-xl font-semibold mb-2 text-white">Latest Artwork</h3>
+                <p className="text-gray-400 mb-4">
                   Explore the latest creation from VALIPOKKANN's studio.
                 </p>
                 <Link
@@ -96,14 +96,14 @@ const Home = () => {
             {/* Featured Article */}
             <motion.div
               whileHover={{ y: -10 }}
-              className="bg-white dark:bg-gray-900 rounded-lg shadow-lg overflow-hidden"
+              className="bg-neutral-950 dark:bg-neutral-900 rounded-lg shadow-lg overflow-hidden"
             >
               <div className="aspect-w-16 aspect-h-9">
                 <img src="/valipokkann_transparent_logo.png" alt="Featured Article" className="object-cover w-full h-full" />
               </div>
               <div className="p-6">
-                <h3 className="text-xl font-semibold mb-2">Latest Article</h3>
-                <p className="text-gray-600 dark:text-gray-400 mb-4">
+                <h3 className="text-xl font-semibold mb-2 text-white">Latest Article</h3>
+                <p className="text-gray-400 mb-4">
                   Read VALIPOKKANN's thoughts on art and revolution.
                 </p>
                 <Link
@@ -118,14 +118,14 @@ const Home = () => {
             {/* Featured Music */}
             <motion.div
               whileHover={{ y: -10 }}
-              className="bg-white dark:bg-gray-900 rounded-lg shadow-lg overflow-hidden"
+              className="bg-neutral-950 dark:bg-neutral-900 rounded-lg shadow-lg overflow-hidden"
             >
               <div className="aspect-w-16 aspect-h-9">
                 <img src="/valipokkann_transparent_logo.png" alt="Featured Music" className="object-cover w-full h-full" />
               </div>
               <div className="p-6">
-                <h3 className="text-xl font-semibold mb-2">Coming Soon</h3>
-                <p className="text-gray-600 dark:text-gray-400 mb-4">
+                <h3 className="text-xl font-semibold mb-2 text-white">Coming Soon</h3>
+                <p className="text-gray-400 mb-4">
                   Music and soundscapes from VALIPOKKANN's creative universe.
                 </p>
                 <Link

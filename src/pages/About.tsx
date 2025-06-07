@@ -3,6 +3,11 @@ import { useState } from 'react';
 
 const About = () => {
   const [isHovered, setIsHovered] = useState(false);
+  const [logoRotation, setLogoRotation] = useState(0);
+
+  const handleLogoClick = () => {
+    setLogoRotation(prev => prev + 360);
+  };
 
   return (
     <div className="min-h-screen py-12 px-4">
@@ -27,14 +32,17 @@ const About = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
             <div>
               <motion.div 
-                className="aspect-w-1 aspect-h-1 bg-gray-200 dark:bg-gray-700 rounded-lg mb-6 overflow-hidden"
+                className="aspect-w-1 aspect-h-1 bg-black dark:bg-black rounded-lg mb-6 overflow-hidden"
                 whileHover={{ scale: 1.05 }}
                 transition={{ duration: 0.3 }}
               >
-                <img 
+                <motion.img 
                   src="/valipokkann_transparent_logo.png" 
                   alt="VALIPOKKANN Logo" 
-                  className="w-full h-full object-contain p-8"
+                  className="w-full h-full object-contain p-8 cursor-pointer"
+                  onClick={handleLogoClick}
+                  animate={{ rotate: logoRotation }}
+                  transition={{ duration: 0.8, ease: "easeOut" }}
                 />
               </motion.div>
               <h2 className="text-2xl font-serif mb-4">Artist Bio</h2>

@@ -12,6 +12,7 @@ import About from './pages/About';
 import Links from './pages/Links';
 import Admin from './pages/Admin';
 import NotFound from './pages/NotFound';
+import Photography from './pages/Photography';
 import { useKonamiCode } from './utils/konami';
 
 function App() {
@@ -20,8 +21,14 @@ function App() {
   const [showTooltip, setShowTooltip] = useState(false);
   const [isSiteBarrelRolling, setIsSiteBarrelRolling] = useState(false);
 
+  // Move useKonamiCode to the top level
+  const konami = useKonamiCode(() => {
+    setIsSiteBarrelRolling(prev => !prev);
+    console.log('Konami code entered! Barrel roll toggled.');
+  });
+
   useEffect(() => {
-    const isDark = localStorage.getItem('darkMode') === null ? true : localStorage.getItem('darkMode') === 'true';
+    const isDark = localStorage.getItem('darkMode') === 'true';
     setIsDarkMode(isDark);
     document.documentElement.classList.toggle('dark', isDark);
   }, []);
@@ -40,12 +47,6 @@ function App() {
 
   useEffect(() => {
     console.log('App mounted');
-    const konami = useKonamiCode(() => {
-      setIsSiteBarrelRolling(prev => !prev);
-      // Optional: Add a visual cue or log here when Konami code is entered
-      console.log('Konami code entered! Barrel roll toggled.');
-    });
-
     konami.start();
 
     return () => {
@@ -54,7 +55,7 @@ function App() {
   }, []);
 
   return (
-    <Router basename="/">
+    <Router basename="/" future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
       <div className={`min-h-screen flex flex-col transition-transform duration-1000 ${isSiteBarrelRolling ? 'rotate-180' : ''}`}>
         <Navbar isDarkMode={isDarkMode} toggleDarkMode={toggleDarkMode} />
         <main className="flex-grow">
@@ -66,6 +67,7 @@ function App() {
               <Route path="/music" element={<Music />} />
               <Route path="/about" element={<About />} />
               <Route path="/links" element={<Links />} />
+              <Route path="/photography" element={<Photography />} />
               <Route path="/admin" element={<Admin />} />
               <Route path="*" element={<NotFound />} />
             </Routes>

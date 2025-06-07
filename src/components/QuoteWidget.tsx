@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Draggable from 'react-draggable';
 
@@ -29,6 +29,7 @@ const QuoteWidget = () => {
   const [currentQuote, setCurrentQuote] = useState(0);
   const [isMinimized, setIsMinimized] = useState(false);
   const [position, setPosition] = useState({ x: 0, y: 0 });
+  const nodeRef = useRef(null);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -58,8 +59,9 @@ const QuoteWidget = () => {
       onStop={handleDragStop}
       bounds="parent"
       handle=".drag-handle"
+      nodeRef={nodeRef}
     >
-      <div className={`fixed bottom-4 right-4 z-50 ${isMinimized ? 'cursor-pointer' : ''}`}>
+      <div ref={nodeRef} className={`fixed bottom-4 right-4 z-50 ${isMinimized ? 'cursor-pointer' : ''}`}>
         <AnimatePresence mode="wait">
           {isMinimized ? (
             <motion.div
@@ -67,10 +69,10 @@ const QuoteWidget = () => {
               initial={{ scale: 0.8, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.8, opacity: 0 }}
-              className="w-12 h-12 rounded-full bg-primary dark:bg-primary-dark shadow-lg flex items-center justify-center relative group overflow-hidden"
+              className="w-12 h-12 rounded-full bg-neutral-900 dark:bg-neutral-800 shadow-lg flex items-center justify-center relative group overflow-hidden"
               onClick={handleClick}
             >
-              <div className="absolute inset-0 rounded-full bg-gradient-to-br from-primary/20 to-primary/10 dark:from-primary-dark/20 dark:to-primary-dark/10 group-hover:from-primary/30 group-hover:to-primary/20 dark:group-hover:from-primary-dark/30 dark:group-hover:to-primary-dark/20 transition-all duration-200" />
+              <div className="absolute inset-0 rounded-full bg-gradient-to-br from-neutral-800/20 to-neutral-700/10 dark:from-neutral-700/20 dark:to-neutral-600/10 group-hover:from-neutral-800/30 group-hover:to-neutral-700/20 dark:group-hover:from-neutral-700/30 dark:group-hover:to-neutral-600/20 transition-all duration-200" />
               <div className="relative w-8 h-8 flex items-center justify-center">
                 <img
                   src="/ayutham.webp"
@@ -78,7 +80,7 @@ const QuoteWidget = () => {
                   className="absolute inset-0 w-8 h-8 object-contain mx-auto my-auto transition-opacity duration-200 group-hover:opacity-0"
                   style={{ pointerEvents: 'none' }}
                 />
-                <span className="absolute inset-0 flex items-center justify-center text-base text-black font-serif opacity-0 group-hover:opacity-100 transition-opacity duration-200 select-none px-3 py-1 rounded-full bg-white/80">
+                <span className="absolute inset-0 flex items-center justify-center text-base text-white font-serif opacity-0 group-hover:opacity-100 transition-opacity duration-200 select-none px-3 py-1 rounded-full bg-white/80">
                   தமிழ்
                 </span>
               </div>
@@ -89,7 +91,7 @@ const QuoteWidget = () => {
               initial={{ scale: 0.8, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.8, opacity: 0 }}
-              className="quote-widget cursor-move"
+              className="quote-widget cursor-move p-6 bg-neutral-950 dark:bg-neutral-900 rounded-lg shadow-lg text-white"
               onClick={handleClick}
             >
               <div className="drag-handle">
@@ -105,7 +107,7 @@ const QuoteWidget = () => {
                     <p className="text-lg font-serif">{quotes[currentQuote].text}</p>
                     <p className="text-sm italic">{quotes[currentQuote].transliteration}</p>
                     <p className="text-sm">{quotes[currentQuote].translation}</p>
-                    <p className="text-xs text-gray-500">— {quotes[currentQuote].source}</p>
+                    <p className="text-xs text-gray-400">— {quotes[currentQuote].source}</p>
                   </motion.div>
                 </AnimatePresence>
                 <button

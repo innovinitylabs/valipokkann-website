@@ -17,7 +17,7 @@ const Links = () => {
     {
       id: 'nft-1',
       title: 'OpenSea Collection',
-      url: 'https://opensea.io/collection/valipokkann',
+      url: 'https://opensea.io/profile/valipokkann',
       category: 'nft',
       icon: '🖼️'
     },

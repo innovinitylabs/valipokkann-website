@@ -15,6 +15,7 @@ const Navbar = ({ isDarkMode, toggleDarkMode }: NavbarProps) => {
   const navItems = [
     { path: '/', label: 'Home' },
     { path: '/art', label: 'Art' },
+    { path: '/photography', label: 'Photography' },
     { path: '/articles', label: 'Articles' },
     { path: '/music', label: 'Music' },
     { path: '/links', label: 'Links' },
@@ -119,7 +120,7 @@ const Navbar = ({ isDarkMode, toggleDarkMode }: NavbarProps) => {
                 className="block w-full text-left px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"
                 aria-label="Toggle theme"
               >
-                {isDarkMode ? 'Switch to Light Mode 🌞' : 'Switch to Dark Mode ��'}
+                {isDarkMode ? 'Switch to Light Mode 🌞' : 'Switch to Dark Mode 🌙'}
               </button>
             </div>
           </motion.div>

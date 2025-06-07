@@ -226,4 +226,31 @@ Key dependencies and their purposes:
 
 ---
 
-This log will be updated as the project evolves. Last updated: 2024-03-XX 
+This log will be updated as the project evolves. Last updated: 2024-03-XX
+
+---
+
+### Session Summary (July 24, 2024)
+
+This session focused primarily on troubleshooting and refining existing features, improving deployment, and creating documentation.
+
+*   **Art Gallery Modal Refinements:** Addressed issues with the two-stage modal on the Art page (`src/pages/Art.tsx`), including:
+    *   Fixing image fitting (`object-contain`) in the details modal.
+    *   Implementing and debugging panning functionality in the fullscreen modal (`framer-motion`, `useMotionValue`).
+    *   Ensuring the reset button correctly resets pan, zoom, and rotation.
+    *   Adjusting drag constraints and animation behavior for smoother interaction across browsers (Safari, Brave).
+*   **Image Handling:** Corrected the path for images in the `artworks` array (`artworks/image.jpg` instead of `/artworks/image.jpg`). Created the `public/artworks` directory to correctly store artwork images.
+*   **Special View Fix:** Updated the "Special View" button functionality to correctly toggle the barrel roll animation (`rotate-180`) in the Art gallery view.
+*   **Deployment Troubleshooting (GitHub Pages):** Diagnosed and resolved issues causing a blank page on the custom domain (`valipokkann.in`), which were identified as related to:
+    *   Incorrect `base` path in `vite.config.ts` (`./` changed to `/`).
+    *   Lack of a GitHub Actions workflow for building and deploying the Vite app.
+    *   Created a new GitHub Actions workflow (`.github/workflows/deploy.yml`) to automate the build (`npm run build`) and deployment to the `gh-pages` branch using `peaceiris/actions-gh-pages@v4`.
+    *   Correctly configured GitHub Pages settings to deploy from the `gh-pages` branch using "GitHub Actions" as the source.
+    *   Resolved "Permission denied" errors for `github-actions[bot]` by updating Workflow Permissions in GitHub settings to "Read and write permissions".
+*   **Documentation:**
+    *   Updated the `README.md` with detailed instructions on local setup and deployment via GitHub Actions, including custom domain setup and troubleshooting common issues like permissions.
+    *   Created a new `CONTENT_GUIDE.md` file providing instructions on managing website content (Articles, Artwork, Links, general text/images).
+
+---
+
+This log will be updated as the project evolves. Last updated: July 24, 2024 

@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { motion } from 'framer-motion';
 import thirukkuralData from '../data/quotes/thirukkural.json';
-import { trackEvent } from '../utils/analytics';
 
 interface Thirukkural {
   id: number;
@@ -155,49 +154,65 @@ const chapterList = [
 ];
 
 const Thirukkural: React.FC = () => {
-  const [kurals, setKurals] = useState<Thirukkural[]>([]);
-  const [selectedChapter, setSelectedChapter] = useState<string>('');
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [selectedChapter, setSelectedChapter] = useState<string>('all');
+  const [filteredKurals, setFilteredKurals] = useState<Thirukkural[]>([]);
+  const [chapters, setChapters] = useState<{ id: number; name: string; nameEng: string }[]>([]);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
-  // Function to get a random chapter number
+  // Generate a random chapter number between 1 and 133
   const getRandomChapter = () => {
     return Math.floor(Math.random() * 133) + 1;
   };
 
-  // Load a specific chapter
-  const loadChapter = async (chapterNumber: number) => {
-    try {
-      setLoading(true);
-      const response = await fetch(`/data/thirukkural/chapter${chapterNumber}.json`);
-      if (!response.ok) {
-        throw new Error('Failed to load chapter');
-      }
-      const data = await response.json();
-      setKurals(data);
-      setSelectedChapter(chapterNumber.toString());
-      setError(null);
-      
-      // Track chapter view
-      trackEvent('view_chapter', 'Thirukkural', `Chapter ${chapterNumber}`);
-    } catch (err) {
-      setError('Failed to load chapter. Please try again.');
-      console.error('Error loading chapter:', err);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  // Load random chapter on initial mount
   useEffect(() => {
-    const randomChapter = getRandomChapter();
-    loadChapter(randomChapter);
+    setChapters(chapterList);
+    // Set a random chapter as default
+    setSelectedChapter(getRandomChapter().toString());
   }, []);
 
-  const handleChapterChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    const chapterNumber = parseInt(event.target.value);
-    loadChapter(chapterNumber);
-  };
+  useEffect(() => {
+    const handleEscape = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        setIsModalOpen(false);
+      }
+    };
+
+    if (isModalOpen) {
+      document.addEventListener('keydown', handleEscape);
+    } else {
+      document.removeEventListener('keydown', handleEscape);
+    }
+
+    return () => {
+      document.removeEventListener('keydown', handleEscape);
+    };
+  }, [isModalOpen]);
+
+  useEffect(() => {
+    let filtered: Thirukkural[] = thirukkuralData as Thirukkural[];
+
+    if (searchTerm) {
+      const searchLower = searchTerm.toLowerCase();
+      filtered = filtered.filter(
+        (kural) =>
+          kural.text.toLowerCase().includes(searchLower) ||
+          kural.translation.toLowerCase().includes(searchLower) ||
+          kural.transliteration.toLowerCase().includes(searchLower) ||
+          kural.explanation.toLowerCase().includes(searchLower)
+      );
+    }
+
+    if (selectedChapter !== 'all') {
+      const chapterNum = parseInt(selectedChapter);
+      filtered = filtered.filter((kural) => {
+        const kuralChapter = Math.ceil(kural.id / 10);
+        return kuralChapter === chapterNum;
+      });
+    }
+
+    setFilteredKurals(filtered);
+  }, [searchTerm, selectedChapter]);
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -279,62 +294,104 @@ const Thirukkural: React.FC = () => {
             src="/Thiruvalluvar.jpg"
             alt="Thiruvalluvar - Author of Thirukkural"
             className="w-32 h-32 rounded-full object-cover object-top shadow-lg cursor-pointer"
+            onClick={() => setIsModalOpen(true)}
           />
         </div>
+
+        {isModalOpen && (
+          <div
+            className="fixed inset-0 bg-black bg-opacity-90 flex items-center justify-center z-50 p-4 overflow-y-auto"
+            onClick={() => setIsModalOpen(false)}
+          >
+            <div
+              className="relative bg-neutral-900 rounded-lg shadow-2xl w-full max-w-4xl mx-auto my-8 max-h-[90vh] overflow-y-auto"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <button
+                className="absolute top-4 right-4 text-white text-3xl font-bold hover:text-neutral-300 transition-colors focus:outline-none z-10"
+                onClick={() => setIsModalOpen(false)}
+              >
+                &times;
+              </button>
+              <div className="p-6 md:p-8">
+                <img
+                  src="/Thiruvalluvar.jpg"
+                  alt="Thiruvalluvar - Author of Thirukkural"
+                  className="w-full h-auto max-h-[50vh] object-contain mx-auto mb-8 rounded-lg"
+                />
+                <div className="max-w-[600px] mx-auto text-neutral-300">
+                  <p className="text-[1.1rem] leading-[1.7] mb-6">
+                    Thiruvalluvar, the legendary Tamil poet-philosopher, authored the Thirukkural over 2,000 years ago — around 300 BCE or earlier. It predates most so-called "ancient" texts, including the Bible, and yet, its truths remain unchanged and undiluted.
+                  </p>
+                  <p className="text-[1.1rem] leading-[1.7] mb-6">
+                    Comprising 1,330 couplets on ethics (aram), political and economic life (porul), and love (inbam), the Thirukkural offers timeless wisdom with no allegiance to any religion, caste, or region. It's a universal scripture written for all humanity — not to command obedience, but to elevate understanding.
+                  </p>
+                  <p className="text-[1.1rem] leading-[1.7] mb-6">
+                    What makes it remarkable? It remains "relevant till date without any rephrasing", even after millennia. Its secular tone, moral precision, and poetic conciseness are unparalleled.
+                  </p>
+                  <p className="text-[1.1rem] leading-[1.7]">
+                    Many Western thinkers — from Tolstoy to Gandhi — praised ideas from the Kural, often unknowingly echoing its verses. Yet the source has rarely been credited in global discourse.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
 
         <div className="mb-8 space-y-4">
           <div className="flex flex-col md:flex-row gap-4">
             <div className="relative flex-1">
-              <select
+              <input
+                type="text"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                placeholder="Search Thirukkural..."
                 className="w-full px-4 py-2 bg-neutral-800 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                value={selectedChapter}
-                onChange={handleChapterChange}
-              >
-                {Array.from({ length: 133 }, (_, i) => i + 1).map((num) => (
-                  <option key={num} value={num}>
-                    Chapter {num}
-                  </option>
-                ))}
-              </select>
+              />
+              {searchTerm && (
+                <button
+                  onClick={() => setSearchTerm('')}
+                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-neutral-400 hover:text-white"
+                >
+                  ×
+                </button>
+              )}
             </div>
+            <select
+              className="px-4 py-2 bg-neutral-800 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 max-w-full md:max-w-xs"
+              value={selectedChapter}
+              onChange={(e) => setSelectedChapter(e.target.value)}
+            >
+              <option value="all">All Chapters</option>
+              {chapters.map((chapter) => (
+                <option key={chapter.id} value={chapter.id}>
+                  {chapter.name} - {chapter.nameEng}
+                </option>
+              ))}
+            </select>
           </div>
         </div>
 
-        {loading ? (
-          <div className="text-center py-8">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gray-900 mx-auto"></div>
-            <p className="mt-4 text-gray-600">Loading chapter...</p>
-          </div>
-        ) : error ? (
-          <div className="text-center py-8 text-red-600">
-            {error}
-          </div>
-        ) : kurals.length > 0 ? (
-          <div className="space-y-8">
-            {kurals.map((kural) => (
-              <motion.div
-                key={kural.id}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                className="bg-neutral-800 rounded-lg p-6 hover:bg-neutral-700 transition-colors"
-              >
-                <div className="flex items-start justify-between mb-4">
-                  <div>
-                    <h3 className="text-xl font-bold mb-2">{kural.text}</h3>
-                    <p className="text-neutral-400 mb-2">{kural.transliteration}</p>
-                  </div>
-                  <span className="text-sm text-neutral-500">#{kural.id}</span>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {filteredKurals.map((kural) => (
+            <motion.div
+              key={kural.id}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="bg-neutral-800 rounded-lg p-6 hover:bg-neutral-700 transition-colors"
+            >
+              <div className="flex items-start justify-between mb-4">
+                <div>
+                  <h3 className="text-xl font-bold mb-2">{kural.text}</h3>
+                  <p className="text-neutral-400 mb-2">{kural.transliteration}</p>
                 </div>
-                <p className="text-neutral-300 mb-4">{kural.translation}</p>
-                <p className="text-sm text-neutral-400">{kural.explanation}</p>
-              </motion.div>
-            ))}
-          </div>
-        ) : (
-          <div className="text-center py-8 text-gray-600">
-            No kurals found for the selected chapter.
-          </div>
-        )}
+                <span className="text-sm text-neutral-500">#{kural.id}</span>
+              </div>
+              <p className="text-neutral-300 mb-4">{kural.translation}</p>
+              <p className="text-sm text-neutral-400">{kural.explanation}</p>
+            </motion.div>
+          ))}
+        </div>
       </motion.div>
     </div>
   );

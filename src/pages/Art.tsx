@@ -16,12 +16,12 @@ interface PressMention {
 }
 
 interface Artwork {
-  id: string; // Use string for IDs from file paths
-  title?: string; // Made title optional
+  id: string;
+  title?: string;
+  description?: string;
   year: number;
-  createdDate: string; // Assuming datetime widget outputs string
-  mintDate: string; // Assuming datetime widget outputs string
-  description: string;
+  createdDate?: string;
+  mintDate?: string;
   medium?: string;
   dimensions?: string;
   editionSize?: number;
@@ -31,17 +31,19 @@ interface Artwork {
   exhibitedAt?: string;
   collectedBy?: string;
   traits?: string[];
-  audio?: string; // Assuming file widget outputs URL string
-  video?: string; // Assuming file widget outputs URL string
-  processImages?: string[]; // Assuming list of image widget outputs array of URLs
-  artistNotes?: string; // Assuming markdown widget outputs string
+  image: string;
+  thumbnail: string;
+  fullImage?: string;
+  video?: string;
+  audio?: string;
+  processImages?: string[];
+  artistNotes?: string;
   pressMentions?: PressMention[];
   license?: string;
   priceEth?: number;
-  thumbnail: string; // thumbnail for grid (required)
-  fullImage?: string; // full image for modal
   links?: LinkItem[];
-  defaultBackgroundColor?: 'black' | 'white'; // New field for default background color
+  defaultBackgroundColor?: 'black' | 'white';
+  blurDataUrl?: string;
 }
 
 const Art = () => {
@@ -225,6 +227,18 @@ const Art = () => {
     setInitialZoom(null);
   };
 
+  const getImageSrcSet = (imagePath: string) => {
+    const basePath = imagePath.replace('.jpg', '');
+    const sizes = ['thumb', 'medium', 'large', 'full'];
+    const webpSrcSet = sizes
+      .map(size => `${basePath}_${size}.webp ${size === 'thumb' ? '400w' : size === 'medium' ? '800w' : size === 'large' ? '1200w' : '1920w'}`)
+      .join(', ');
+    const jpegSrcSet = sizes
+      .map(size => `${basePath}_${size}.jpg ${size === 'thumb' ? '400w' : size === 'medium' ? '800w' : size === 'large' ? '1200w' : '1920w'}`)
+      .join(', ');
+    return { webpSrcSet, jpegSrcSet };
+  };
+
   return (
     <>
       {selectedArtwork && (
@@ -305,7 +319,6 @@ const Art = () => {
                               }}
                             />
                           )}
-                          <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-20 transition-all duration-300" />
                         </motion.div>
                       ))
                     ) : null}

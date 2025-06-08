@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { motion, AnimatePresence, useMotionValue, animate } from 'framer-motion';
 import yaml from 'js-yaml';
 import StructuredData from '../components/StructuredData';
+import { Helmet } from 'react-helmet-async';
 
 const FALLBACK_IMAGE = '/valipokkann_transparent_logo.png';
 
@@ -57,7 +58,7 @@ const Art = () => {
   const panY = useMotionValue(0);
   const [rotationSlider, setRotationSlider] = useState(0);
   const [artworksByYear, setArtworksByYear] = useState<{ year: number; artworks: Artwork[] }[]>([]);
-  const [backgroundColor, setBackgroundColor] = useState('black');
+  const [backgroundColor, setBackgroundColor] = useState<'black' | 'white'>('black');
   const [initialPinchDistance, setInitialPinchDistance] = useState<number | null>(null);
   const [initialZoom, setInitialZoom] = useState<number | null>(null);
 
@@ -214,11 +215,9 @@ const Art = () => {
 
   const handleTouchMove = (e: React.TouchEvent) => {
     if (e.touches.length === 2 && initialPinchDistance !== null && initialZoom !== null) {
-      e.preventDefault();
       const currentDistance = getPinchDistance(e.touches[0], e.touches[1]);
       const scale = currentDistance / initialPinchDistance;
-      const newZoom = initialZoom * scale;
-      setZoom(Math.max(0.1, Math.min(10, newZoom)));
+      setZoom(initialZoom * scale);
     }
   };
 
@@ -227,106 +226,96 @@ const Art = () => {
     setInitialZoom(null);
   };
 
-  const getImageSrcSet = (imagePath: string) => {
-    const basePath = imagePath.replace('.jpg', '');
-    const sizes = ['thumb', 'medium', 'large', 'full'];
-    const webpSrcSet = sizes
-      .map(size => `${basePath}_${size}.webp ${size === 'thumb' ? '400w' : size === 'medium' ? '800w' : size === 'large' ? '1200w' : '1920w'}`)
-      .join(', ');
-    const jpegSrcSet = sizes
-      .map(size => `${basePath}_${size}.jpg ${size === 'thumb' ? '400w' : size === 'medium' ? '800w' : size === 'large' ? '1200w' : '1920w'}`)
-      .join(', ');
-    return { webpSrcSet, jpegSrcSet };
-  };
-
   return (
-    <>
+    <div className="min-h-screen bg-white dark:bg-black">
+      <Helmet>
+        <title>Art - VALIPOKKANN</title>
+        <meta name="description" content="Explore VALIPOKKANN's digital art collection" />
+      </Helmet>
       {selectedArtwork && (
         <StructuredData
           type="artwork"
           data={selectedArtwork}
         />
       )}
-      <div className="min-h-screen">
-        <div className="max-w-7xl mx-auto px-4 py-12">
-          <div className="flex justify-between items-center mb-8">
-            <h1 className="text-4xl font-serif">Art Gallery</h1>
-            <button
-              onClick={handleBarrelRoll}
-              className={`px-4 py-2 rounded-md transition-colors duration-200 ${
-                isBarrelRolling
-                  ? 'bg-primary-dark text-white'
-                  : 'bg-primary text-white hover:bg-primary-dark'
-              }`}
-              title={isBarrelRolling ? 'normie view' : 'enter the omnivalient era'}
-            >
-              {isBarrelRolling ? 'Nilai Pārvai' : 'Nōkkōṇam'}
-            </button>
-          </div>
-
-          <div
-            className={`transition-all duration-1000 ${
+      <div className="container mx-auto px-4 py-8">
+        <div className="flex justify-between items-center mb-8">
+          <h1 className="text-4xl font-serif">Art Gallery</h1>
+          <button
+            onClick={handleBarrelRoll}
+            className={`px-4 py-2 rounded-md transition-colors duration-200 ${
               isBarrelRolling
-                ? 'rotate-180'
-                : ''
+                ? 'bg-primary-dark text-white'
+                : 'bg-primary text-white hover:bg-primary-dark'
             }`}
+            title={isBarrelRolling ? 'normie view' : 'enter the omnivalient era'}
           >
-            {/* Render artworks grouped by year */}
-            {artworksByYear.map(({ year, artworks }) => (
-              <div key={year} className="mb-0 relative">
-                {/* Year "bookmark" on the far left */}
-                <h2 className="text-xl font-serif absolute right-full top-0 mt-0 mr-2 text-gray-700 dark:text-gray-300 sticky top-12 z-10">
-                  {year}
-                </h2>
-                {/* Content area with the horizontal line */}
-                <div className="ml-16">
-                  <div className="border-b border-gray-400 dark:border-gray-500 mb-2 pb-0 relative">
-                    <div className="absolute left-0 top-0 h-full w-1 bg-gray-400 dark:bg-gray-500"></div>
-                  </div>
-                  <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2">
-                    {Array.isArray(artworks) && artworks.length > 0 ? (
-                      artworks.map((artwork) => (
-                        <motion.div
-                          key={artwork.id}
-                          className="relative aspect-square overflow-hidden cursor-pointer group"
-                          onClick={() => openDetailsModal(artwork)}
-                          whileHover={{ scale: 1.02 }}
-                          transition={{ duration: 0.2 }}
-                        >
-                          {artwork.video ? (
-                            <video
-                              src={artwork.video}
-                              loop
-                              muted
-                              autoPlay
-                              playsInline
-                              onError={(e) => {
-                                const target = e.target as HTMLVideoElement;
-                                target.src = FALLBACK_IMAGE;
-                              }}
-                              className="w-full h-full object-contain bg-black dark:bg-black"
-                              onClick={(e) => e.stopPropagation()}
-                            />
-                          ) : (
-                            <img
-                              src={artwork.thumbnail}
-                              alt={artwork.title || `Artwork ${artwork.id}`}
-                              className="w-full h-full object-contain bg-black dark:bg-black"
-                              loading="lazy"
-                              onError={(e) => {
-                                const target = e.target as HTMLImageElement;
-                                target.src = FALLBACK_IMAGE;
-                              }}
-                            />
-                          )}
-                        </motion.div>
-                      ))
-                    ) : null}
-                  </div>
+            {isBarrelRolling ? 'Nilai Pārvai' : 'Nōkkōṇam'}
+          </button>
+        </div>
+
+        <div
+          className={`transition-all duration-1000 ${
+            isBarrelRolling
+              ? 'rotate-180'
+              : ''
+          }`}
+        >
+          {/* Render artworks grouped by year */}
+          {artworksByYear.map(({ year, artworks }) => (
+            <div key={year} className="mb-0 relative">
+              {/* Year "bookmark" on the far left */}
+              <h2 className="text-xl font-serif absolute right-full top-0 mt-0 mr-2 text-gray-700 dark:text-gray-300 sticky top-12 z-10">
+                {year}
+              </h2>
+              {/* Content area with the horizontal line */}
+              <div className="ml-16">
+                <div className="border-b border-gray-400 dark:border-gray-500 mb-2 pb-0 relative">
+                  <div className="absolute left-0 top-0 h-full w-1 bg-gray-400 dark:bg-gray-500"></div>
+                </div>
+                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2">
+                  {Array.isArray(artworks) && artworks.length > 0 ? (
+                    artworks.map((artwork) => (
+                      <motion.div
+                        key={artwork.id}
+                        className="relative aspect-square overflow-hidden cursor-pointer group"
+                        onClick={() => openDetailsModal(artwork)}
+                        whileHover={{ scale: 1.02 }}
+                        transition={{ duration: 0.2 }}
+                      >
+                        {artwork.video ? (
+                          <video
+                            src={artwork.video}
+                            loop
+                            muted
+                            autoPlay
+                            playsInline
+                            onError={(e) => {
+                              const target = e.target as HTMLVideoElement;
+                              target.src = FALLBACK_IMAGE;
+                            }}
+                            className="w-full h-full object-contain bg-black dark:bg-black"
+                            onClick={(e) => e.stopPropagation()}
+                          />
+                        ) : (
+                          <img
+                            src={artwork.thumbnail}
+                            alt={artwork.title || `Artwork ${artwork.id}`}
+                            className="w-full h-full object-contain bg-black dark:bg-black"
+                            loading="lazy"
+                            onError={(e) => {
+                              const target = e.target as HTMLImageElement;
+                              target.src = FALLBACK_IMAGE;
+                            }}
+                          />
+                        )}
+                      </motion.div>
+                    ))
+                  ) : null}
                 </div>
               </div>
-            ))}
-          </div>
+            </div>
+          ))}
         </div>
 
         {/* Details Modal */}
@@ -674,7 +663,7 @@ const Art = () => {
           )}
         </AnimatePresence>
       </div>
-    </>
+    </div>
   );
 };
 

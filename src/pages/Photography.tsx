@@ -222,18 +222,6 @@ const Photography = () => {
     setInitialZoom(null);
   };
 
-  const getImageSrcSet = (imagePath: string) => {
-    const basePath = imagePath.replace('.jpg', '');
-    const sizes = ['thumb', 'medium', 'large', 'full'];
-    const webpSrcSet = sizes
-      .map(size => `${basePath}_${size}.webp ${size === 'thumb' ? '400w' : size === 'medium' ? '800w' : size === 'large' ? '1200w' : '1920w'}`)
-      .join(', ');
-    const jpegSrcSet = sizes
-      .map(size => `${basePath}_${size}.jpg ${size === 'thumb' ? '400w' : size === 'medium' ? '800w' : size === 'large' ? '1200w' : '1920w'}`)
-      .join(', ');
-    return { webpSrcSet, jpegSrcSet };
-  };
-
   return (
     <>
       {selectedPhotograph && (

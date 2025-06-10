@@ -226,12 +226,66 @@ const Art = () => {
     setInitialZoom(null);
   };
 
+  const artworkCollectionData = {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    "name": "VALIPOKKANN Art Gallery",
+    "description": "Explore VALIPOKKANN's digital art collection - raw, figurative-abstract works that challenge conventional aesthetics and explore the intersection of traditional Tamil philosophy with contemporary expression.",
+    "url": "https://valipokkann.com/art",
+    "author": {
+      "@type": "Person",
+      "name": "VALIPOKKANN",
+      "alternateName": "வழிப்போக்கன்"
+    },
+    "about": {
+      "@type": "Thing",
+      "name": "Contemporary Art",
+      "description": "Digital and figurative-abstract art exploring Tamil philosophy and modern expression"
+    }
+  };
+
   return (
     <div className="min-h-screen bg-white dark:bg-black">
       <Helmet>
-        <title>Art - VALIPOKKANN</title>
-        <meta name="description" content="Explore VALIPOKKANN's digital art collection" />
+        <title>Art Gallery | VALIPOKKANN</title>
+        <meta name="description" content="Explore VALIPOKKANN's digital art collection - raw, figurative-abstract works that challenge conventional aesthetics and explore the intersection of traditional Tamil philosophy with contemporary expression." />
+        <meta name="keywords" content="VALIPOKKANN, digital art, figurative-abstract art, Tamil art, contemporary art, art gallery, digital artist" />
+        
+        {/* Open Graph Meta Tags */}
+        <meta property="og:title" content="Art Gallery | VALIPOKKANN" />
+        <meta property="og:description" content="Explore VALIPOKKANN's digital art collection - raw, figurative-abstract works that challenge conventional aesthetics and explore the intersection of traditional Tamil philosophy with contemporary expression." />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://valipokkann.com/art" />
+        <meta property="og:image" content="/valipokkann_transparent_logo.png" />
+        
+        {/* Twitter Card Meta Tags */}
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="Art Gallery | VALIPOKKANN" />
+        <meta name="twitter:description" content="Explore VALIPOKKANN's digital art collection - raw, figurative-abstract works that challenge conventional aesthetics and explore the intersection of traditional Tamil philosophy with contemporary expression." />
+        <meta name="twitter:image" content="/valipokkann_transparent_logo.png" />
+        
+        {/* Additional Meta Tags */}
+        <meta name="robots" content="index, follow" />
+        <link rel="canonical" href="https://valipokkann.com/art" />
       </Helmet>
+      
+      <StructuredData type="website" data={{
+        "@context": "https://schema.org",
+        "@type": "WebPage",
+        "name": "VALIPOKKANN Art Gallery",
+        "description": "Explore VALIPOKKANN's digital art collection - raw, figurative-abstract works that challenge conventional aesthetics and explore the intersection of traditional Tamil philosophy with contemporary expression.",
+        "url": "https://valipokkann.com/art",
+        "author": {
+          "@type": "Person",
+          "name": "VALIPOKKANN",
+          "alternateName": "வழிப்போக்கன்"
+        },
+        "about": {
+          "@type": "Thing",
+          "name": "Contemporary Art",
+          "description": "Digital and figurative-abstract art exploring Tamil philosophy and modern expression"
+        }
+      }} />
       {selectedArtwork && (
         <StructuredData
           type="artwork"

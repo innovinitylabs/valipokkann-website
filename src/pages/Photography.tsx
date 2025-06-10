@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { motion, AnimatePresence, useMotionValue, animate } from 'framer-motion';
 import yaml from 'js-yaml';
 import StructuredData from '../components/StructuredData';
+import { Helmet } from 'react-helmet-async';
 
 const FALLBACK_IMAGE = '/valipokkann_transparent_logo.png';
 
@@ -222,8 +223,50 @@ const Photography = () => {
     setInitialZoom(null);
   };
 
+  const photographyCollectionData = {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    "name": "VALIPOKKANN Photography Gallery",
+    "description": "Explore VALIPOKKANN's photography collection - capturing moments that blend traditional Tamil aesthetics with contemporary vision. Each photograph tells a story of cultural heritage and modern expression.",
+    "url": "https://valipokkann.com/photography",
+    "author": {
+      "@type": "Person",
+      "name": "VALIPOKKANN",
+      "alternateName": "வழிப்போக்கன்"
+    },
+    "about": {
+      "@type": "Thing",
+      "name": "Photography",
+      "description": "Contemporary photography exploring Tamil culture and modern expression"
+    }
+  };
+
   return (
-    <>
+    <div className="min-h-screen bg-white dark:bg-black">
+      <Helmet>
+        <title>Photography Gallery | VALIPOKKANN</title>
+        <meta name="description" content="Explore VALIPOKKANN's photography collection - capturing moments that blend traditional Tamil aesthetics with contemporary vision. Each photograph tells a story of cultural heritage and modern expression." />
+        <meta name="keywords" content="VALIPOKKANN, photography, Tamil photography, contemporary photography, art photography, digital photography, photo gallery" />
+        
+        {/* Open Graph Meta Tags */}
+        <meta property="og:title" content="Photography Gallery | VALIPOKKANN" />
+        <meta property="og:description" content="Explore VALIPOKKANN's photography collection - capturing moments that blend traditional Tamil aesthetics with contemporary vision. Each photograph tells a story of cultural heritage and modern expression." />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://valipokkann.com/photography" />
+        <meta property="og:image" content="/valipokkann_transparent_logo.png" />
+        
+        {/* Twitter Card Meta Tags */}
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="Photography Gallery | VALIPOKKANN" />
+        <meta name="twitter:description" content="Explore VALIPOKKANN's photography collection - capturing moments that blend traditional Tamil aesthetics with contemporary vision. Each photograph tells a story of cultural heritage and modern expression." />
+        <meta name="twitter:image" content="/valipokkann_transparent_logo.png" />
+        
+        {/* Additional Meta Tags */}
+        <meta name="robots" content="index, follow" />
+        <link rel="canonical" href="https://valipokkann.com/photography" />
+      </Helmet>
+      
+      <StructuredData type="website" data={photographyCollectionData} />
       {selectedPhotograph && (
         <StructuredData
           type="photography"
@@ -511,7 +554,7 @@ const Photography = () => {
           )}
         </AnimatePresence>
       </div>
-    </>
+    </div>
   );
 };
 

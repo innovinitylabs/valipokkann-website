@@ -17,15 +17,18 @@ import Photography from './pages/Photography';
 import Thirukkural from './pages/Thirukkural';
 import { useKonamiCode } from './utils/konami';
 import { HelmetProvider } from 'react-helmet-async';
-import { initGA, trackPageView, trackWebVitals } from './utils/analytics';
-import { Metric } from 'web-vitals';
 
 // Analytics wrapper component
 const AnalyticsWrapper: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const location = useLocation();
 
   useEffect(() => {
-    trackPageView(location.pathname);
+    // Use gtag for page views
+    if (typeof window.gtag === 'function') {
+      window.gtag('config', 'G-JGDQ4FE21R', {
+        page_path: location.pathname + location.search
+      });
+    }
   }, [location]);
 
   return <>{children}</>;
@@ -73,24 +76,6 @@ function App() {
     return () => {
       konami.stop();
     };
-  }, []);
-
-  // Initialize Google Analytics
-  useEffect(() => {
-    initGA();
-  }, []);
-
-  // Track Core Web Vitals
-  useEffect(() => {
-    if ('web-vital' in window) {
-      import('web-vitals').then(({ getCLS, getFID, getFCP, getLCP, getTTFB }) => {
-        getCLS((metric: Metric) => trackWebVitals(metric));
-        getFID((metric: Metric) => trackWebVitals(metric));
-        getFCP((metric: Metric) => trackWebVitals(metric));
-        getLCP((metric: Metric) => trackWebVitals(metric));
-        getTTFB((metric: Metric) => trackWebVitals(metric));
-      });
-    }
   }, []);
 
   return (

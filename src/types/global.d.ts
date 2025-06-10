@@ -1,11 +1,18 @@
+interface DataLayerEvent {
+  event: string;
+  [key: string]: any;
+}
+
 interface Window {
-  dataLayer: any[];
+  dataLayer: DataLayerEvent[];
   gtag: (...args: any[]) => void;
 }
 
 declare global {
   interface Window {
-    dataLayer: any[];
+    dataLayer: DataLayerEvent[];
     gtag: (...args: any[]) => void;
   }
-} 
+}
+
+export {}; 

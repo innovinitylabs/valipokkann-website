@@ -1,4 +1,4 @@
-import os
+whats import os
 import yaml
 from PIL import Image, ExifTags, ImageOps
 from datetime import datetime
@@ -170,23 +170,49 @@ def optimize_image(input_path: str, output_path: str, max_size: tuple = (1920, 1
                     logger.warning(f"No EXIF data found in temporary JPEG {temp_jpeg}")
             except Exception as exif_error:
                 logger.warning(f"Failed to extract EXIF from temporary JPEG: {exif_error}")
-            ratio = min(max_size[0] / image.size[0], max_size[1] / image.size[1])
-            if ratio < 1:
-                new_size = tuple(int(dim * ratio) for dim in image.size)
-                image = image.resize(new_size, Image.Resampling.LANCZOS)
-            if exif_bytes:
-                image.save(output_path, 'JPEG', quality=85, optimize=True, exif=exif_bytes)
-                logger.debug(f"Saved optimized JPEG with EXIF (GPS stripped) for {input_path}")
-            else:
-                image.save(output_path, 'JPEG', quality=85, optimize=True)
-                logger.warning(f"Saved optimized JPEG without EXIF for {input_path}")
+            
+            # Generate multiple sizes
+            sizes = {
+                'thumb': (400, 400),
+                'medium': (800, 800),
+                'large': (1200, 1200),
+                'full': max_size
+            }
+            
+            base_path = os.path.splitext(output_path)[0]
+            
+            for size_name, size in sizes.items():
+                # Resize image
+                ratio = min(size[0] / image.size[0], size[1] / image.size[1])
+                if ratio < 1:
+                    new_size = tuple(int(dim * ratio) for dim in image.size)
+                    resized = image.resize(new_size, Image.Resampling.LANCZOS)
+                else:
+                    resized = image
+                
+                # Save JPEG version
+                jpeg_path = f"{base_path}_{size_name}.jpg"
+                if exif_bytes:
+                    resized.save(jpeg_path, 'JPEG', quality=85, optimize=True, exif=exif_bytes)
+                else:
+                    resized.save(jpeg_path, 'JPEG', quality=85, optimize=True)
+                
+                # Save WebP version
+                webp_path = f"{base_path}_{size_name}.webp"
+                resized.save(webp_path, 'WEBP', quality=85, method=6)
+                
+                # Generate blur-up thumbnail
+                if size_name == 'thumb':
+                    blur_path = f"{base_path}_blur.jpg"
+                    blur_size = (20, 20)
+                    blur = resized.resize(blur_size, Image.Resampling.LANCZOS)
+                    blur.save(blur_path, 'JPEG', quality=30)
+            
             try:
                 os.remove(temp_jpeg)
             except Exception as e:
                 logger.warning(f"Failed to remove temporary file {temp_jpeg}: {e}")
-            if not verify_exif_preservation(input_path, output_path):
-                logger.error(f"EXIF verification failed after optimization for {input_path}")
-                return False
+            
             return True
         else:
             image = Image.open(input_path)
@@ -195,14 +221,44 @@ def optimize_image(input_path: str, output_path: str, max_size: tuple = (1920, 1
                 exif_bytes = strip_gps_from_exif_bytes(exif_bytes)
             if image.mode in ('RGBA', 'P'):
                 image = image.convert('RGB')
-            ratio = min(max_size[0] / image.size[0], max_size[1] / image.size[1])
-            if ratio < 1:
-                new_size = tuple(int(dim * ratio) for dim in image.size)
-                image = image.resize(new_size, Image.Resampling.LANCZOS)
-            if exif_bytes:
-                image.save(output_path, 'JPEG', quality=85, optimize=True, exif=exif_bytes)
-            else:
-                image.save(output_path, 'JPEG', quality=85, optimize=True)
+            
+            # Generate multiple sizes
+            sizes = {
+                'thumb': (400, 400),
+                'medium': (800, 800),
+                'large': (1200, 1200),
+                'full': max_size
+            }
+            
+            base_path = os.path.splitext(output_path)[0]
+            
+            for size_name, size in sizes.items():
+                # Resize image
+                ratio = min(size[0] / image.size[0], size[1] / image.size[1])
+                if ratio < 1:
+                    new_size = tuple(int(dim * ratio) for dim in image.size)
+                    resized = image.resize(new_size, Image.Resampling.LANCZOS)
+                else:
+                    resized = image
+                
+                # Save JPEG version
+                jpeg_path = f"{base_path}_{size_name}.jpg"
+                if exif_bytes:
+                    resized.save(jpeg_path, 'JPEG', quality=85, optimize=True, exif=exif_bytes)
+                else:
+                    resized.save(jpeg_path, 'JPEG', quality=85, optimize=True)
+                
+                # Save WebP version
+                webp_path = f"{base_path}_{size_name}.webp"
+                resized.save(webp_path, 'WEBP', quality=85, method=6)
+                
+                # Generate blur-up thumbnail
+                if size_name == 'thumb':
+                    blur_path = f"{base_path}_blur.jpg"
+                    blur_size = (20, 20)
+                    blur = resized.resize(blur_size, Image.Resampling.LANCZOS)
+                    blur.save(blur_path, 'JPEG', quality=30)
+            
             return True
     except Exception as e:
         logger.error(f"Failed to optimize {input_path}: {e}")

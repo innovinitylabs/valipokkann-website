@@ -1,0 +1,145 @@
+[
+  {
+    "@context": "https://schema.org",
+    "@type": "VisualArtwork",
+    "name": "\"WORKING ON MY-SELF\"",
+    "description": "\"A reflective piece on personal growth and self-improvement.\"",
+    "image": "https://valipokkann.in",
+    "creator": {
+      "@type": "Person",
+      "name": "Valipokkann"
+    },
+    "dateCreated": "2025-06-08T06:53:57.270Z",
+    "url": "https://valipokkann.in/art/working-on-my-self"
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "VisualArtwork",
+    "name": "\"SOCIETY\"",
+    "description": "\"A critical commentary on societal structures and their impact.\"",
+    "image": "https://valipokkann.in",
+    "creator": {
+      "@type": "Person",
+      "name": "Valipokkann"
+    },
+    "dateCreated": "2025-06-08T06:53:57.270Z",
+    "url": "https://valipokkann.in/art/society"
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "VisualArtwork",
+    "name": "\"Society - Personal ED\"",
+    "description": "\"A personal interpretation of societal pressures and individual identity.\"",
+    "image": "https://valipokkann.in",
+    "creator": {
+      "@type": "Person",
+      "name": "Valipokkann"
+    },
+    "dateCreated": "2025-06-08T06:53:57.270Z",
+    "url": "https://valipokkann.in/art/society-personal-ed"
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "VisualArtwork",
+    "name": "\"SCROLL'SCOPE\"",
+    "description": "\"A visual exploration of a scrollable, immersive world.\"",
+    "image": "https://valipokkann.in",
+    "creator": {
+      "@type": "Person",
+      "name": "Valipokkann"
+    },
+    "dateCreated": "2025-06-08T06:53:57.270Z",
+    "url": "https://valipokkann.in/art/scrollscope"
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "VisualArtwork",
+    "name": "\"Digital Dreams\"",
+    "description": "\"A vibrant exploration of digital consciousness and human connection in the age of AI.\"",
+    "image": "https://valipokkann.in",
+    "creator": {
+      "@type": "Person",
+      "name": "Valipokkann"
+    },
+    "dateCreated": "2025-06-08T06:53:57.270Z",
+    "url": "https://valipokkann.in/art/sample-artwork"
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "VisualArtwork",
+    "name": "\"Poochandi\"",
+    "description": "\"A playful yet eerie depiction of a mythical creature.\"",
+    "image": "https://valipokkann.in",
+    "creator": {
+      "@type": "Person",
+      "name": "Valipokkann"
+    },
+    "dateCreated": "2025-06-08T06:53:57.270Z",
+    "url": "https://valipokkann.in/art/poochandi"
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "VisualArtwork",
+    "name": "\"OmniValient\"",
+    "description": "\"A powerful and iconic representation of boundless courage.\"",
+    "image": "https://valipokkann.in",
+    "creator": {
+      "@type": "Person",
+      "name": "Valipokkann"
+    },
+    "dateCreated": "2025-06-08T06:53:57.270Z",
+    "url": "https://valipokkann.in/art/omnivalient"
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "VisualArtwork",
+    "name": "\"OmniValient (GIF)\"",
+    "description": "\"An animated version of the powerful and iconic representation of boundless courage.\"",
+    "image": "https://valipokkann.in",
+    "creator": {
+      "@type": "Person",
+      "name": "Valipokkann"
+    },
+    "dateCreated": "2025-06-08T06:53:57.270Z",
+    "url": "https://valipokkann.in/art/omnivalient-gif"
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "VisualArtwork",
+    "name": "\"கானல் நீர் (Mirage)\"",
+    "description": "\"A surreal depiction of illusions and hidden realities.\"",
+    "image": "https://valipokkann.in",
+    "creator": {
+      "@type": "Person",
+      "name": "Valipokkann"
+    },
+    "dateCreated": "2025-06-08T06:53:57.270Z",
+    "url": "https://valipokkann.in/art/kanalneer"
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "VisualArtwork",
+    "name": "\"Harmony of Obscure Fidelity\"",
+    "description": "\"An exploration of intricate patterns and hidden connections.\"",
+    "image": "https://valipokkann.in",
+    "creator": {
+      "@type": "Person",
+      "name": "Valipokkann"
+    },
+    "dateCreated": "2025-06-08T06:53:57.270Z",
+    "url": "https://valipokkann.in/art/harmonyofobscurefidelity"
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "VisualArtwork",
+    "name": "\"FEAR & GREED\"",
+    "description": "\"A striking visual representation of market emotions.\"",
+    "image": "https://valipokkann.in",
+    "creator": {
+      "@type": "Person",
+      "name": "Valipokkann"
+    },
+    "dateCreated": "2025-06-08T06:53:57.271Z",
+    "url": "https://valipokkann.in/art/fear-greed"
+  }
+]

@@ -226,24 +226,6 @@ const Art = () => {
     setInitialZoom(null);
   };
 
-  const artworkCollectionData = {
-    "@context": "https://schema.org",
-    "@type": "WebPage",
-    "name": "VALIPOKKANN Art Gallery",
-    "description": "Explore VALIPOKKANN's digital art collection - raw, figurative-abstract works that challenge conventional aesthetics and explore the intersection of traditional Tamil philosophy with contemporary expression.",
-    "url": "https://valipokkann.com/art",
-    "author": {
-      "@type": "Person",
-      "name": "VALIPOKKANN",
-      "alternateName": "வழிப்போக்கன்"
-    },
-    "about": {
-      "@type": "Thing",
-      "name": "Contemporary Art",
-      "description": "Digital and figurative-abstract art exploring Tamil philosophy and modern expression"
-    }
-  };
-
   return (
     <div className="min-h-screen bg-white dark:bg-black">
       <Helmet>

@@ -2,7 +2,7 @@ import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { glob } from 'glob';
-import { siteConfig } from '../config/site-config.js';
+import siteConfig from '../config/site-config.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -27,7 +27,7 @@ export const generateSitemap = async (): Promise<void> => {
   });
 
   // Add navigation pages from site config
-  siteConfig.navigation.forEach(nav => {
+  siteConfig.navigation.forEach((nav: { path: string }) => {
     urls.push({
       loc: `${baseUrl}${nav.path}`,
       lastmod: new Date().toISOString(),

@@ -19,7 +19,9 @@ const Breadcrumbs: React.FC = () => {
       articles: 'Articles',
       music: 'Music',
       about: 'About',
-      links: 'Links'
+      links: 'Links',
+      fusion: 'Fusion',
+      brahmamuhurtham: 'Brahma Muhurtham'
     };
     return labels[path] || path.charAt(0).toUpperCase() + path.slice(1);
   };

@@ -15,6 +15,8 @@ import Admin from './pages/Admin';
 import NotFound from './pages/NotFound';
 import Photography from './pages/Photography';
 import Thirukkural from './pages/Thirukkural';
+import Fusion from './pages/Fusion';
+import Brahmamuhurtham from './pages/Fusion/Brahmamuhurtham';
 import { useKonamiCode } from './utils/konami';
 import { HelmetProvider } from 'react-helmet-async';
 
@@ -95,6 +97,8 @@ function App() {
                   <Route path="/articles" element={<Articles />} />
                   <Route path="/links" element={<Links />} />
                   <Route path="/thirukkural" element={<Thirukkural />} />
+                  <Route path="/fusion" element={<Fusion />} />
+                  <Route path="/fusion/brahmamuhurtham" element={<Brahmamuhurtham />} />
                   <Route path="/admin" element={<Admin />} />
                   <Route path="*" element={<NotFound />} />
                 </Routes>

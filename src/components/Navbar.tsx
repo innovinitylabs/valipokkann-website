@@ -17,6 +17,7 @@ const Navbar = ({ isDarkMode, toggleDarkMode }: NavbarProps) => {
     { name: 'Art', path: '/art' },
     { name: 'Photography', path: '/photography' },
     { name: 'Thirukkural', path: '/thirukkural' },
+    { name: 'Fusion', path: '/fusion' },
     { name: 'Articles', path: '/articles' },
     { name: 'Music', path: '/music' },
     { name: 'About', path: '/about' },

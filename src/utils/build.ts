@@ -1,4 +1,4 @@
-import generateSitemap from './generate-sitemap.js';
+import { generateSitemap } from './generate-sitemap.js';
 import generateStructuredData from './generate-structured-data.js';
 import generateSitemapIndex from './generate-sitemap-index.js';
 import { generateThirukkuralQuotes } from './generate-quotes.js';

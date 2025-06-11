@@ -1,6 +1,11 @@
 import fs from 'fs';
 import path from 'path';
-import siteConfig from '../config/site-config.js';
+import { fileURLToPath } from 'url';
+import { glob } from 'glob';
+import { siteConfig } from '../config/site-config.js';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 interface SitemapUrl {
   loc: string;
@@ -9,8 +14,7 @@ interface SitemapUrl {
   priority: number;
 }
 
-const generateSitemap = async (): Promise<void> => {
-  const { glob } = await import('glob');
+export const generateSitemap = async (): Promise<void> => {
   const baseUrl = `https://${siteConfig.domain}`;
   const urls: SitemapUrl[] = [];
 
@@ -22,7 +26,7 @@ const generateSitemap = async (): Promise<void> => {
     priority: 1.0
   });
 
-  // Add navigation pages
+  // Add navigation pages from site config
   siteConfig.navigation.forEach(nav => {
     urls.push({
       loc: `${baseUrl}${nav.path}`,
@@ -33,7 +37,7 @@ const generateSitemap = async (): Promise<void> => {
   });
 
   // Add artwork pages
-  const artworkFiles = await glob.sync('src/data/artwork/*.md');
+  const artworkFiles = await glob('src/data/artwork/*.md');
   artworkFiles.forEach((file: string) => {
     const slug = path.basename(file, '.md');
     urls.push({
@@ -45,7 +49,7 @@ const generateSitemap = async (): Promise<void> => {
   });
 
   // Add photography pages
-  const photoFiles = await glob.sync('src/data/photography/*.md');
+  const photoFiles = await glob('src/data/photography/*.md');
   photoFiles.forEach((file: string) => {
     const slug = path.basename(file, '.md');
     urls.push({
@@ -57,7 +61,7 @@ const generateSitemap = async (): Promise<void> => {
   });
 
   // Add article pages
-  const articleFiles = await glob.sync('src/data/articles/*.md');
+  const articleFiles = await glob('src/data/articles/*.md');
   articleFiles.forEach((file: string) => {
     const slug = path.basename(file, '.md');
     urls.push({
@@ -81,7 +85,10 @@ const generateSitemap = async (): Promise<void> => {
 </urlset>`;
 
   // Write sitemap to public directory
-  fs.writeFileSync('public/sitemap.xml', sitemap);
+  const publicDir = path.join(__dirname, '../../public');
+  fs.writeFileSync(path.join(publicDir, 'sitemap.xml'), sitemap);
+  console.log('Sitemap generated successfully!');
 };
 
-export default generateSitemap; 
+// Run the sitemap generation
+generateSitemap().catch(console.error); 

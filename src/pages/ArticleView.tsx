@@ -3,7 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { marked } from 'marked';
 import { Helmet } from 'react-helmet-async';
-import type { Article } from '../utils/frontmatter';
+import type { Article, ArticleMeta } from '../utils/frontmatter';
 import { parseFrontmatter } from '../utils/frontmatter';
 
 const ArticleView = () => {

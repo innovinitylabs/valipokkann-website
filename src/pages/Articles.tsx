@@ -1,14 +1,13 @@
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { marked } from 'marked';
 import { Helmet } from 'react-helmet-async';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import StructuredData from '../components/StructuredData';
-import { Article, ArticleMeta, parseFrontmatter } from '../utils/frontmatter';
+import type { Article } from '../utils/frontmatter';
+import { parseFrontmatter } from '../utils/frontmatter';
 
 const Articles = () => {
   const [articles, setArticles] = useState<Article[]>([]);
-  const [selectedArticle, setSelectedArticle] = useState<Article | null>(null);
   const [selectedTag, setSelectedTag] = useState<string | null>(null);
   const navigate = useNavigate();
 

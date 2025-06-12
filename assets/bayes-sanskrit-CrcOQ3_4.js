@@ -4,7 +4,13 @@ description: Explore how ancient Indian philosophy, Nyaya Sutras, and Dharmakirt
 keywords: Bayes Theorem Indian origin, Sanskrit probability, Dharmakirti Bayesian logic, Nyaya Sutras, ancient Indian epistemology, Vedic Mathematics, Pramana Shastra, Indian philosophy and probability
 author: Valipokkann
 date: 2025-06-12
-category: Decolonizing Knowledge
+tags: 
+  - Decolonizing Knowledge
+  - Mathematics
+  - Philosophy
+  - History
+  - Indian Heritage
+coverImage: /articles/covers/bayes_theorem.png
 ---
 
 # Did Bayes Theorem Come from Sanskrit Literature? The Untold Roots of Probabilistic Reasoning
@@ -99,4 +105,4 @@ Indian philosophers in Sanskrit traditions laid the conceptual bedrock for reaso
 - Bimal Krishna Matilal's *The Navya-Nyaya Doctrine of Negation*
 - Subhash Kak's works on Indian epistemology and probability
 - Bharati Krishna Tirthaji's *Vedic Mathematics* `;export{e as default};
-//# sourceMappingURL=bayes-sanskrit-DZNHRI0C.js.map
+//# sourceMappingURL=bayes-sanskrit-CrcOQ3_4.js.map

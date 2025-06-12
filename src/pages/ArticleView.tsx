@@ -3,8 +3,9 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { marked } from 'marked';
 import { Helmet } from 'react-helmet-async';
-import type { Article, ArticleMeta } from '../utils/frontmatter';
-import { parseFrontmatter } from '../utils/frontmatter';
+import StructuredData from '../components/StructuredData';
+import type { Article, ArticleMeta } from '@/utils/frontmatter';
+import { parseFrontmatter } from '@/utils/frontmatter';
 
 const ArticleView = () => {
   const { slug } = useParams<{ slug: string }>();
@@ -103,10 +104,10 @@ const ArticleView = () => {
         <meta name="keywords" content={article.meta.keywords} />
         <meta name="author" content={article.meta.author || 'Vali Pokkan'} />
         
-        {/* Open Graph / Facebook */}
-        <meta property="og:type" content="article" />
+        {/* Open Graph */}
         <meta property="og:title" content={article.meta.title} />
         <meta property="og:description" content={article.meta.description} />
+        <meta property="og:type" content="article" />
         {article.meta.coverImage && (
           <meta property="og:image" content={`https://valipokkan.in${article.meta.coverImage}`} />
         )}
@@ -192,4 +193,4 @@ const ArticleView = () => {
   );
 };
 
-export default ArticleView; 
+export default ArticleView;

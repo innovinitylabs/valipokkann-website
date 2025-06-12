@@ -1,24 +1,25 @@
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
-import { motion, AnimatePresence } from 'framer-motion';
+import { HelmetProvider } from 'react-helmet-async';
 import { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import Home from './pages/Home';
+import About from './pages/About';
+import Articles from './pages/Articles';
+import ArticleView from './pages/ArticleView';
+import Photography from './pages/Photography';
+import Art from './pages/Art';
+import Music from './pages/Music';
+import Links from './pages/Links';
+import Admin from './pages/Admin';
+import NotFound from './pages/NotFound';
+import Thirukkural from './pages/Thirukkural';
+import Fusion from './pages/Fusion';
+import Brahmamuhurtham from './pages/Fusion/Brahmamuhurtham';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import QuoteWidget from './components/QuoteWidget';
 import Breadcrumbs from './components/Breadcrumbs';
-import Home from './pages/Home';
-import Art from './pages/Art';
-import Articles from './pages/Articles';
-import Music from './pages/Music';
-import About from './pages/About';
-import Links from './pages/Links';
-import Admin from './pages/Admin';
-import NotFound from './pages/NotFound';
-import Photography from './pages/Photography';
-import Thirukkural from './pages/Thirukkural';
-import Fusion from './pages/Fusion';
-import Brahmamuhurtham from './pages/Fusion/Brahmamuhurtham';
 import { useKonamiCode } from './utils/konami';
-import { HelmetProvider } from 'react-helmet-async';
 
 // Analytics wrapper component
 const AnalyticsWrapper: React.FC<{ children: React.ReactNode }> = ({ children }) => {
@@ -37,7 +38,6 @@ const AnalyticsWrapper: React.FC<{ children: React.ReactNode }> = ({ children })
 };
 
 function App() {
-  // App component main function
   const [isDarkMode, setIsDarkMode] = useState(true);
   const [showTooltip, setShowTooltip] = useState(false);
   const [isSiteBarrelRolling, setIsSiteBarrelRolling] = useState(false);
@@ -95,6 +95,7 @@ function App() {
                   <Route path="/art" element={<Art />} />
                   <Route path="/music" element={<Music />} />
                   <Route path="/articles" element={<Articles />} />
+                  <Route path="/articles/:slug" element={<ArticleView />} />
                   <Route path="/links" element={<Links />} />
                   <Route path="/thirukkural" element={<Thirukkural />} />
                   <Route path="/fusion" element={<Fusion />} />

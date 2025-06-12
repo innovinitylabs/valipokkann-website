@@ -1,10 +1,11 @@
 import { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Helmet } from 'react-helmet-async';
 import { useNavigate } from 'react-router-dom';
 import StructuredData from '../components/StructuredData';
-import type { Article } from '../utils/frontmatter';
-import { parseFrontmatter } from '../utils/frontmatter';
+import type { Article } from '@/utils/frontmatter';
+import { parseFrontmatter } from '@/utils/frontmatter';
 
 const Articles = () => {
   const [articles, setArticles] = useState<Article[]>([]);

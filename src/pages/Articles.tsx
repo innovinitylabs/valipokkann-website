@@ -13,60 +13,46 @@ const Articles = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const modules = import.meta.glob<string>('../data/articles/*.md', { query: '?raw', import: 'default' });
-    console.log('Found article modules:', Object.keys(modules));
     const loadArticles = async () => {
       try {
-        const loaded: Article[] = await Promise.all(
+        const modules = import.meta.glob<string>('../data/articles/*.md', { 
+          query: '?raw',
+          import: 'default'
+        });
+        
+        const loadedArticles = await Promise.all(
           Object.entries(modules).map(async ([path, resolver]) => {
-            console.log('Loading article from path:', path);
-            const raw = await resolver() as string;
-            const { meta, content } = parseFrontmatter(raw);
+            const content = await resolver();
+            const { meta, content: markdownContent } = parseFrontmatter(content);
             const slug = path.split('/').pop()?.replace(/\.md$/, '') || '';
-            console.log('Loaded article:', { 
-              slug, 
-              meta,
-              coverImage: meta.coverImage,
-              hasCoverImage: !!meta.coverImage 
-            });
             return {
               slug,
               meta,
-              content,
+              content: markdownContent
             };
           })
         );
-        // Sort by date descending
-        loaded.sort((a, b) => new Date(b.meta.date).getTime() - new Date(a.meta.date).getTime());
-        console.log('All articles loaded:', loaded.map(a => ({ 
-          title: a.meta.title, 
-          coverImage: a.meta.coverImage,
-          hasCoverImage: !!a.meta.coverImage 
-        })));
-        setArticles(loaded);
+
+        // Sort articles by date, most recent first
+        loadedArticles.sort((a, b) => new Date(b.meta.date).getTime() - new Date(a.meta.date).getTime());
+        setArticles(loadedArticles);
       } catch (error) {
         console.error('Error loading articles:', error);
       }
     };
+
     loadArticles();
   }, []);
 
-  // Get unique tags from all articles
-  const allTags = useMemo(() => {
-    const tags = new Set<string>();
-    articles.forEach(article => {
-      article.meta.tags?.forEach(tag => tags.add(tag));
-    });
-    return Array.from(tags).sort();
-  }, [articles]);
-
   // Filter articles based on selected tag
-  const filteredArticles = useMemo(() => {
-    if (!selectedTag) return articles;
-    return articles.filter(article => 
-      Array.isArray(article.meta.tags) && article.meta.tags.includes(selectedTag)
-    );
-  }, [articles, selectedTag]);
+  const filteredArticles = articles.filter(article => 
+    !selectedTag || article.meta.tags?.includes(selectedTag)
+  );
+
+  // Get unique tags from all articles
+  const uniqueTags = Array.from(
+    new Set(articles.flatMap(article => article.meta.tags || []))
+  ).sort();
 
   // Prepare structured data for the articles list page
   const articlesPageData = {
@@ -152,7 +138,7 @@ const Articles = () => {
                 >
                   All
                 </button>
-                {Array.from(new Set(articles.flatMap(article => article.meta.tags || []))).map(tag => (
+                {uniqueTags.map((tag: string) => (
                   <button
                     key={tag}
                     onClick={() => setSelectedTag(tag)}
@@ -183,7 +169,7 @@ const Articles = () => {
                 <p className="text-gray-400 mb-4">{article.meta.description}</p>
                 <div className="flex items-center justify-between">
                   <div className="flex flex-wrap gap-2">
-                    {article.meta.tags?.map(tag => (
+                    {article.meta.tags?.map((tag: string) => (
                       <span
                         key={tag}
                         className="px-3 py-1 bg-neutral-900 dark:bg-neutral-800 rounded-full text-sm text-gray-300"

@@ -3,7 +3,8 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { marked } from 'marked';
 import { Helmet } from 'react-helmet-async';
-import { Article, parseFrontmatter } from '../utils/frontmatter';
+import type { Article } from '../utils/frontmatter';
+import { parseFrontmatter } from '../utils/frontmatter';
 
 const ArticleView = () => {
   const { slug } = useParams<{ slug: string }>();
@@ -143,7 +144,7 @@ const ArticleView = () => {
               <div className="flex items-center space-x-4 mb-2">
                 <time className="text-gray-400">{article.meta.date}</time>
                 <div className="flex flex-wrap gap-2">
-                  {article.meta.tags?.map(tag => (
+                  {article.meta.tags?.map((tag: string) => (
                     <span
                       key={tag}
                       className="px-3 py-1 bg-neutral-900 dark:bg-neutral-800 rounded-full text-sm text-gray-300"

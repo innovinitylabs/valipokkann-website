@@ -15,7 +15,9 @@
     "@types/react-helmet": "^6.1.11",
     "framer-motion": "^10.16.4",
     "glob": "^11.0.2",
+    "gray-matter": "^4.0.3",
     "js-yaml": "^4.1.0",
+    "marked": "^15.0.12",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-draggable": "^4.4.6",
@@ -26,6 +28,7 @@
     "web-vitals": "^3.5.2"
   },
   "devDependencies": {
+    "@tailwindcss/typography": "^0.5.16",
     "@types/glob": "^8.1.0",
     "@types/node": "^20.19.0",
     "@types/react": "^18.2.37",

@@ -1,68 +1,103 @@
-import { useState, useMemo } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { motion } from 'framer-motion';
+import { marked } from 'marked';
+
+interface ArticleMeta {
+  title: string;
+  description: string;
+  keywords?: string;
+  author?: string;
+  date: string;
+  category?: string;
+}
 
 interface Article {
-  id: number;
-  title: string;
-  excerpt: string;
-  date: string;
+  slug: string;
+  meta: ArticleMeta;
   content: string;
-  tags: string[];
+}
+
+// Simple frontmatter parser for browser environment
+function parseFrontmatter(content: string): { meta: ArticleMeta; content: string } {
+  const frontmatterRegex = /^---\n([\s\S]*?)\n---\n([\s\S]*)$/;
+  const match = content.match(frontmatterRegex);
+  
+  if (!match) {
+    throw new Error('No frontmatter found in markdown file');
+  }
+
+  const [, frontmatter, markdownContent] = match;
+  const meta: ArticleMeta = {
+    title: '',
+    description: '',
+    date: '',
+  };
+
+  // Parse frontmatter key-value pairs
+  frontmatter.split('\n').forEach(line => {
+    const [key, ...valueParts] = line.split(':');
+    if (key && valueParts.length > 0) {
+      const value = valueParts.join(':').trim();
+      // Remove quotes if present
+      const cleanValue = value.replace(/^["']|["']$/g, '');
+      meta[key.trim() as keyof ArticleMeta] = cleanValue;
+    }
+  });
+
+  return {
+    meta,
+    content: markdownContent.trim()
+  };
 }
 
 const Articles = () => {
+  const [articles, setArticles] = useState<Article[]>([]);
   const [selectedArticle, setSelectedArticle] = useState<Article | null>(null);
   const [selectedTag, setSelectedTag] = useState<string | null>(null);
 
-  // Sample articles data
-  const articles: Article[] = [
-    {
-      id: 1,
-      title: 'The Intersection of Art and Revolution',
-      excerpt: 'Exploring how art can be a powerful tool for social change and cultural transformation.',
-      date: '2024-03-15',
-      content: '# The Intersection of Art and Revolution\n\nArt has always been a mirror of society...',
-      tags: ['Art', 'Revolution', 'Culture']
-    },
-    {
-      id: 2,
-      title: 'Tamil Literature in Modern Times',
-      excerpt: 'A deep dive into the evolution of Tamil literature and its impact on contemporary society.',
-      date: '2024-03-10',
-      content: '# Tamil Literature in Modern Times\n\nTamil literature has a rich history...',
-      tags: ['Literature', 'Culture', 'Tamil']
-    },
-    {
-      id: 3,
-      title: 'Digital Art and Traditional Techniques',
-      excerpt: 'Bridging the gap between traditional artistic methods and modern digital tools.',
-      date: '2024-03-05',
-      content: '# Digital Art and Traditional Techniques\n\nThe digital age has transformed art...',
-      tags: ['Art', 'Technology', 'Digital']
-    },
-    {
-      id: 4,
-      title: 'Cultural Identity in Contemporary Art',
-      excerpt: 'Examining how artists express and preserve cultural identity through their work.',
-      date: '2024-02-28',
-      content: '# Cultural Identity in Contemporary Art\n\nCultural identity plays a crucial role...',
-      tags: ['Culture', 'Art', 'Identity']
-    }
-  ];
+  useEffect(() => {
+    const modules = import.meta.glob<string>('../data/articles/*.md', { query: '?raw', import: 'default' });
+    console.log('Found article modules:', Object.keys(modules));
+    const loadArticles = async () => {
+      try {
+        const loaded: Article[] = await Promise.all(
+          Object.entries(modules).map(async ([path, resolver]) => {
+            console.log('Loading article from path:', path);
+            const raw = await resolver() as string;
+            const { meta, content } = parseFrontmatter(raw);
+            const slug = path.split('/').pop()?.replace(/\.md$/, '') || '';
+            console.log('Loaded article:', { slug, meta });
+            return {
+              slug,
+              meta,
+              content,
+            };
+          })
+        );
+        // Sort by date descending
+        loaded.sort((a, b) => new Date(b.meta.date).getTime() - new Date(a.meta.date).getTime());
+        console.log('All articles loaded:', loaded);
+        setArticles(loaded);
+      } catch (error) {
+        console.error('Error loading articles:', error);
+      }
+    };
+    loadArticles();
+  }, []);
 
-  // Get unique tags from all articles
+  // Get unique tags/categories from all articles
   const allTags = useMemo(() => {
     const tags = new Set<string>();
     articles.forEach(article => {
-      article.tags.forEach(tag => tags.add(tag));
+      if (article.meta.category) tags.add(article.meta.category);
     });
     return Array.from(tags).sort();
   }, [articles]);
 
-  // Filter articles based on selected tag
+  // Filter articles based on selected tag/category
   const filteredArticles = useMemo(() => {
     if (!selectedTag) return articles;
-    return articles.filter(article => article.tags.includes(selectedTag));
+    return articles.filter(article => article.meta.category === selectedTag);
   }, [articles, selectedTag]);
 
   return (
@@ -102,27 +137,26 @@ const Articles = () => {
         <div className="space-y-8">
           {filteredArticles.map((article) => (
             <motion.article
-              key={article.id}
+              key={article.slug}
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               whileHover={{ scale: 1.02 }}
               className="bg-neutral-950 dark:bg-neutral-900 rounded-lg shadow-lg p-6 cursor-pointer"
               onClick={() => setSelectedArticle(article)}
             >
-              <h2 className="text-2xl font-serif mb-2 text-white">{article.title}</h2>
-              <p className="text-gray-400 mb-4">{article.excerpt}</p>
+              <h2 className="text-2xl font-serif mb-2 text-white">{article.meta.title}</h2>
+              <p className="text-gray-400 mb-4">{article.meta.description}</p>
               <div className="flex items-center justify-between">
                 <div className="flex space-x-2">
-                  {article.tags.map((tag) => (
+                  {article.meta.category && (
                     <span
-                      key={tag}
                       className="px-3 py-1 bg-neutral-900 dark:bg-neutral-800 rounded-full text-sm text-gray-300"
                     >
-                      {tag}
+                      {article.meta.category}
                     </span>
-                  ))}
+                  )}
                 </div>
-                <time className="text-sm text-gray-400">{article.date}</time>
+                <time className="text-sm text-gray-400">{article.meta.date}</time>
               </div>
             </motion.article>
           ))}
@@ -133,37 +167,42 @@ const Articles = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-60"
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-60 p-4 overflow-y-auto"
             onClick={() => setSelectedArticle(null)}
           >
             <div
-              className="relative w-full max-w-3xl md:max-w-4xl bg-neutral-950 dark:bg-neutral-900 p-6 rounded-lg mx-2"
+              className="relative w-full max-w-3xl md:max-w-4xl bg-neutral-950 dark:bg-neutral-900 rounded-lg mx-2 my-8"
               onClick={(e) => e.stopPropagation()}
             >
-              <button
-                className="absolute top-4 right-4 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
-                onClick={() => setSelectedArticle(null)}
-              >
-                ✕
-              </button>
-              
-              <h2 className="text-3xl font-serif mb-4 text-white">{selectedArticle.title}</h2>
-              <div className="flex items-center space-x-4 mb-6">
-                <time className="text-gray-400">{selectedArticle.date}</time>
-                <div className="flex space-x-2">
-                  {selectedArticle.tags.map((tag) => (
+              <div className="sticky top-0 bg-neutral-950 dark:bg-neutral-900 p-6 border-b border-neutral-800 rounded-t-lg">
+                <button
+                  className="absolute top-4 right-4 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
+                  onClick={() => setSelectedArticle(null)}
+                >
+                  ✕
+                </button>
+                <h2 className="text-3xl font-serif mb-4 text-white pr-8">{selectedArticle.meta.title}</h2>
+                <div className="flex items-center space-x-4 mb-2">
+                  <time className="text-gray-400">{selectedArticle.meta.date}</time>
+                  {selectedArticle.meta.category && (
                     <span
-                      key={tag}
                       className="px-3 py-1 bg-neutral-900 dark:bg-neutral-800 rounded-full text-sm text-gray-300"
                     >
-                      {tag}
+                      {selectedArticle.meta.category}
                     </span>
-                  ))}
+                  )}
                 </div>
               </div>
-              
-              <div className="prose dark:prose-invert max-w-none">
-                <p className="text-gray-300">{selectedArticle.content}</p>
+              <div className="p-6 overflow-y-auto max-h-[calc(100vh-16rem)]">
+                <article 
+                  className="prose prose-lg dark:prose-invert prose-headings:font-serif prose-headings:text-white prose-p:text-gray-300 prose-a:text-primary prose-a:no-underline hover:prose-a:text-primary-dark prose-strong:text-white prose-code:text-green-400 prose-code:bg-neutral-800 prose-code:px-1 prose-code:py-0.5 prose-code:rounded prose-pre:bg-neutral-800 prose-pre:text-gray-200 prose-blockquote:border-l-primary prose-blockquote:text-gray-400 prose-img:rounded-lg prose-img:shadow-lg max-w-none"
+                  dangerouslySetInnerHTML={{ 
+                    __html: marked(selectedArticle.content, {
+                      breaks: true,
+                      gfm: true
+                    }) 
+                  }} 
+                />
               </div>
             </div>
           </motion.div>

@@ -46,9 +46,61 @@ export default {
           '100%': { opacity: '1' },
         },
       },
+      typography: {
+        DEFAULT: {
+          css: {
+            maxWidth: 'none',
+            color: 'inherit',
+            a: {
+              color: 'inherit',
+              textDecoration: 'none',
+              fontWeight: '500',
+              '&:hover': {
+                color: '#FFA500',
+              },
+            },
+            strong: {
+              color: 'inherit',
+              fontWeight: '600',
+            },
+            code: {
+              color: '#10B981',
+              fontWeight: '400',
+              backgroundColor: '#1F2937',
+              padding: '0.2em 0.4em',
+              borderRadius: '0.25rem',
+            },
+            pre: {
+              backgroundColor: '#1F2937',
+              color: '#E5E7EB',
+            },
+            blockquote: {
+              borderLeftColor: '#374151',
+              color: '#9CA3AF',
+            },
+            h1: {
+              color: 'inherit',
+              fontWeight: '700',
+            },
+            h2: {
+              color: 'inherit',
+              fontWeight: '600',
+            },
+            h3: {
+              color: 'inherit',
+              fontWeight: '600',
+            },
+            h4: {
+              color: 'inherit',
+              fontWeight: '600',
+            },
+          },
+        },
+      },
     },
   },
   plugins: [
     require('@tailwindcss/aspect-ratio'),
+    require('@tailwindcss/typography'),
   ],
 } 

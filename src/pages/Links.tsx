@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion';
 import { useState } from 'react';
+import { Helmet } from 'react-helmet-async';
 
 interface LinkItem {
   id: string;
@@ -88,6 +89,21 @@ const Links = () => {
 
   return (
     <div className="min-h-screen py-12 px-4">
+      <Helmet>
+        <title>Links | VALIPOKKANN</title>
+        <meta name="description" content="Find all official links to VALIPOKKANN's NFT collections, social profiles, and music platforms. Connect with VALIPOKKANN across the web." />
+        <meta name="keywords" content="VALIPOKKANN, links, NFT, social, music, OpenSea, Foundation, Instagram, Twitter, Spotify, Apple Music, SoundCloud" />
+        <meta property="og:title" content="Links | VALIPOKKANN" />
+        <meta property="og:description" content="Find all official links to VALIPOKKANN's NFT collections, social profiles, and music platforms. Connect with VALIPOKKANN across the web." />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://valipokkan.in/links" />
+        <meta property="og:image" content="https://valipokkan.in/valipokkann_transparent_logo.png" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="Links | VALIPOKKANN" />
+        <meta name="twitter:description" content="Find all official links to VALIPOKKANN's NFT collections, social profiles, and music platforms. Connect with VALIPOKKANN across the web." />
+        <meta name="twitter:image" content="https://valipokkan.in/valipokkann_transparent_logo.png" />
+        <link rel="canonical" href="https://valipokkan.in/links" />
+      </Helmet>
       <div className="max-w-4xl mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 20 }}

@@ -1,11 +1,27 @@
 import { motion } from 'framer-motion';
 import { useState } from 'react';
+import { Helmet } from 'react-helmet-async';
 
 const Music = () => {
   const [activeTab, setActiveTab] = useState<'spotify' | 'apple' | 'soundcloud'>('apple');
 
   return (
     <div className="min-h-screen bg-black dark:bg-black">
+      <Helmet>
+        <title>Music Playlists & Streams | VALIPOKKANN</title>
+        <meta name="description" content="Listen to curated playlists and music streams by VALIPOKKANN. Explore Apple Music, Spotify, and SoundCloud selections blending Tamil, ambient, and experimental sounds." />
+        <meta name="keywords" content="VALIPOKKANN, music, playlists, Apple Music, Spotify, SoundCloud, Tamil music, ambient, experimental" />
+        <meta property="og:title" content="Music Playlists & Streams | VALIPOKKANN" />
+        <meta property="og:description" content="Listen to curated playlists and music streams by VALIPOKKANN. Explore Apple Music, Spotify, and SoundCloud selections blending Tamil, ambient, and experimental sounds." />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://valipokkan.in/music" />
+        <meta property="og:image" content="https://valipokkan.in/valipokkann_transparent_logo.png" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="Music Playlists & Streams | VALIPOKKANN" />
+        <meta name="twitter:description" content="Listen to curated playlists and music streams by VALIPOKKANN. Explore Apple Music, Spotify, and SoundCloud selections blending Tamil, ambient, and experimental sounds." />
+        <meta name="twitter:image" content="https://valipokkan.in/valipokkann_transparent_logo.png" />
+        <link rel="canonical" href="https://valipokkan.in/music" />
+      </Helmet>
       <div className="container mx-auto px-4 py-16">
         <motion.h1 
           initial={{ opacity: 0, y: 20 }}

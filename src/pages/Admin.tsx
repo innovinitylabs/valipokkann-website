@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
+import { Helmet } from 'react-helmet-async';
 
 interface Article {
   id: string;
@@ -58,6 +59,22 @@ const Admin = () => {
 
   return (
     <div className="min-h-screen py-12 px-4">
+      <Helmet>
+        <title>Admin Dashboard | VALIPOKKANN</title>
+        <meta name="robots" content="noindex, nofollow" />
+        <meta name="description" content="Admin dashboard for managing articles and content on VALIPOKKANN." />
+        <meta name="keywords" content="VALIPOKKANN, admin, dashboard, content management, articles" />
+        <meta property="og:title" content="Admin Dashboard | VALIPOKKANN" />
+        <meta property="og:description" content="Admin dashboard for managing articles and content on VALIPOKKANN." />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://valipokkan.in/admin" />
+        <meta property="og:image" content="https://valipokkan.in/valipokkann_transparent_logo.png" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="Admin Dashboard | VALIPOKKANN" />
+        <meta name="twitter:description" content="Admin dashboard for managing articles and content on VALIPOKKANN." />
+        <meta name="twitter:image" content="https://valipokkan.in/valipokkann_transparent_logo.png" />
+        <link rel="canonical" href="https://valipokkan.in/admin" />
+      </Helmet>
       <div className="max-w-4xl mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 20 }}

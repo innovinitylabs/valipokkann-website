@@ -17,6 +17,7 @@ interface Timing {
 const Brahmamuhurtham = () => {
   const [location, setLocation] = useState<Location | null>(null);
   const [timing, setTiming] = useState<Timing | null>(null);
+  const [tomorrowTiming, setTomorrowTiming] = useState<Timing | null>(null);
   const [offset, setOffset] = useState<number>(0);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
@@ -59,6 +60,17 @@ const Brahmamuhurtham = () => {
         brahmaMuhurtham,
         adjustedTime
       });
+      // Calculate tomorrow's timings
+      const tomorrow = new Date(today);
+      tomorrow.setDate(today.getDate() + 1);
+      const timesTomorrow = SunCalc.getTimes(tomorrow, location.latitude, location.longitude);
+      const brahmaMuhurthamTomorrow = new Date(timesTomorrow.sunrise.getTime() - (96 * 60 * 1000));
+      const adjustedTimeTomorrow = new Date(brahmaMuhurthamTomorrow.getTime() - (offset * 60 * 1000));
+      setTomorrowTiming({
+        sunrise: timesTomorrow.sunrise,
+        brahmaMuhurtham: brahmaMuhurthamTomorrow,
+        adjustedTime: adjustedTimeTomorrow
+      });
       setLoading(false);
     }
   }, [location, offset]);
@@ -68,6 +80,14 @@ const Brahmamuhurtham = () => {
       hour: 'numeric',
       minute: '2-digit',
       hour12: true
+    });
+  };
+
+  const formatDate = (date: Date) => {
+    return date.toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
     });
   };
 
@@ -121,7 +141,8 @@ const Brahmamuhurtham = () => {
           ) : timing && (
             <div className="space-y-8">
               <div className="bg-gradient-to-br from-purple-500/10 to-indigo-600/10 rounded-lg p-6 border border-purple-500/20">
-                <h2 className="text-2xl font-semibold mb-4">Today's Timings</h2>
+                <h2 className="text-2xl font-semibold mb-1">Today's Timings</h2>
+                <div className="text-gray-400 text-sm mb-4">{formatDate(timing.sunrise)}</div>
                 <div className="space-y-4">
                   <div>
                     <p className="text-gray-400">Sunrise</p>
@@ -137,6 +158,26 @@ const Brahmamuhurtham = () => {
                   </div>
                 </div>
               </div>
+              {tomorrowTiming && (
+                <div className="bg-gradient-to-br from-purple-500/10 to-indigo-600/10 rounded-lg p-6 border border-purple-500/20">
+                  <h2 className="text-2xl font-semibold mb-1">Tomorrow's Timings</h2>
+                  <div className="text-gray-400 text-sm mb-4">{formatDate(tomorrowTiming.sunrise)}</div>
+                  <div className="space-y-4">
+                    <div>
+                      <p className="text-gray-400">Sunrise</p>
+                      <p className="text-2xl font-mono">{formatTime(tomorrowTiming.sunrise)}</p>
+                    </div>
+                    <div>
+                      <p className="text-gray-400">Brahma Muhurtham</p>
+                      <p className="text-2xl font-mono">{formatTime(tomorrowTiming.brahmaMuhurtham)}</p>
+                    </div>
+                    <div>
+                      <p className="text-gray-400">Adjusted Wake-up Time</p>
+                      <p className="text-2xl font-mono text-purple-400">{formatTime(tomorrowTiming.adjustedTime)}</p>
+                    </div>
+                  </div>
+                </div>
+              )}
 
               <div className="bg-gradient-to-br from-purple-500/10 to-indigo-600/10 rounded-lg p-6 border border-purple-500/20">
                 <h2 className="text-xl font-semibold mb-4">Wake-up Offset</h2>

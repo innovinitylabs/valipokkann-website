@@ -20,8 +20,8 @@ A completely free CMS that:
 2. Click "New OAuth App"
 3. Fill in the details:
    - **Application name**: `VALIPOKKANN CMS`
-   - **Homepage URL**: `https://valipokkann.com`
-   - **Authorization callback URL**: `https://valipokkann.com/admin/auth-callback.html`
+   - **Homepage URL**: `https://valipokkann.in`
+   - **Authorization callback URL**: `https://valipokkann.in/admin/auth-callback.html`
 
 ### 2. Get Your Client ID
 
@@ -33,8 +33,8 @@ Edit `public/admin/auth.html` and replace `YOUR_GITHUB_CLIENT_ID` with your actu
 
 ### 4. Access Your CMS
 
-- **CMS Interface**: https://valipokkann.com/admin/
-- **Authentication**: https://valipokkann.com/admin/auth.html
+- **CMS Interface**: https://valipokkann.in/admin/
+- **Authentication**: https://valipokkann.in/admin/auth.html
 
 ## 📁 CMS Structure
 

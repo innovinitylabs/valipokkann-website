@@ -26,7 +26,7 @@ const About = () => {
     "@type": "Person",
     "name": "VALIPOKKANN",
     "alternateName": "வழிப்போக்கன்",
-    "description": "VALIPOKKANN is an artist whose work is raw, figurative-abstract, and fiercely original — unpolished, uncategorized, and unafraid. They create without reference, imitation, or borrowed aesthetics; each piece emerges from an inner well of form and force, drawn not from outside inspiration but ancestral memory and lived intensity.",
+    "description": "VALIPOKKANN is an artist whose work is raw, figurative-abstract, and fiercely original, unpolished, uncategorized, and unafraid. Since 2021, they have been an active participant in the crypto and NFT art space, pioneering digital art that bridges traditional Tamil philosophy with blockchain technology.",
     "image": "/valipokkann_transparent_logo.png",
     "email": "valipokkann@proton.me",
     "sameAs": [
@@ -41,15 +41,15 @@ const About = () => {
     <>
       <Helmet>
         <title>About VALIPOKKANN | Artist Bio & Contact</title>
-        <meta name="description" content="VALIPOKKANN is an artist whose work is raw, figurative-abstract, and fiercely original. Rooted in Tamil philosophy and Thirukkural, their art spans painting, photography, music, and writing." />
-        <meta name="keywords" content="VALIPOKKANN, வழிப்போக்கன், artist, Tamil art, contemporary art, Thirukkural, figurative-abstract art" />
+        <meta name="description" content="VALIPOKKANN is an artist whose work is raw, figurative-abstract, and fiercely original. Since 2021, they have been active in crypto and NFT art, bridging Tamil philosophy with blockchain technology." />
+        <meta name="keywords" content="VALIPOKKANN, வழிப்போக்கன், artist, Tamil art, contemporary art, Thirukkural, figurative-abstract art, crypto art, NFT artist, Web3" />
         <meta property="og:title" content="About VALIPOKKANN | Artist Bio & Contact" />
-        <meta property="og:description" content="VALIPOKKANN is an artist whose work is raw, figurative-abstract, and fiercely original. Rooted in Tamil philosophy and Thirukkural, their art spans painting, photography, music, and writing." />
+        <meta property="og:description" content="VALIPOKKANN is an artist whose work is raw, figurative-abstract, and fiercely original. Since 2021, they have been active in crypto and NFT art, bridging Tamil philosophy with blockchain technology." />
         <meta property="og:image" content="/valipokkann_transparent_logo.png" />
         <meta property="og:type" content="profile" />
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content="About VALIPOKKANN | Artist Bio & Contact" />
-        <meta name="twitter:description" content="VALIPOKKANN is an artist whose work is raw, figurative-abstract, and fiercely original. Rooted in Tamil philosophy and Thirukkural, their art spans painting, photography, music, and writing." />
+        <meta name="twitter:description" content="VALIPOKKANN is an artist whose work is raw, figurative-abstract, and fiercely original. Since 2021, they have been active in crypto and NFT art, bridging Tamil philosophy with blockchain technology." />
         <meta name="twitter:image" content="/valipokkann_transparent_logo.png" />
         <link rel="canonical" href="https://valipokkann.com/about" />
       </Helmet>
@@ -91,16 +91,19 @@ const About = () => {
                 </motion.div>
                 <h2 className="text-2xl font-sans mb-4">Artist Bio</h2>
                 <p className="text-gray-600 dark:text-gray-400 mb-4">
-                  Valipokkann creates as the ancients did — not by copying what is seen, but by invoking what is known. Each canvas is a confrontation, not a decoration.
+                  Valipokkann creates as the ancients did, not by copying what is seen, but by invoking what is known. Each canvas is a confrontation, not a decoration.
                 </p>
                 <p className="text-gray-600 dark:text-gray-400">
-                  VALIPOKKANN is an artist whose work is raw, figurative-abstract, and fiercely original — unpolished, uncategorized, and unafraid. They create without reference, imitation, or borrowed aesthetics; each piece emerges from an inner well of form and force, drawn not from outside inspiration but ancestral memory and lived intensity.
+                  VALIPOKKANN is an artist whose work is raw, figurative-abstract, and fiercely original, unpolished, uncategorized, and unafraid. They create without reference, imitation, or borrowed aesthetics; each piece emerges from an inner well of form and force, drawn not from outside inspiration but ancestral memory and lived intensity.
                 </p>
                 <p className="text-gray-600 dark:text-gray-400 mb-4">
-                  Their art defies gravity itself — omnivalient and multidimensional, revealing hidden layers and meanings when flipped, rotated, or reinterpreted.
+                  Their art defies gravity itself, omnivalient and multidimensional, revealing hidden layers and meanings when flipped, rotated, or reinterpreted.
                 </p>
                 <p className="text-gray-600 dark:text-gray-400 mb-4">
-                  Rooted deeply in Tamil philosophy and the fire of Thirukkural, VALIPOKKANN channels traditional knowledge into a new visual language. Across mediums — painting, photography, music, and writing — their work challenges trends, confronts shallow modernity, and refuses to be diluted.
+                  Rooted deeply in Tamil philosophy and the fire of Thirukkural, VALIPOKKANN channels traditional knowledge into a new visual language. Across mediums, painting, photography, music, and writing, their work challenges trends, confronts shallow modernity, and refuses to be diluted.
+                </p>
+                <p className="text-gray-600 dark:text-gray-400 mb-4">
+                  Since 2021, VALIPOKKANN has been an active participant in the crypto and NFT art space, pioneering digital art that bridges traditional Tamil philosophy with blockchain technology. Their crypto legacy spans multiple collections and collaborations, establishing them as a voice for authentic, culturally-rooted digital art in the Web3 ecosystem.
                 </p>
                 <p className="text-gray-600 dark:text-gray-400">
                   Made not to impress, but to reveal.

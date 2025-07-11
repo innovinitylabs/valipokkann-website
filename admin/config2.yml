@@ -1,0 +1,103 @@
+backend:
+  name: github
+  repo: innovinitylabs/valipokkann-website
+  branch: main
+
+media_folder: "public/images"
+public_folder: "/images"
+
+collections:
+  - name: "articles"
+    label: "Articles"
+    folder: "src/data/articles"
+    create: true
+    slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
+    fields:
+      - {label: "Title", name: "title", widget: "string"}
+      - {label: "Publish Date", name: "date", widget: "datetime"}
+      - {label: "Tags", name: "tags", widget: "list", field: {label: "Tag", name: "tag", widget: "string"}}
+      - {label: "Body", name: "body", widget: "markdown"}
+
+  - name: "artwork"
+    label: "Artwork"
+    folder: "src/data/artwork"
+    create: true
+    slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
+    fields:
+      - {label: "Title", name: "title", widget: "string"}
+      - {label: "Year", name: "year", widget: "number"}
+      - {label: "Created Date", name: "createdDate", widget: "datetime"}
+      - {label: "Mint Date", name: "mintDate", widget: "datetime"}
+      - {label: "Description", name: "description", widget: "text"}
+      - {label: "Medium", name: "medium", widget: "string"}
+      - {label: "Dimensions", name: "dimensions", widget: "string"}
+      - {label: "Edition Size", name: "editionSize", widget: "number"}
+      - {label: "Blockchain", name: "blockchain", widget: "string"}
+      - {label: "Contract Address", name: "contractAddress", widget: "string"}
+      - {label: "Token ID", name: "tokenId", widget: "string"}
+      - {label: "Exhibited At", name: "exhibitedAt", widget: "string"}
+      - {label: "Collected By", name: "collectedBy", widget: "string", required: false}
+      - label: "Traits"
+        name: "traits"
+        widget: "list"
+        field: {label: "Trait", name: "trait", widget: "string"}
+      - {label: "Audio", name: "audio", widget: "file", required: false}
+      - {label: "Video", name: "video", widget: "file", required: false}
+      - label: "Process Images"
+        name: "processImages"
+        widget: "list"
+        field: {label: "Image", name: "image", widget: "image", media_folder: "/public/artworks", public_folder: "/artworks"}
+      - {label: "Artist Notes", name: "artistNotes", widget: "markdown", required: false}
+      - label: "Press Mentions"
+        name: "pressMentions"
+        widget: "list"
+        fields:
+          - {label: "Title", name: "title", widget: "string"}
+          - {label: "URL", name: "url", widget: "string"}
+      - {label: "License", name: "license", widget: "string"}
+      - {label: "Price (ETH)", name: "priceEth", widget: "number", required: false, default: 0.0}
+      - {label: "Thumbnail", name: "thumbnail", widget: "image", media_folder: "/public/artworks", public_folder: "/artworks"}
+      - {label: "Full Image", name: "fullImage", widget: "image", media_folder: "/public/artworks", public_folder: "/artworks"}
+      - {label: "Default Background Color", name: "defaultBackgroundColor", widget: "select", options: ["black", "white"], default: "black"}
+      - label: "Links"
+        name: "links"
+        widget: "list"
+        fields:
+          - {label: "Label", name: "label", widget: "string"}
+          - {label: "URL", name: "url", widget: "string"}
+
+  - name: "photography"
+    label: "Photography"
+    folder: "src/data/photography"
+    create: true
+    slug: "{{year}}-{{slug}}"
+    fields:
+      - {label: "Title", name: "title", widget: "string", required: false}
+      - {label: "Description", name: "description", widget: "text", required: false}
+      - {label: "Year", name: "year", widget: "number"}
+      - {label: "Date Taken", name: "dateTaken", widget: "datetime", required: false}
+      - {label: "Mint Date", name: "mintDate", widget: "datetime", required: false}
+      - {label: "Blockchain", name: "blockchain", widget: "string", required: false}
+      - {label: "Contract Address", name: "contractAddress", widget: "string", required: false}
+      - {label: "Token ID", name: "tokenId", widget: "string", required: false}
+      - {label: "Price (ETH)", name: "priceEth", widget: "number", required: false, default: 0.0}
+      - {label: "Image", name: "image", widget: "image", media_folder: "/public/photographs", public_folder: "/photographs"}
+      - {label: "Make", name: "make", widget: "string", required: false}
+      - {label: "Model", name: "model", widget: "string", required: false}
+      - {label: "Focal Length", name: "focalLength", widget: "string", required: false}
+      - {label: "Aperture", name: "aperture", widget: "string", required: false}
+      - {label: "Shutter Speed", name: "shutterSpeed", widget: "string", required: false}
+      - {label: "ISO", name: "iso", widget: "number", required: false}
+      - {label: "Lens", name: "lens", widget: "string", required: false}
+      - label: "Tags"
+        name: "tags"
+        widget: "list"
+        field: {label: "Tag", name: "tag", widget: "string"}
+      - {label: "Default Background Color", name: "defaultBackgroundColor", widget: "select", options: ["black", "white"], default: "black"}
+      - label: "Links"
+        name: "links"
+        widget: "list"
+        fields:
+          - {label: "Label", name: "label", widget: "string"}
+          - {label: "URL", name: "url", widget: "string"} 
+# Trigger redeploy: Decap CMS config is valid, no links collection 

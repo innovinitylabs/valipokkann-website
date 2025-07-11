@@ -1,7 +1,9 @@
 backend:
-  name: git-gateway
-  branch: main # Branch to commit to
-  base_url: https://valipokkann.netlify.app/.netlify/identity
+  name: github
+  repo: innovinitylabs/valipokkann-website
+  branch: main
+  base_url: https://valipokkann.com
+  auth_endpoint: https://valipokkann.com/.netlify/identity
 
 media_folder: "public/images"
 public_folder: "/images"

@@ -1,0 +1,83 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VALIPOKKANN CMS - Authentication Callback</title>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      margin: 0;
+      padding: 40px 20px;
+      background: #f5f5f5;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+    .callback-container {
+      background: white;
+      padding: 40px;
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      text-align: center;
+      max-width: 400px;
+      width: 100%;
+    }
+    .callback-container h1 {
+      margin: 0 0 20px 0;
+      color: #333;
+      font-weight: 300;
+    }
+    .callback-container p {
+      color: #666;
+      margin-bottom: 30px;
+    }
+    .spinner {
+      border: 3px solid #f3f3f3;
+      border-top: 3px solid #333;
+      border-radius: 50%;
+      width: 30px;
+      height: 30px;
+      animation: spin 1s linear infinite;
+      margin: 0 auto 20px;
+    }
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+  </style>
+</head>
+<body>
+  <div class="callback-container">
+    <h1>VALIPOKKANN CMS</h1>
+    <div class="spinner"></div>
+    <p>Processing authentication...</p>
+  </div>
+
+  <script>
+    // Handle OAuth callback
+    const urlParams = new URLSearchParams(window.location.search);
+    const code = urlParams.get('code');
+    const error = urlParams.get('error');
+
+    if (error) {
+      document.querySelector('.callback-container').innerHTML = `
+        <h1>Authentication Error</h1>
+        <p>Error: ${error}</p>
+        <a href="/admin/auth.html" style="color: #333; text-decoration: none;">← Back to Login</a>
+      `;
+    } else if (code) {
+      // Store the code and redirect to CMS
+      localStorage.setItem('github_code', code);
+      window.location.href = '/admin/';
+    } else {
+      document.querySelector('.callback-container').innerHTML = `
+        <h1>Invalid Request</h1>
+        <p>No authorization code received.</p>
+        <a href="/admin/auth.html" style="color: #333; text-decoration: none;">← Back to Login</a>
+      `;
+    }
+  </script>
+</body>
+</html> 

@@ -101,19 +101,4 @@ collections:
         widget: "list"
         fields:
           - {label: "Label", name: "label", widget: "string"}
-          - {label: "URL", name: "url", widget: "string"}
-  - name: "links"
-    label: "Links"
-    file: "src/data/links.json"
-    description: "Manage all your profile, NFT, social, and music links."
-    fields:
-      - label: "Links"
-        name: "links"
-        widget: "list"
-        summary: "{{fields.title}} ({{fields.category}})"
-        fields:
-          - {label: "ID", name: "id", widget: "string"}
-          - {label: "Title", name: "title", widget: "string"}
-          - {label: "URL", name: "url", widget: "string"}
-          - {label: "Category", name: "category", widget: "select", options: ["nft", "social", "music", "other"]}
-          - {label: "Icon (emoji)", name: "icon", widget: "string", required: false} 
+          - {label: "URL", name: "url", widget: "string"} 

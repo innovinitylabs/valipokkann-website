@@ -3,22 +3,36 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Content Manager</title>
+  <title>VALIPOKKANN CMS</title>
   <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
-  <script>
-    // Initialize Decap CMS
-    if (window.netlifyIdentity) {
-      window.netlifyIdentity.on("init", user => {
-        if (!user) {
-          window.netlifyIdentity.on("login", () => {
-            document.location.href = "/admin/";
-          });
-        }
-      });
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      margin: 0;
+      padding: 20px;
+      background: #f5f5f5;
     }
-  </script>
+    .cms-header {
+      text-align: center;
+      margin-bottom: 30px;
+      color: #333;
+    }
+    .cms-header h1 {
+      margin: 0;
+      font-size: 2rem;
+      font-weight: 300;
+    }
+    .cms-header p {
+      margin: 10px 0 0 0;
+      color: #666;
+    }
+  </style>
 </head>
 <body>
+  <div class="cms-header">
+    <h1>VALIPOKKANN</h1>
+    <p>Content Management System</p>
+  </div>
   <div id="nc-root"></div>
 </body>
 </html> 

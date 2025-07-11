@@ -2,8 +2,8 @@ backend:
   name: github
   repo: innovinitylabs/valipokkann-website
   branch: main
-  base_url: https://valipokkann.com
-  auth_endpoint: https://valipokkann.com/.netlify/identity
+  base_url: https://valipokkann.in
+  auth_endpoint: https://valipokkann.in/.netlify/identity
 
 media_folder: "public/images"
 public_folder: "/images"
